@@ -2,7 +2,7 @@ name: Build and deploy Python app to Azure Web App - nen1090-api-prod
 
 on:
   push:
-    branches: ["main"]
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
@@ -18,14 +18,18 @@ jobs:
         with:
           python-version: "3.11"
 
-      # Install dependencies into .python_packages (ROOT) so Azure can load them
-      - name: Install dependencies
+      - name: Install dependencies into .python_packages (Azure style)
         run: |
           python -m pip install --upgrade pip
           rm -rf .python_packages
-          pip install -r requirements.txt --target=".python_packages"
+          mkdir -p .python_packages/lib/site-packages
+          pip install -r requirements.txt --target=".python_packages/lib/site-packages"
 
-      # Create a clean deploy zip (includes .python_packages)
+      - name: Sanity check (show installed packages)
+        run: |
+          python -c "import sys; print(sys.version)"
+          ls -la .python_packages/lib/site-packages | head -n 50
+
       - name: Create deployment package (app.zip)
         run: |
           rm -f app.zip
@@ -33,14 +37,13 @@ jobs:
             -x ".git/*" \
             -x ".github/*" \
             -x "**/__pycache__/*" \
-            -x "*.pyc" \
-            -x "*.pyo" \
-            -x "*.pyd" \
+            -x "**/*.pyc" \
+            -x "**/*.pyo" \
             -x "venv/*" \
             -x ".venv/*" \
             -x "antenv/*"
 
-      - name: Deploy to Azure Web App
+      - name: Deploy to Azure Web App (ZIP Deploy)
         uses: azure/webapps-deploy@v3
         with:
           app-name: nen1090-api-prod
