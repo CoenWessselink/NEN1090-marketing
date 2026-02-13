@@ -18,17 +18,17 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install dependencies into .python_packages (Azure style)
+      - name: Install dependencies into .python_packages (Azure layout)
         run: |
           python -m pip install --upgrade pip
           rm -rf .python_packages
           mkdir -p .python_packages/lib/site-packages
           pip install -r requirements.txt --target=".python_packages/lib/site-packages"
 
-      - name: Sanity check (show installed packages)
+      - name: Sanity check imports (must succeed)
         run: |
-          python -c "import sys; print(sys.version)"
-          ls -la .python_packages/lib/site-packages | head -n 50
+          PYTHONPATH="${{ github.workspace }}/.python_packages/lib/site-packages" \
+          python -c "import fastapi, uvicorn, gunicorn; print('imports OK')"
 
       - name: Create deployment package (app.zip)
         run: |
@@ -38,12 +38,23 @@ jobs:
             -x ".github/*" \
             -x "**/__pycache__/*" \
             -x "**/*.pyc" \
-            -x "**/*.pyo" \
             -x "venv/*" \
             -x ".venv/*" \
             -x "antenv/*"
 
-      - name: Deploy to Azure Web App (ZIP Deploy)
+      - name: List zip contents (debug)
+        run: |
+          unzip -l app.zip | head -n 200
+          unzip -l app.zip | grep -E "\.python_packages|uvicorn" || true
+
+      # Optioneel maar handig om te zien wat je deployt
+      - name: Upload artifact (app.zip)
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-zip
+          path: app.zip
+
+      - name: Deploy to Azure Web App (Zip Deploy via Publish Profile)
         uses: azure/webapps-deploy@v3
         with:
           app-name: nen1090-api-prod
