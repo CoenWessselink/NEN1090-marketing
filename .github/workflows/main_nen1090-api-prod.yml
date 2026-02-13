@@ -18,14 +18,15 @@ jobs:
         with:
           python-version: "3.11"
 
-      # Belangrijk: install in .python_packages/lib/site-packages (Azure App Service conventie)
+      # Installeer dependencies DIRECT in .python_packages (root)
       - name: Install dependencies into .python_packages
         run: |
           python -m pip install --upgrade pip
           rm -rf .python_packages
-          mkdir -p .python_packages/lib/site-packages
-          pip install -r requirements.txt --target=".python_packages/lib/site-packages"
+          mkdir -p .python_packages
+          pip install -r requirements.txt --target=".python_packages"
 
+      # Maak deploy zip (NEEM .python_packages mee!)
       - name: Create deployment package (app.zip)
         run: |
           rm -f app.zip
@@ -34,21 +35,19 @@ jobs:
             -x ".github/*" \
             -x "**/__pycache__/*" \
             -x "**/*.pyc" \
-            -x "**/*.pyo" \
-            -x "**/*.pyd" \
             -x "venv/*" \
             -x ".venv/*" \
             -x "antenv/*" \
-            -x "*.log"
+            -x "*.PublishSettings"
 
-      # (optioneel maar handig) artifact bewaren zodat je kunt downloaden/inspecteren
-      - name: Upload build artifact
+      # Optioneel: upload artifact zodat je kunt downloaden/inspecteren
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: app-zip
           path: app.zip
 
-      - name: Deploy to Azure Web App (ZIP)
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: nen1090-api-prod
