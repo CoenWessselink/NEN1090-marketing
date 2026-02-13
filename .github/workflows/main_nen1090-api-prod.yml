@@ -2,8 +2,7 @@ name: Build and deploy Python app to Azure Web App - nen1090-api-prod
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
@@ -33,12 +32,10 @@ jobs:
             -x ".git/*" \
             -x ".github/*" \
             -x "**/__pycache__/*" \
-            -x "*.pyc" \
-            -x "*.pyo" \
-            -x "*.pyd" \
-            -x "antenv/*" \
+            -x "**/*.pyc" \
+            -x "venv/*" \
             -x ".venv/*" \
-            -x "venv/*"
+            -x "antenv/*"
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
