@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Optional: set your Cloudflare Turnstile sitekey here -->
+  <meta name="turnstile-sitekey" content="" />
+  <title>Login – NEN-EN 1090 – CWS NEN1090 Platform</title>
+  <!-- Webfont (enterprise) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="/assets/css/enterprise.css"/>
+<meta property="og:site_name" content="CWS NEN1090 Platform"/>
+<meta property="og:type" content="website"/>
+<meta property="og:image" content="/practice-welder.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="/practice-welder.png"/>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "CWS NEN1090 Platform", "applicationCategory": "BusinessApplication", "operatingSystem": "Web", "description": "Enterprise platform voor NEN-EN 1090 compliance, audits, ISO 3834 ondersteuning, lascontrole (ISO 5817), auditlog en CE-dossier export per project.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR", "description": "Demo/trial beschikbaar. Abonnementen op aanvraag."}}</script>
+<link rel="canonical" href="https://nen1090.pages.dev/app/login.html"/>
+</head>
+<body>
+<div class="site-topbar">
+  <div class="container">
+    <div class="row">
+      <a class="brand" href="/">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <b>CWS NEN1090 Platform</b>
+      </a>
+      <nav class="nav" aria-label="Hoofdnavigatie">
+        <a href="/#features">Features</a>
+        <a href="/iso-3834.html">ISO 3834</a>
+        <a href="/ce-markering.html">CE-markering</a>
+        <a href="/lascontrole.html">Lascontrole</a>
+        <a href="/pricing.html" class="pill">Prijzen</a>
+        <a href="/app/login.html" class="pill">Inloggen</a>
+      </nav>
+    </div>
+  </div>
+</div>
+
+  <header class="topbar">
+    <div class="container">
+      <div class="row">
+        <a class="brand" href="../index.html">
+          <span class="logo-dot" aria-hidden="true"></span>
+          <span>NEN-EN 1090</span>
+          <span style="color:var(--muted); font-weight:900;">| Login</span>
+        </a>
+        <nav class="nav">
+          <a href="../index.html#features">Functies</a>
+          <a href="../legal/security.html">Security</a>
+          <a class="btn primary" href="mailto:info@example.com">Support</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <h1>Inloggen</h1>
+      <p class="small">Login via de echte backend (Azure) loopt via de Cloudflare Pages proxy. Je blijft op dezelfde origin en hebt geen CORS-gedoe.</p>
+
+      <div class="form-wrap">
+        <div class="card form-card">
+          <div class="kicker">omgeving</div>
+          <div style="font-weight:900; font-size:18px; margin-top:6px;">NEN-EN 1090 auditomgeving</div>
+          <p class="small">Kies een rol om de demo te bekijken (QC/Directie/Auditor). Dit beïnvloedt alleen de demo-schermen.</p>
+          <hr class="sep"/>
+
+          <form id="loginForm" autocomplete="on">
+            <div class="field">
+              <div class="label">E-mail</div>
+              <input class="input" type="email" name="email" placeholder="naam@bedrijf.nl" required />
+              <div class="helper">Voor demo: elk e-mailadres werkt.</div>
+            </div>
+            <div class="field">
+              <div class="label">Rol</div>
+              <select class="input" name="role" required>
+                <option value="QC">QC / Lascoördinator</option>
+                <option value="Directie">Directie</option>
+                <option value="Auditor">Auditor (read-only)</option>
+              </select>
+              <div class="helper">In productie: rollen en rechten komen uit de backend.</div>
+            </div>
+            <div class="field">
+              <div class="label">Wachtwoord</div>
+              <input class="input" type="password" name="password" placeholder="••••••••" required />
+              
+              <label class="label" style="margin-top:10px;">Tenant</label>
+              <select class="input" name="tenant" required>
+                <option value="demo" selected>demo</option>
+                <option value="platform">platform (superadmin)</option>
+              </select>
+<div class="helper">Demo: elk wachtwoord werkt.</div>
+            </div>
+
+            <div class="field">
+              <div class="label">Anti‑spam</div>
+              <div class="small">Als Turnstile is ingeschakeld, verschijnt hieronder een verificatie.</div>
+              <div class="turnstile" data-turnstile style="margin-top:8px"></div>
+            </div>
+
+            <div class="cta-row">
+              <button class="btn primary" type="submit">Login</button>
+              <a class="btn secondary" href="./login.html?demo=1">Demo automatisch</a>
+              <button class="btn" type="button" id="logoutBtn" style="display:none;">Uitloggen</button>
+            </div>
+            <div id="msg" class="alert" style="display:none;"></div>
+          </form>
+        </div>
+
+        <div class="card form-card">
+          <div class="kicker">wat je ziet in de demo</div>
+          <div style="font-weight:900; font-size:18px; margin-top:6px;">Voorbeeldflow</div>
+          <ul>
+            <li><strong>Dashboard</strong>: status per project en open punten</li>
+            <li><strong>Eisen</strong>: checklist per onderwerp, status + opmerkingen</li>
+            <li><strong>Bewijs</strong>: WPS/certificaten/inspecties gekoppeld</li>
+            <li><strong>Auditlog</strong>: wie/wat/wanneer vastgelegd</li>
+            <li><strong>Export</strong>: PDF/ZIP (placeholder)</li>
+          </ul>
+          <div class="illus" style="margin-top:12px"><img src="../assets/img/app-preview.svg" alt="App preview illustratie"/></div>
+          <div class="notice" style="margin-top:12px">
+            <strong>Online klaarzetten:</strong> deze demo werkt op Cloudflare Pages/Netlify. Voor echte data heb je backend + database + opslag nodig.
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script src="../assets/js/main.js"></script>
+  <script src="../assets/js/config.js"></script>
+  <script src="../assets/js/auth_api.js"></script>
+  <script src="../assets/js/turnstile.js"></script>
+  <script>
+    (function(){
+      const q = new URLSearchParams(location.search);
+      const next = q.get('next') || './dashboard.html';
+      const demo = q.get('demo') === '1';
+
+      const form = document.getElementById('loginForm');
+      
+      // Preselect tenant via ?tenant=platform
+      try {
+        const t = new URLSearchParams(location.search).get("tenant");
+        if (t && form.tenant) form.tenant.value = t;
+      } catch (e) {}
+const msg = document.getElementById('msg');
+      const logoutBtn = document.getElementById('logoutBtn');
+
+      function show(text){
+        msg.style.display = 'block';
+        msg.textContent = text;
+      }
+      function hide(){ msg.style.display = 'none'; msg.textContent=''; }
+
+      const session = window.NEN1090Auth?.getSession?.();
+      if (session){
+        logoutBtn.style.display = 'inline-flex';
+        show('Je bent al ingelogd als ' + (session.email||'') + ' (' + (session.role||'') + ').');
+      }
+
+      logoutBtn.addEventListener('click', () => {
+        window.NEN1090Auth.clearSession();
+        location.reload();
+      });
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        hide();
+        const fd = new FormData(form);
+        const email = String(fd.get('email')||'').trim();
+        const role = String(fd.get('role')||'QC').trim();
+        const password = String(fd.get('password')||'').trim();
+        if (!email){
+          show('Vul een e-mailadres in.');
+          return;
+        }
+        // Login via Pages proxy (/api/v1/...) → zet HttpOnly cookies (access + refresh)
+        function readTurnstileToken(){
+          const el = document.querySelector('input[name="cf-turnstile-response"]');
+          return el ? String(el.value||'').trim() : '';
+        }
+        try{
+          const tenant = String(fd.get('tenant')||'demo').trim();
+          const res = await fetch('/api/v1/auth/login', {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            credentials: 'include',
+            body: JSON.stringify({ email, password, tenant, turnstileToken: readTurnstileToken() })
+          });
+          if (res.ok){
+            // Keep a lightweight UI-session (no tokens stored client-side)
+            window.NEN1090Auth.setSession({ email, role, tenant, createdAt: new Date().toISOString(), mode: 'cookie' });
+            location.href = next;
+            return;
+          }
+        }catch(e){ /* ignore and fallback */ }
+
+        // Fallback: demo session (zonder backend)
+        show('Login (backend) niet gelukt. Demo-sessie geopend.');
+
+        // Static demo session
+        window.NEN1090Auth.setSession({ email, role, tenant: String(fd.get('tenant')||'demo').trim(), createdAt: new Date().toISOString(), mode: 'demo' });
+        location.href = next;
+      });
+
+      if (demo){
+        // auto-login QC with demo email
+        const emailEl = form.querySelector('input[name="email"]');
+        const pwdEl = form.querySelector('input[name="password"]');
+        const roleEl = form.querySelector('select[name="role"]');
+        emailEl.value = 'demo@nen1090.local';
+        pwdEl.value = 'demo';
+        roleEl.value = 'QC';
+        window.NEN1090Auth.setSession({ email: emailEl.value, role: roleEl.value, createdAt: new Date().toISOString() });
+        location.href = next;
+      }
+    })();
+  </script>
+
+<script>
+(async () => {
+  try {
+    const cfg = await fetch('/api/public/config', { cache: 'no-store' }).then(r => r.json());
+    const el = document.querySelector('[data-turnstile]');
+    if (el && cfg.TURNSTILE_SITEKEY) {
+      el.setAttribute('data-sitekey', cfg.TURNSTILE_SITEKEY);
+      el.style.display = '';
+    }
+  } catch (e) {}
+})();
+</script>
+
+<footer class="footer">
+  <div class="container">
+    <div class="row">
+      <div>© 2026 CWS NEN1090 Platform</div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap">
+        <a href="/privacy.html">Privacy</a>
+        <a href="/security.html">Security</a>
+        <a href="/legal/terms.html">Voorwaarden</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

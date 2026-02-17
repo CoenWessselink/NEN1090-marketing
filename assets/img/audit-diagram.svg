@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="420" viewBox="0 0 980 420" fill="none">
+<defs>
+  <linearGradient id="g" x1="120" y1="30" x2="860" y2="390" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#2F7BFF"/><stop offset="1" stop-color="#39D6B5"/>
+  </linearGradient>
+  <filter id="sh" x="-50%" y="-50%" width="200%" height="200%">
+    <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#0b1a3a" flood-opacity="0.18"/>
+  </filter>
+</defs>
+<rect x="28" y="28" width="924" height="300" rx="24" fill="url(#g)" opacity="0.08"/>
+<rect x="60" y="60" width="860" height="300" rx="22" fill="#FFFFFF" stroke="#E7EEFC" filter="url(#sh)"/>
+<rect x="110" y="110" width="240" height="80" rx="18" fill="#F6F8FF" stroke="#E7EEFC"/>
+<rect x="110" y="216" width="240" height="80" rx="18" fill="#F6F8FF" stroke="#E7EEFC"/>
+<rect x="390" y="160" width="240" height="80" rx="18" fill="#F2FBF8" stroke="#E7EEFC"/>
+<rect x="670" y="110" width="240" height="80" rx="18" fill="#F6F8FF" stroke="#E7EEFC"/>
+<rect x="670" y="216" width="240" height="80" rx="18" fill="#F6F8FF" stroke="#E7EEFC"/>
+<path d="M350 150L390 186" stroke="#2F7BFF" stroke-width="3" opacity="0.55"/>
+<path d="M350 266L390 214" stroke="#39D6B5" stroke-width="3" opacity="0.55"/>
+<path d="M630 200L670 150" stroke="#2F7BFF" stroke-width="3" opacity="0.55"/>
+<path d="M630 200L670 256" stroke="#39D6B5" stroke-width="3" opacity="0.55"/>
+<circle cx="370" cy="176" r="6" fill="#2F7BFF" opacity="0.6"/>
+<circle cx="370" cy="224" r="6" fill="#39D6B5" opacity="0.6"/>
+<circle cx="650" cy="176" r="6" fill="#2F7BFF" opacity="0.6"/>
+<circle cx="650" cy="224" r="6" fill="#39D6B5" opacity="0.6"/>
+
+<text x="130" y="146" font-family="Arial" font-size="14" fill="#0B1220" font-weight="700">Eisen</text>
+<text x="130" y="172" font-family="Arial" font-size="12" fill="#58627A">Status • opmerkingen</text>
+<text x="130" y="252" font-family="Arial" font-size="14" fill="#0B1220" font-weight="700">Bewijs</text>
+<text x="130" y="278" font-family="Arial" font-size="12" fill="#58627A">WPS • certs • inspectie</text>
+<text x="410" y="196" font-family="Arial" font-size="14" fill="#0B1220" font-weight="700">Auditlog</text>
+<text x="410" y="222" font-family="Arial" font-size="12" fill="#58627A">Wie • wat • wanneer</text>
+<text x="690" y="146" font-family="Arial" font-size="14" fill="#0B1220" font-weight="700">Export PDF</text>
+<text x="690" y="172" font-family="Arial" font-size="12" fill="#58627A">CE-dossier</text>
+<text x="690" y="252" font-family="Arial" font-size="14" fill="#0B1220" font-weight="700">Export ZIP</text>
+<text x="690" y="278" font-family="Arial" font-size="12" fill="#58627A">Bijlagen pakket</text>
+</svg>

@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Checkout – CWS NEN1090 Platform</title>
+  <meta name="description" content="Start een demo-tenant of bestel een plan. Checkout voorbereid voor betaalprovider en automatische tenant-activatie."/>
+  <link rel="canonical" href="/checkout.html"/>
+  <meta property="og:title" content="Checkout – CWS NEN1090 Platform"/>
+  <meta property="og:description" content="Start een demo-tenant of bestel een plan. Checkout voorbereid voor betaalprovider en automatische tenant-activatie."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:image" content="/assets/img/hero-welder.webp"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <link rel="stylesheet" href="/assets/css/enterprise.css"/>
+
+  <script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "CWS NEN1090 Platform",
+    "url": "https://nen1090-marketing.pages.dev",
+    "logo": "https://nen1090-marketing.pages.dev/assets/img/logos/cws-nen1090.svg",
+    "sameAs": []
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "CWS NEN1090 Platform",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "url": "https://nen1090-marketing.pages.dev",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "EUR",
+      "category": "FreeTrial",
+      "availability": "https://schema.org/InStock"
+    }
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://nen1090-marketing.pages.dev/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Checkout",
+        "item": "https://nen1090-marketing.pages.dev/checkout.html"
+      }
+    ]
+  }
+]
+  </script>
+</head>
+<body>
+<div class="site-topbar">
+  <div class="container">
+    <div class="row">
+      <a class="brand" href="/">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <b>CWS NEN1090 Platform</b>
+      </a>
+      <nav class="nav" aria-label="Hoofdnavigatie">
+        <a href="/#features">Features</a>
+        <a href="/iso-3834.html">ISO 3834</a>
+        <a href="/ce-markering.html">CE-markering</a>
+        <a href="/lascontrole.html">Lascontrole</a>
+        <a href="/pricing.html" class="pill">Prijzen</a>
+        <a href="/app/login.html" class="pill">Inloggen</a>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="container">
+    <h1>Bestellen / Demo starten</h1>
+    <div class="sub">Kies een plan en seat-aantal. Start direct een demo of ga door naar betaling.</div>
+    <div class="hero-actions">
+      <a class="btn btn-orange" href="/checkout.html?plan=trial&seats=5">Vernieuwen</a>
+      <a class="btn btn-ghost" href="/pricing.html">Prijzen</a>
+      <a class="btn btn-blue" href="/app/login.html">Inloggen</a>
+    </div>
+    <div class="hero-tags">
+      <span class="tag">Audit-ready</span>
+      <span class="tag">Traceerbaar</span>
+      <span class="tag">CE-export</span>
+    </div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="container">
+    <div class="card pad" style="max-width:980px;margin:0 auto">
+      <h2 class="h2" style="font-size:28px">Checkout</h2>
+      <p class="lead">In lokale dev is de betaalprovider niet gekoppeld. In productie koppel je Mollie/Stripe en activeer je de tenant via webhook.</p>
+      <div class="grid3" style="grid-template-columns:1.2fr 1fr;gap:16px;margin-top:18px">
+        <div class="card pad" style="box-shadow:none">
+          <b>Gegevens</b>
+          <div style="margin-top:12px;display:grid;gap:12px">
+            <div><label>Bedrijfsnaam</label><input placeholder="Bijv. Tasche Staalbouw"/></div>
+            <div><label>E-mail (tenant admin)</label><input placeholder="naam@bedrijf.nl" type="email"/></div>
+            <div><label>Plan</label><select><option>Demo (trial)</option><option>Standard</option><option>Enterprise</option></select></div>
+            <div><label>Seats</label><input value="5" type="number" min="1"/></div>
+          </div>
+        </div>
+        <div class="card pad" style="box-shadow:none">
+          <b>Samenvatting</b>
+          <div class="card pad" style="margin-top:12px;background:rgba(31,91,214,0.06);border-color:rgba(31,91,214,0.16)">
+            <div style="display:grid;gap:6px;font-weight:700">
+              <div>Plan: <span style="color:var(--muted);font-weight:800">demo</span></div>
+              <div>Seats: <span style="color:var(--muted);font-weight:800">5</span></div>
+              <div>Bedrijf: <span style="color:var(--muted);font-weight:800">—</span></div>
+              <div>Admin: <span style="color:var(--muted);font-weight:800">—</span></div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <a class="btn btn-orange" href="/app/login.html">Start demo-omgeving</a>
+            <a class="btn btn-blue" href="#" onclick="alert('Betaalprovider nog niet gekoppeld in local dev.');return false;">Ga naar betaling</a>
+          </div>
+          <p style="margin:10px 0 0;color:var(--muted);line-height:1.6;font-size:13px">Na betaling wordt je tenant automatisch geactiveerd en kun je direct inloggen.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="row">
+      <div>© 2026 CWS NEN1090 Platform</div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap">
+        <a href="/privacy.html">Privacy</a>
+        <a href="/security.html">Security</a>
+        <a href="/legal/terms.html">Voorwaarden</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

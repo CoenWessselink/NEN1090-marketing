@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Betaling gelukt – NEN-EN 1090 – CWS NEN1090 Platform</title>
+  <meta name="robots" content="noindex" />
+  <!-- Webfont (enterprise) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="./assets/css/style.css" />
+  <link rel="stylesheet" href="/assets/css/enterprise.css"/>
+<meta property="og:site_name" content="CWS NEN1090 Platform"/>
+<meta property="og:type" content="website"/>
+<meta property="og:image" content="/assets/img/hero-welder.webp"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="/assets/img/hero-welder.webp"/>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "CWS NEN1090 Platform", "applicationCategory": "BusinessApplication", "operatingSystem": "Web", "description": "Enterprise platform voor NEN-EN 1090 compliance, audits, ISO 3834 ondersteuning, lascontrole (ISO 5817), auditlog en CE-dossier export per project.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR", "description": "Demo/trial beschikbaar. Abonnementen op aanvraag."}}</script>
+<link rel="canonical" href="https://nen1090.pages.dev/success.html"/>
+</head>
+<body>
+<div class="site-topbar">
+  <div class="container">
+    <div class="row">
+      <a class="brand" href="/">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <b>CWS NEN1090 Platform</b>
+      </a>
+      <nav class="nav" aria-label="Hoofdnavigatie">
+        <a href="/#features">Features</a>
+        <a href="/iso-3834.html">ISO 3834</a>
+        <a href="/ce-markering.html">CE-markering</a>
+        <a href="/lascontrole.html">Lascontrole</a>
+        <a href="/pricing.html" class="pill">Prijzen</a>
+        <a href="/app/login.html" class="pill">Inloggen</a>
+      </nav>
+    </div>
+  </div>
+</div>
+
+  <header class="topbar">
+    <div class="container">
+      <div class="row">
+        <a class="brand" href="./index.html"><span class="logo-dot" aria-hidden="true"></span><span>NEN‑EN 1090</span></a>
+        <nav class="nav"><a class="btn ghost" href="./app/login.html">Inloggen</a></nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <h1>Betaling gelukt</h1>
+      <p>Bedankt! We verwerken je bestelling. Dit duurt meestal maar enkele seconden.</p>
+      <div class="card form-card">
+        <div class="kicker">volgende stap</div>
+        <p class="small" id="statusTxt">Activeren…</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <a class="btn primary" id="openApp" href="./app/login.html">Open app</a>
+          <a class="btn secondary" href="./pricing.html">Terug naar prijzen</a>
+        </div>
+        <hr class="sep" />
+        <div class="small" id="debug" style="display:none"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+  <div class="container">
+    <div class="row">
+      <div>© 2026 CWS NEN1090 Platform</div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap">
+        <a href="/privacy.html">Privacy</a>
+        <a href="/security.html">Security</a>
+        <a href="/legal/terms.html">Voorwaarden</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+  <script src="./assets/js/main.js"></script>
+  <script>
+    (function(){
+      const statusTxt = document.getElementById('statusTxt');
+      const openApp = document.getElementById('openApp');
+      const debug = document.getElementById('debug');
+
+      const paymentId = (function(){
+        try{ return new URLSearchParams(location.search).get('paymentId') || localStorage.getItem('nen1090.lastPaymentId') || ''; }catch(_){ return ''; }
+      })();
+
+      if(!paymentId){
+        statusTxt.textContent = 'We konden je betaalreferentie niet automatisch vinden. Klik op "Open app" of neem contact op.';
+        return;
+      }
+
+      async function poll(){
+        try{
+          const r = await fetch('./api/checkout/status?paymentId=' + encodeURIComponent(paymentId));
+          const j = await r.json().catch(()=>({}));
+
+          if(j && j.ok){
+            const directSetPassword = (j.backend && (j.backend.set_password_url || j.backend.setPasswordUrl)) || j.setPasswordUrl;
+            if(directSetPassword){
+              statusTxt.innerHTML = '✅ Betaling ontvangen. Maak je admin account af (wachtwoord instellen)…';
+              location.href = String(directSetPassword);
+              return;
+            }
+            const needsOnboarding = !!(j.needsOnboarding || (j.backend && (j.backend.needs_onboarding || j.backend.needsOnboarding)));
+            const onboardingUrl = (j.backend && (j.backend.onboarding_url || j.backend.onboardingUrl)) || ('./onboarding.html?paymentId=' + encodeURIComponent(paymentId));
+
+            if(j.status === 'paid' && j.activated && !needsOnboarding){
+              statusTxt.innerHTML = '✅ Betaling ontvangen en tenant geactiveerd. Je kunt nu inloggen.';
+              if(j.backend && (j.backend.login_url || j.backend.loginUrl)){
+                openApp.href = String(j.backend.login_url || j.backend.loginUrl);
+              }
+              return;
+            }
+
+            if(j.status === 'paid' && j.activated && needsOnboarding){
+              statusTxt.innerHTML = '✅ Betaling ontvangen en tenant geactiveerd. Rond nu de onboarding af (admin account instellen) om direct de app in te gaan.';
+              openApp.textContent = 'Onboarding afronden';
+              openApp.href = String(onboardingUrl);
+              return;
+            }
+            if(j.status === 'paid' && !j.activated){
+              statusTxt.textContent = 'Betaling ontvangen. Activatie wordt afgerond…';
+            } else if(j.status === 'open' || j.status === 'pending'){
+              statusTxt.textContent = 'Betaling wordt bevestigd…';
+            } else {
+              statusTxt.textContent = 'Status: ' + (j.status || 'onbekend') + '. Als dit blijft hangen, neem contact op.';
+            }
+            // Optional debug toggle via ?debug=1
+            if(new URLSearchParams(location.search).get('debug') === '1'){
+              debug.style.display = 'block';
+              debug.textContent = JSON.stringify(j, null, 2);
+            }
+          } else {
+            statusTxt.textContent = 'Activeren…';
+          }
+        } catch(e){
+          statusTxt.textContent = 'Activeren…';
+        }
+        setTimeout(poll, 2000);
+      }
+
+      poll();
+    })();
+  </script>
+</body>
+</html>

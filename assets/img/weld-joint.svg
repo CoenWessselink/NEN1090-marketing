@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="560" viewBox="0 0 980 560" fill="none">
+<defs>
+  <linearGradient id="g" x1="120" y1="50" x2="860" y2="520" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#2F7BFF"/><stop offset="1" stop-color="#39D6B5"/>
+  </linearGradient>
+  <filter id="sh" x="-40%" y="-40%" width="180%" height="180%">
+    <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#0b1a3a" flood-opacity="0.18"/>
+  </filter>
+</defs>
+<rect x="30" y="30" width="920" height="500" rx="30" fill="url(#g)" opacity="0.08"/>
+<rect x="80" y="80" width="820" height="400" rx="26" fill="#FFFFFF" stroke="#E7EEFC" filter="url(#sh)"/>
+
+<!-- plate T-joint -->
+<rect x="180" y="360" width="620" height="46" rx="18" fill="#F6F8FF" stroke="#E7EEFC"/>
+<rect x="452" y="190" width="76" height="216" rx="18" fill="#F6F8FF" stroke="#E7EEFC"/>
+
+<!-- weld fillet -->
+<path d="M452 360c22-22 54-22 76 0" stroke="#39D6B5" stroke-width="10" stroke-linecap="round" opacity="0.65"/>
+<path d="M448 360c30-30 80-30 110 0" stroke="#2F7BFF" stroke-width="6" stroke-linecap="round" opacity="0.35"/>
+
+<!-- inspection callouts -->
+<rect x="140" y="140" width="240" height="64" rx="18" fill="#F6F8FF" stroke="#E7EEFC"/>
+<rect x="140" y="220" width="240" height="64" rx="18" fill="#F2FBF8" stroke="#E7EEFC"/>
+<rect x="140" y="300" width="240" height="64" rx="18" fill="#F6F8FF" stroke="#E7EEFC"/>
+<path d="M168 172h150" stroke="#2F7BFF" stroke-width="6" stroke-linecap="round" opacity="0.55"/>
+<path d="M168 252h110" stroke="#39D6B5" stroke-width="6" stroke-linecap="round" opacity="0.55"/>
+<path d="M168 332h130" stroke="#2F7BFF" stroke-width="6" stroke-linecap="round" opacity="0.45"/>
+
+<path d="M380 172l90 40" stroke="#2F7BFF" stroke-width="3" opacity="0.35"/>
+<path d="M380 252l100 60" stroke="#39D6B5" stroke-width="3" opacity="0.35"/>
+<path d="M380 332l105 20" stroke="#2F7BFF" stroke-width="3" opacity="0.30"/>
+
+<!-- magnifier -->
+<circle cx="760" cy="220" r="62" fill="#F8FAFF" stroke="#E7EEFC"/>
+<circle cx="760" cy="220" r="34" fill="none" stroke="#2F7BFF" stroke-width="6" opacity="0.35"/>
+<path d="M802 262l44 44" stroke="#58627A" stroke-width="10" stroke-linecap="round" opacity="0.25"/>
+<path d="M744 220h32" stroke="#39D6B5" stroke-width="6" stroke-linecap="round" opacity="0.55"/>
+</svg>

@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Onboarding – Admin account instellen – CWS NEN1090 Platform</title>
+  <meta name="robots" content="noindex" />
+  <!-- Webfont (enterprise) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="./assets/css/style.css" />
+  <link rel="stylesheet" href="/assets/css/enterprise.css"/>
+<meta property="og:site_name" content="CWS NEN1090 Platform"/>
+<meta property="og:type" content="website"/>
+<meta property="og:image" content="/assets/img/hero-welder.webp"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="/assets/img/hero-welder.webp"/>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "CWS NEN1090 Platform", "applicationCategory": "BusinessApplication", "operatingSystem": "Web", "description": "Enterprise platform voor NEN-EN 1090 compliance, audits, ISO 3834 ondersteuning, lascontrole (ISO 5817), auditlog en CE-dossier export per project.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR", "description": "Demo/trial beschikbaar. Abonnementen op aanvraag."}}</script>
+<link rel="canonical" href="https://nen1090.pages.dev/onboarding.html"/>
+</head>
+<body>
+<div class="site-topbar">
+  <div class="container">
+    <div class="row">
+      <a class="brand" href="/">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <b>CWS NEN1090 Platform</b>
+      </a>
+      <nav class="nav" aria-label="Hoofdnavigatie">
+        <a href="/#features">Features</a>
+        <a href="/iso-3834.html">ISO 3834</a>
+        <a href="/ce-markering.html">CE-markering</a>
+        <a href="/lascontrole.html">Lascontrole</a>
+        <a href="/pricing.html" class="pill">Prijzen</a>
+        <a href="/app/login.html" class="pill">Inloggen</a>
+      </nav>
+    </div>
+  </div>
+</div>
+
+  <header class="topbar">
+    <div class="container">
+      <div class="row">
+        <a class="brand" href="./index.html"><span class="logo-dot" aria-hidden="true"></span><span>NEN‑EN 1090</span></a>
+        <nav class="nav"><a class="btn ghost" href="./pricing.html">Prijzen</a></nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="container">
+      <h1>Admin account instellen</h1>
+      <p>We zijn bijna klaar. Vul je gegevens in om je omgeving te activeren en direct de app te openen.</p>
+
+      <div class="card form-card">
+        <div class="kicker">stap 1</div>
+        <form id="frm" class="form" autocomplete="on">
+          <div class="grid2">
+            <div class="field">
+              <label for="company">Bedrijfsnaam</label>
+              <input id="company" name="company" placeholder="Bijv. Tasche Staalbouw" required />
+            </div>
+            <div class="field">
+              <label for="email">Admin e‑mail</label>
+              <input id="email" name="email" type="email" placeholder="naam@bedrijf.nl" required />
+            </div>
+          </div>
+          <div class="field">
+            <label for="seats">Seats</label>
+            <input id="seats" name="seats" type="number" min="1" step="1" value="5" />
+            <div class="hint">Tip: je kunt seats later altijd wijzigen.</div>
+          </div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+            <button class="btn primary" type="submit" id="btn">Account aanmaken</button>
+            <a class="btn secondary" href="./app/login.html">Ik heb al een account</a>
+          </div>
+        </form>
+
+        <hr class="sep" />
+        <p class="small" id="status">—</p>
+        <pre class="small" id="debug" style="display:none;white-space:pre-wrap"></pre>
+      </div>
+    </div>
+  </main>
+
+<script>
+(async function(){
+  try{
+    const r = await fetch('./api/onboarding/status', {credentials:'include'});
+    const j = await r.json();
+    const hint = (j && j.hint) ? j.hint : {};
+    const emailEl = document.getElementById('email');
+    const companyEl = document.getElementById('company');
+    const seatsEl = document.getElementById('seats');
+    if (hint.email && emailEl && !emailEl.value) emailEl.value = hint.email;
+    if (hint.company && companyEl && !companyEl.value) companyEl.value = hint.company;
+    if (hint.seats && seatsEl){
+      seatsEl.value = hint.seats;
+      seatsEl.setAttribute('readonly','readonly');
+      const note = document.getElementById('seatsNote');
+      if (note) note.textContent = 'Seats zijn bepaald door je bestelling.';
+    } else if (seatsEl) {
+      // fallback from localStorage
+      const lsSeats = Number(localStorage.getItem('nen1090.checkout.seats')||localStorage.getItem('nen1090.seats')||'0');
+      if (lsSeats>0) seatsEl.value = lsSeats;
+    }
+  }catch(e){/* ignore */}
+})();
+</script>
+
+
+  <footer class="footer">
+  <div class="container">
+    <div class="row">
+      <div>© 2026 CWS NEN1090 Platform</div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap">
+        <a href="/privacy.html">Privacy</a>
+        <a href="/security.html">Security</a>
+        <a href="/legal/terms.html">Voorwaarden</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+  <script src="./assets/js/main.js"></script>
+  <script>
+    (function(){
+      const frm = document.getElementById('frm');
+      const status = document.getElementById('status');
+      const debug = document.getElementById('debug');
+      const btn = document.getElementById('btn');
+
+      const qs = new URLSearchParams(location.search);
+      const paymentId = qs.get('paymentId') || localStorage.getItem('nen1090.lastPaymentId') || '';
+      const lastEmail = localStorage.getItem('nen1090.lastCheckoutEmail') || '';
+      if(lastEmail) document.getElementById('email').value = lastEmail;
+
+      function setStatus(msg){ status.textContent = msg; }
+      setStatus(paymentId ? 'Klaar om admin account te maken…' : 'Geen paymentId gevonden. Je kunt alsnog een account maken, maar activatie kan niet automatisch gekoppeld worden.');
+
+      frm.addEventListener('submit', async (e)=>{
+        e.preventDefault();
+        btn.disabled = true;
+        setStatus('Bezig met aanmaken…');
+        try{
+          const payload = {
+            paymentId,
+            company: document.getElementById('company').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            seats: Number(document.getElementById('seats').value || 1)
+          };
+          const r = await fetch('./api/onboarding/create-admin', {
+            method: 'POST',
+            headers: {'content-type':'application/json'},
+            body: JSON.stringify(payload)
+          });
+          const j = await r.json().catch(()=>({}));
+
+          if(new URLSearchParams(location.search).get('debug') === '1'){
+            debug.style.display = 'block';
+            debug.textContent = JSON.stringify(j, null, 2);
+          }
+
+          if(j && j.ok){
+            if(j.setPasswordUrl){
+              setStatus('✅ Account aangemaakt. Stel nu je wachtwoord in…');
+              location.href = j.setPasswordUrl;
+              return;
+            }
+            if(j.loginUrl){
+              setStatus('✅ Gereed. Je wordt doorgestuurd…');
+              location.href = j.loginUrl;
+              return;
+            }
+            setStatus('✅ Account aangemaakt. Ga nu naar inloggen.');
+            location.href = './app/login.html';
+          } else {
+            setStatus('❌ Kon account niet aanmaken: ' + (j && (j.error || j.message) ? (j.error || j.message) : 'onbekende fout'));
+          }
+        } catch(err){
+          setStatus('❌ Fout bij aanmaken. Probeer opnieuw.');
+        } finally {
+          btn.disabled = false;
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

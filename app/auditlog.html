@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="nl" data-requires-auth="1">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Auditlog – NEN-EN 1090 – CWS NEN1090 Platform</title>
+  <!-- Webfont (enterprise) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="/assets/css/enterprise.css"/>
+<meta property="og:site_name" content="CWS NEN1090 Platform"/>
+<meta property="og:type" content="website"/>
+<meta property="og:image" content="/practice-welder.png"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="/practice-welder.png"/>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "SoftwareApplication", "name": "CWS NEN1090 Platform", "applicationCategory": "BusinessApplication", "operatingSystem": "Web", "description": "Enterprise platform voor NEN-EN 1090 compliance, audits, ISO 3834 ondersteuning, lascontrole (ISO 5817), auditlog en CE-dossier export per project.", "offers": {"@type": "Offer", "price": "0", "priceCurrency": "EUR", "description": "Demo/trial beschikbaar. Abonnementen op aanvraag."}}</script>
+<link rel="canonical" href="https://nen1090.pages.dev/app/auditlog.html"/>
+</head>
+<body>
+<div class="site-topbar">
+  <div class="container">
+    <div class="row">
+      <a class="brand" href="/">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <b>CWS NEN1090 Platform</b>
+      </a>
+      <nav class="nav" aria-label="Hoofdnavigatie">
+        <a href="/#features">Features</a>
+        <a href="/iso-3834.html">ISO 3834</a>
+        <a href="/ce-markering.html">CE-markering</a>
+        <a href="/lascontrole.html">Lascontrole</a>
+        <a href="/pricing.html" class="pill">Prijzen</a>
+        <a href="/app/login.html" class="pill">Inloggen</a>
+      </nav>
+    </div>
+  </div>
+</div>
+
+  <header class="topbar">
+    <div class="container">
+      <div class="row">
+        <a class="brand" href="../index.html">
+          <span class="logo-dot" aria-hidden="true"></span>
+          <span>NEN-EN 1090</span>
+          <span style="color:var(--muted); font-weight:900;">| Auditlog</span>
+        </a>
+        <nav class="nav">
+          <span class="badge"><span data-user-role></span></span>
+          <span class="badge"><span data-user-email></span></span>
+          <a class="btn ghost" href="./login.html" id="logoutLink">Uitloggen</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <div class="app-grid">
+      <aside class="side">
+        <a class="" href="./dashboard.html">Dashboard</a>
+<a class="" href="./projects.html">Projecten</a>
+<a class="" href="./requirements.html">Eisen & bewijs</a>
+<a class="active" href="./auditlog.html">Auditlog</a>
+<a class="" href="./settings.html">Instellingen</a>
+        <hr class="sep"/>
+        <a href="../index.html">← Terug naar website</a>
+      </aside>
+      <section class="main">
+        
+<div class="kicker">auditlog</div>
+<div style="font-weight:900; font-size:20px; margin-top:6px;">Wie / wat / wanneer (demo)</div>
+<div class="small">In productie: immutable log (append-only) in database.</div>
+<hr class="sep"/>
+<table class="table">
+  <thead><tr><th>Tijd</th><th>Gebruiker</th><th>Actie</th><th>Item</th></tr></thead>
+  <tbody>
+    <tr><td>Vandaag 09:12</td><td>qc@bedrijf.nl</td><td>Status gewijzigd</td><td>WPS aanwezig en actueel → Goedgekeurd</td></tr>
+    <tr><td>Gisteren 15:41</td><td>qc@bedrijf.nl</td><td>Bewijs toegevoegd</td><td>3.1_batch_04.pdf</td></tr>
+    <tr><td>Gisteren 15:10</td><td>directie@bedrijf.nl</td><td>Inzage</td><td>Projectstatus bekeken</td></tr>
+  </tbody>
+</table>
+<div class="notice" style="margin-top:12px">
+  <strong>Voor productie:</strong> maak dit append-only (niet wijzigbaar), met tenant-scheiding per bedrijf en exportbare audittrail.
+</div>
+
+      </section>
+    </div>
+  </main>
+
+  <script src="../assets/js/main.js"></script>
+  <script>
+    (function(){
+      const a = document.getElementById('logoutLink');
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.NEN1090Auth.clearSession();
+        location.href = './login.html';
+      });
+    })();
+  </script>
+<footer class="footer">
+  <div class="container">
+    <div class="row">
+      <div>© 2026 CWS NEN1090 Platform</div>
+      <div style="display:flex;gap:14px;flex-wrap:wrap">
+        <a href="/privacy.html">Privacy</a>
+        <a href="/security.html">Security</a>
+        <a href="/legal/terms.html">Voorwaarden</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

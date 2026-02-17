@@ -1,0 +1,14 @@
+# Voor lokale tests (WRANGLER)
+# In Cloudflare Pages zet je dit als env vars (Production/Preview).
+
+BACKEND_API_BASE=http://localhost:8000
+MOLLIE_API_KEY=test_xxx
+CHECKOUT_RETURN_BASE=http://localhost:8788
+
+# Turnstile: zet REQUIRE_TURNSTILE=0 lokaal als je geen keys wilt
+TURNSTILE_SITEKEY=your_sitekey
+TURNSTILE_SECRET=your_secret
+REQUIRE_TURNSTILE=0
+
+BACKEND_PAYMENT_CONFIRM_PATH=/api/v1/tenant/billing/confirm
+BACKEND_PAYMENT_CONFIRM_TOKEN=dev_secret_token

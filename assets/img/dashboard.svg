@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#1f5bd6" stop-opacity=".18"/><stop offset="1" stop-color="#f59e0b" stop-opacity=".18"/>
+</linearGradient></defs>
+<rect width="1200" height="800" fill="url(#g)"/>
+<rect x="70" y="90" width="1060" height="620" rx="26" fill="#ffffff" opacity=".85"/>
+<text x="600" y="430" text-anchor="middle" font-family="Inter,Arial" font-size="44" font-weight="800" fill="#111827">Dashboard</text>
+<text x="600" y="490" text-anchor="middle" font-family="Inter,Arial" font-size="20" fill="#6b7280">beeld placeholder – vervang door echte foto/screenshot</text>
+</svg>

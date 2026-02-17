@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="220" height="64" viewBox="0 0 220 64" role="img" aria-label="Partner logo 3">
+<defs><linearGradient id="c" x1="0" y1="0" x2="1" y2="1">
+<stop offset="0" stop-color="#f59e0b" stop-opacity="0.16"/><stop offset="1" stop-color="#1f5bd6" stop-opacity="0.16"/></linearGradient></defs>
+<rect x="1" y="1" width="218" height="62" rx="14" fill="url(#c)" stroke="rgba(31,91,214,.18)"/>
+<circle cx="44" cy="32" r="16" fill="rgba(31,91,214,.28)"/>
+<path d="M36 32l6 6 12-14" fill="none" stroke="#0f1b2d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M86 32c14-16 32-16 46 0s32 16 46 0" fill="none" stroke="#1f5bd6" stroke-width="4" stroke-linecap="round" opacity=".7"/>
+</svg>
