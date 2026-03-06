@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual envs
+venv/
+.venv/
+antenv/
+
+# Local builds / packages
+.python_packages/
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
+
+# Secrets / profiles
+*.PublishSettings
+.env
+.env.*
+
+.python_packages/
+antenv/
+__pycache__/
+*.pyc
+.venv/
+venv/

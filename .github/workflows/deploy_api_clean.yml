@@ -16,6 +16,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+<<<<<<< HEAD
+=======
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build local package folder
+        run: |
+          python -m pip install --upgrade pip
+          rm -rf .python_packages
+          mkdir -p .python_packages/lib/site-packages
+          pip install -r requirements.txt --target .python_packages/lib/site-packages
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_41E1D00167544F6A807B419551CCECB3 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FFB7FC8230AD46C6828A3FEDCF4B7DF }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_25FA83492B05466B9358CD02B735D72A }}
+
+>>>>>>> d1041ea94a192ff91943ffd7c72ff1462eefc385
       - name: Build deployment zip
         run: |
           python - <<'PY'
@@ -43,6 +65,7 @@ jobs:
                       z.write(path, arc)
           PY
 
+<<<<<<< HEAD
       - name: Azure login (OIDC)
         uses: azure/login@v2
         with:
@@ -50,14 +73,27 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FFB7FC8230AD46C6828A3FEDCF4B7DF }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_25FA83492B05466B9358CD02B735D72A }}
 
+=======
+>>>>>>> d1041ea94a192ff91943ffd7c72ff1462eefc385
       - name: Clean deploy to Azure Web App
         run: |
           az webapp deploy --resource-group rg-nen1090 --name nen1090-api-prod --src-path backend-clean.zip --type zip --clean true --restart true
 
       - name: Set startup command
         run: |
+<<<<<<< HEAD
           az webapp config set --resource-group rg-nen1090 --name nen1090-api-prod --startup-file "export PYTHONPATH=/home/site/wwwroot/.python_packages:\$PYTHONPATH && gunicorn -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:\$PORT --workers 2 --timeout 120"
 
       - name: Restart app
         run: |
           az webapp restart --resource-group rg-nen1090 --name nen1090-api-prod
+=======
+          az webapp config set \
+            --resource-group rg-nen1090 \
+            --name nen1090-api-prod \
+            --startup-file "export PYTHONPATH=/home/site/wwwroot/.python_packages/lib/site-packages:\$PYTHONPATH && gunicorn -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:\$PORT --workers 2 --timeout 120"
+
+      - name: Restart app
+        run: |
+          az webapp restart --resource-group rg-nen1090 --name nen1090-api-prod
+>>>>>>> d1041ea94a192ff91943ffd7c72ff1462eefc385

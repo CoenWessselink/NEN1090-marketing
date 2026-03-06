@@ -27,6 +27,7 @@ storage/
 
 # git internals should never be copied into release zips
 .git/
+<<<<<<< HEAD
 
 .python_packages/
 venv/
@@ -40,3 +41,5 @@ __pycache__/
 *.db
 *.sqlite
 *.sqlite3
+=======
+>>>>>>> d1041ea94a192ff91943ffd7c72ff1462eefc385
