@@ -1,0 +1,198 @@
+from __future__ import annotations
+
+from datetime import datetime, timezone
+from typing import Optional
+
+from fastapi import APIRouter, Depends, HTTPException, Request
+from pydantic import BaseModel, Field
+from sqlalchemy.orm import Session
+
+from app.api.deps import get_db, get_current_tenant_id, get_current_claims
+from app.core.audit import audit
+from app.db.models import Tenant, TenantUser, User
+
+
+router = APIRouter(prefix="/tenant/billing", tags=["tenant-billing"])
+
+
+def _ip(request: Request) -> str:
+    return (request.headers.get("x-forwarded-for") or request.client.host or "").split(",")[0].strip()
+
+
+def _ua(request: Request) -> str:
+    return request.headers.get("user-agent", "")[:4000]
+
+
+def _now_utc() -> datetime:
+    return datetime.now(timezone.utc)
+
+
+def _as_utc(dt):
+    if not dt:
+        return None
+    try:
+        return dt.replace(tzinfo=timezone.utc)
+    except Exception:
+        return None
+
+
+def _users_count(db: Session, tenant_id) -> int:
+    # Count active users in tenant
+    return (
+        db.query(TenantUser)
+        .join(User, User.id == TenantUser.user_id)
+        .filter(TenantUser.tenant_id == tenant_id, User.is_active == True)
+        .count()
+    )
+
+
+def _ensure_tenant_admin(db: Session, tenant_id, user_id, claims):
+    if claims.get("role") == "platform_admin":
+        return True
+    if claims.get("role") != "tenant_admin":
+        raise HTTPException(status_code=403, detail="Forbidden")
+    # extra safety: verify mapping still exists
+    tu = db.query(TenantUser).filter(TenantUser.tenant_id == tenant_id, TenantUser.user_id == user_id).first()
+    if not tu or tu.role != "tenant_admin":
+        raise HTTPException(status_code=403, detail="Forbidden")
+    return True
+
+
+class BillingStatusOut(BaseModel):
+    tenant_id: str
+    status: str
+    is_active: bool
+    trial_until: Optional[str] = None
+    valid_until: Optional[str] = None
+
+    seats_purchased: int
+    users_count: int
+    price_per_seat_year_cents: int = 0
+
+    billing_provider: str = "none"
+    mollie_subscription_status: Optional[str] = None
+    mollie_next_payment_date: Optional[str] = None
+
+    pending_seats: Optional[int] = None
+    pending_seats_effective_at: Optional[str] = None
+
+
+class PreviewIn(BaseModel):
+    target_seats: int = Field(..., ge=1)
+
+
+class PreviewOut(BaseModel):
+    current_seats: int
+    target_seats: int
+    action: str  # upgrade | downgrade_planned | noop
+    effective_at: Optional[str] = None
+    amount_cents_year: int = 0
+
+
+class ChangeIn(BaseModel):
+    target_seats: int = Field(..., ge=1)
+
+
+@router.get("/status", response_model=BillingStatusOut)
+def billing_status(
+    request: Request,
+    db: Session = Depends(get_db),
+    tenant_id=Depends(get_current_tenant_id),
+    claims=Depends(get_current_claims),
+):
+    t = db.query(Tenant).filter(Tenant.id == tenant_id).first()
+    if not t:
+        raise HTTPException(status_code=404, detail="Tenant not found")
+
+    return BillingStatusOut(
+        tenant_id=str(t.id),
+        status=getattr(t, "status", "active"),
+        is_active=bool(getattr(t, "is_active", True)),
+        trial_until=t.trial_until.isoformat() if t.trial_until else None,
+        valid_until=t.valid_until.isoformat() if t.valid_until else None,
+        seats_purchased=int(t.seats_purchased or 1),
+        users_count=_users_count(db, t.id),
+        price_per_seat_year_cents=int(getattr(t, "price_per_seat_year_cents", 0) or 0),
+        billing_provider=getattr(t, "billing_provider", "none") or "none",
+        mollie_subscription_status=getattr(t, "mollie_subscription_status", None),
+        mollie_next_payment_date=t.mollie_next_payment_date.isoformat() if t.mollie_next_payment_date else None,
+        pending_seats=getattr(t, "pending_seats", None),
+        pending_seats_effective_at=t.pending_seats_effective_at.isoformat() if t.pending_seats_effective_at else None,
+    )
+
+
+@router.post("/preview", response_model=PreviewOut)
+def billing_preview(
+    payload: PreviewIn,
+    request: Request,
+    db: Session = Depends(get_db),
+    tenant_id=Depends(get_current_tenant_id),
+    claims=Depends(get_current_claims),
+):
+    t = db.query(Tenant).filter(Tenant.id == tenant_id).first()
+    if not t:
+        raise HTTPException(status_code=404, detail="Tenant not found")
+
+    current = int(t.seats_purchased or 1)
+    target = int(payload.target_seats)
+    users_cnt = _users_count(db, t.id)
+    if target < users_cnt:
+        raise HTTPException(status_code=400, detail=f"Target seats ({target}) < actieve users ({users_cnt})")
+
+    price = int(getattr(t, "price_per_seat_year_cents", 0) or 0)
+    amount = target * price
+
+    if target == current:
+        return PreviewOut(current_seats=current, target_seats=target, action="noop", amount_cents_year=amount)
+
+    if target > current:
+        return PreviewOut(current_seats=current, target_seats=target, action="upgrade", amount_cents_year=amount)
+
+    # downgrade planned
+    eff = t.mollie_next_payment_date.isoformat() if t.mollie_next_payment_date else None
+    return PreviewOut(current_seats=current, target_seats=target, action="downgrade_planned", effective_at=eff, amount_cents_year=amount)
+
+
+@router.post("/change", response_model=BillingStatusOut)
+def billing_change(
+    payload: ChangeIn,
+    request: Request,
+    db: Session = Depends(get_db),
+    tenant_id=Depends(get_current_tenant_id),
+    claims=Depends(get_current_claims),
+):
+    user_id = claims.get("sub")
+    _ensure_tenant_admin(db, tenant_id, user_id, claims)
+
+    t = db.query(Tenant).filter(Tenant.id == tenant_id).first()
+    if not t:
+        raise HTTPException(status_code=404, detail="Tenant not found")
+
+    current = int(t.seats_purchased or 1)
+    target = int(payload.target_seats)
+
+    users_cnt = _users_count(db, t.id)
+    if target < users_cnt:
+        raise HTTPException(status_code=400, detail=f"Target seats ({target}) < actieve users ({users_cnt})")
+
+    if target == current:
+        return billing_status(request, db, tenant_id, claims)
+
+    if target > current:
+        # Upgrade direct (and let platform billing autosync handle Mollie via existing logic)
+        t.seats_purchased = target
+        t.pending_seats = None
+        t.pending_seats_effective_at = None
+        db.commit()
+        audit(db, tenant_id=str(t.id), user_id=str(user_id) if user_id else None, action="tenant_billing_upgrade", entity="tenant", entity_id=str(t.id), ip=_ip(request), user_agent=_ua(request), meta={"seats": target})
+        return billing_status(request, db, tenant_id, claims)
+
+    # Downgrade planned on next payment date
+    if not t.mollie_next_payment_date:
+        raise HTTPException(status_code=400, detail="Downgrade plannen vereist next payment date. Doe eerst: Mollie sync subscription.")
+
+    t.pending_seats = target
+    t.pending_seats_effective_at = t.mollie_next_payment_date
+    db.commit()
+    audit(db, tenant_id=str(t.id), user_id=str(user_id) if user_id else None, action="tenant_billing_downgrade_planned", entity="tenant", entity_id=str(t.id), ip=_ip(request), user_agent=_ua(request), meta={"seats": target, "effective_at": t.mollie_next_payment_date.isoformat()})
+    return billing_status(request, db, tenant_id, claims)
