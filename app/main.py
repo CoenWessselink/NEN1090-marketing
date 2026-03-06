@@ -17,6 +17,7 @@ app.add_middleware(
     allow_origins=settings.CORS_ORIGINS,
     allow_methods=["*"],
     allow_headers=["*"],
+    allow_credentials=True,
 )
 
 def _health_payload():
@@ -39,5 +40,15 @@ def health_root():
 @app.get("/api/health")
 def health_api():
     return _health_payload()
+
+
+@app.get("/")
+def root():
+    # Handy landing response for browsers / uptime checks
+    return {
+        **_health_payload(),
+        "docs": "/docs",
+        "openapi": "/openapi.json",
+    }
 
 app.include_router(api_router)

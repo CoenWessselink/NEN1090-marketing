@@ -1,5 +1,5 @@
 from logging.config import fileConfig
-from sqlalchemy import engine_from_config, pool
+from sqlalchemy import engine_from_config, pool, text
 from alembic import context
 
 from pathlib import Path
@@ -36,6 +36,30 @@ def run_migrations_online() -> None:
     configuration["sqlalchemy.url"] = url
     connectable = engine_from_config(configuration, prefix="sqlalchemy.", poolclass=pool.NullPool)
     with connectable.connect() as connection:
+        # --- IMPORTANT ---
+        # Alembic's default version table column is VARCHAR(32).
+        # Our revision ids are longer (e.g. "0012_mollie_subscription_status_fields"),
+        # which can cause migrations to fail with:
+        #   psycopg.errors.StringDataRightTruncation: value too long for type character varying(32)
+        #
+        # We proactively ensure the alembic_version table exists and version_num is wide enough.
+        # This makes first-time deployments and empty databases safe.
+        try:
+            connection.execute(text(
+                """
+                CREATE TABLE IF NOT EXISTS alembic_version (
+                  version_num VARCHAR(128) NOT NULL
+                );
+                """
+            ))
+            connection.execute(text(
+                "ALTER TABLE alembic_version ALTER COLUMN version_num TYPE VARCHAR(128);"
+            ))
+            connection.commit()
+        except Exception:
+            # Never block migrations due to a version-table preflight.
+            pass
+
         context.configure(connection=connection, target_metadata=target_metadata)
         with context.begin_transaction():
             context.run_migrations()
