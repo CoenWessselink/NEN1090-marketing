@@ -41,9 +41,7 @@ jobs:
                       dirs[:] = []
                       continue
                   for f in files:
-                      if f in exclude_names:
-                          continue
-                      if any(f.endswith(ext) for ext in exclude_ext):
+                      if f in exclude_names or any(f.endswith(ext) for ext in exclude_ext):
                           continue
                       path=os.path.join(root,f)
                       arc=os.path.relpath(path,'.')
