@@ -21,3 +21,10 @@ antenv/
 *.PublishSettings
 .env
 .env.*
+
+.python_packages/
+antenv/
+__pycache__/
+*.pyc
+.venv/
+venv/

@@ -1,5 +1,5 @@
-fastapi==0.115.6
-uvicorn[standard]==0.32.1
+fastapi==0.110.0
+uvicorn[standard]==0.29.0
 gunicorn==22.0.0
 python-dotenv==1.0.1
 SQLAlchemy==2.0.36
@@ -10,3 +10,4 @@ email-validator==2.1.1
 bcrypt==3.2.2
 python-multipart==0.0.9
 psycopg[binary]==3.2.3
+pydantic==2.6.4
