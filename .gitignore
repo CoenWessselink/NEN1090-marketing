@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+
+# virtual envs
+venv/
+.venv/
+antenv/
+.python_packages/
+
+# local secrets / config
+.env
+.env.*
+*.PublishSettings
+
+# local storage / databases
+storage/
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+
+# git internals should never be copied into release zips
+.git/

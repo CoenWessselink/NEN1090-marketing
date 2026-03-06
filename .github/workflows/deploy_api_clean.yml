@@ -1,0 +1,63 @@
+name: Deploy API to Azure (clean)
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build deployment zip
+        run: |
+          python - <<'PY'
+          import os, zipfile
+          exclude_dirs={'.git','venv','__pycache__','.pytest_cache','.mypy_cache','.ruff_cache','.idea','.vscode','storage'}
+          exclude_names={'.env','backend','.gitignore.txt'}
+          exclude_ext={'.pyc','.pyo','.pyd','.db','.sqlite','.sqlite3'}
+          with zipfile.ZipFile('backend-clean.zip','w',zipfile.ZIP_DEFLATED) as z:
+              for root, dirs, files in os.walk('.'):
+                  rel=os.path.relpath(root,'.')
+                  parts=set(rel.split(os.sep))
+                  dirs[:] = [d for d in dirs if d not in exclude_dirs and d != '__pycache__']
+                  if 'storage' in parts:
+                      dirs[:] = []
+                      continue
+                  for f in files:
+                      if f in exclude_names:
+                          continue
+                      if any(f.endswith(ext) for ext in exclude_ext):
+                          continue
+                      path=os.path.join(root,f)
+                      arc=os.path.relpath(path,'.')
+                      if arc == 'backend-clean.zip':
+                          continue
+                      z.write(path, arc)
+          PY
+
+      - name: Azure login (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_41E1D00167544F6A807B419551CCECB3 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FFB7FC8230AD46C6828A3FEDCF4B7DF }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_25FA83492B05466B9358CD02B735D72A }}
+
+      - name: Clean deploy to Azure Web App
+        run: |
+          az webapp deploy --resource-group rg-nen1090 --name nen1090-api-prod --src-path backend-clean.zip --type zip --clean true --restart true
+
+      - name: Set startup command
+        run: |
+          az webapp config set --resource-group rg-nen1090 --name nen1090-api-prod --startup-file "export PYTHONPATH=/home/site/wwwroot/.python_packages:\$PYTHONPATH && gunicorn -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:\$PORT --workers 2 --timeout 120"
+
+      - name: Restart app
+        run: |
+          az webapp restart --resource-group rg-nen1090 --name nen1090-api-prod
