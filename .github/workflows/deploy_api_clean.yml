@@ -21,41 +21,37 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Build local package folder
+      - name: Build clean .python_packages
         run: |
           python -m pip install --upgrade pip
-          rm -rf .python_packages
+          rm -rf .python_packages backend-clean.zip
           mkdir -p .python_packages/lib/site-packages
           pip install -r requirements.txt --target .python_packages/lib/site-packages
 
-      - name: Build deployment zip
+      - name: Build deployment archive
         run: |
           python - <<'PY'
           import os, zipfile
           exclude_dirs={'.git','venv','.venv','antenv','__pycache__','.pytest_cache','.mypy_cache','.ruff_cache','.idea','.vscode','storage'}
-          exclude_names={'.env','backend','.gitignore.txt'}
+          exclude_names={'.env','backend','.gitignore.txt','backend-clean.zip'}
           exclude_ext={'.pyc','.pyo','.pyd','.db','.sqlite','.sqlite3'}
           with zipfile.ZipFile('backend-clean.zip','w',zipfile.ZIP_DEFLATED) as z:
               for root, dirs, files in os.walk('.'):
                   rel=os.path.relpath(root,'.')
                   parts=set(rel.split(os.sep))
-                  dirs[:] = [d for d in dirs if d not in exclude_dirs and d != '.python_packages']
+                  dirs[:] = [d for d in dirs if d not in exclude_dirs]
                   if 'storage' in parts or '.git' in parts:
                       dirs[:] = []
                       continue
                   for f in files:
-                      if f in exclude_names:
-                          continue
-                      if any(f.endswith(ext) for ext in exclude_ext):
+                      if f in exclude_names or any(f.endswith(ext) for ext in exclude_ext):
                           continue
                       path=os.path.join(root,f)
                       arc=os.path.relpath(path,'.')
-                      if arc == 'backend-clean.zip':
-                          continue
                       z.write(path, arc)
           PY
 
-      - name: Azure login (OIDC)
+      - name: Azure login
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_41E1D00167544F6A807B419551CCECB3 }}
@@ -64,12 +60,12 @@ jobs:
 
       - name: Set startup command
         run: |
-          az webapp config set             --resource-group rg-nen1090             --name nen1090-api-prod             --startup-file "export PYTHONPATH=/home/site/wwwroot/.python_packages/lib/site-packages:$PYTHONPATH && gunicorn -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120"
+          az webapp config set             --resource-group rg-nen1090             --name nen1090-api-prod             --startup-file 'export PYTHONPATH=/home/site/wwwroot/.python_packages/lib/site-packages:$PYTHONPATH && gunicorn -k uvicorn.workers.UvicornWorker main:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120'
 
-      - name: Clean deploy to Azure Web App
+      - name: Clean zip deploy
         run: |
           az webapp deploy             --resource-group rg-nen1090             --name nen1090-api-prod             --src-path backend-clean.zip             --type zip             --clean true             --restart true
 
-      - name: Restart app
+      - name: Restart webapp
         run: |
           az webapp restart --resource-group rg-nen1090 --name nen1090-api-prod
