@@ -30,7 +30,7 @@ jobs:
           python - <<'PY'
           import os, zipfile
           exclude_dirs={'.git','venv','.venv','antenv','__pycache__','.pytest_cache','.mypy_cache','.ruff_cache','.idea','.vscode','storage','.python_packages'}
-          exclude_names={'.env','backend','.gitignore.txt','backend-clean.zip'}
+          exclude_names={'.env','backend','.gitignore.txt','backend-clean.zip','requirements.txt'}
           exclude_ext={'.pyc','.pyo','.pyd','.db','.sqlite','.sqlite3'}
           with zipfile.ZipFile('backend-clean.zip','w',zipfile.ZIP_DEFLATED) as z:
               for root, dirs, files in os.walk('.'):
