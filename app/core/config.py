@@ -5,7 +5,16 @@ import urllib.parse
 
 BASE_DIR = Path(__file__).resolve().parents[2]  # backend
 ENV_PATH = BASE_DIR / '.env'  # backend/.env
-load_dotenv(dotenv_path=ENV_PATH, override=True)
+# Do not let a bundled/local .env override Azure App Service settings.
+# Local .env is only used as fallback for development.
+load_dotenv(dotenv_path=ENV_PATH, override=False)
+
+def _running_on_azure() -> bool:
+    return any(os.getenv(k) for k in ("WEBSITE_SITE_NAME", "WEBSITE_INSTANCE_ID", "WEBSITES_PORT"))
+
+def _is_local_db_url(url: str) -> bool:
+    lowered = url.lower()
+    return any(token in lowered for token in ("@localhost", "@127.0.0.1", "@::1", "://localhost", "://127.0.0.1", "://[::1]"))
 
 def _get_db_url() -> str:
     # Prefer full URL if provided
@@ -16,7 +25,11 @@ def _get_db_url() -> str:
             url = 'postgresql+psycopg://' + url[len('postgresql://'):]
         if url.startswith('postgres://'):
             url = 'postgresql+psycopg://' + url[len('postgres://'):]
-        return url
+        # Safety net: on Azure we should never connect to a local database from a bundled .env.
+        if _running_on_azure() and _is_local_db_url(url):
+            url = ""
+        else:
+            return url
 
     host = os.getenv("DB_HOST", "").strip()
     port = os.getenv("DB_PORT", "5432").strip() or "5432"
