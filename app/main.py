@@ -1,43 +1,47 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import auth, projects
+from app.api.v1.router import api_router
 
 app = FastAPI(
-    title="NEN1090 API",
-    version="1.0"
+    title="NEN1090 Backend (Phase 3)",
+    version="0.1.0",
+    docs_url="/docs",
+    redoc_url="/redoc",
+    openapi_url="/openapi.json",
 )
 
-# ---------------------------------------------------
-# CORS CONFIGURATIE (BELANGRIJK)
-# ---------------------------------------------------
-
-origins = [
+ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "https://nen1090.pages.dev",
     "https://nen1090-marketing.pages.dev",
+    "https://app.nen1090.nl",
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["*"],
+    expose_headers=["*"],
+    max_age=86400,
 )
 
-# ---------------------------------------------------
-# ROUTES
-# ---------------------------------------------------
-
-app.include_router(auth.router, prefix="/api/v1/auth", tags=["auth"])
-app.include_router(projects.router, prefix="/api/v1/projects", tags=["projects"])
+app.include_router(api_router, prefix="/api/v1")
 
 
-# ---------------------------------------------------
-# HEALTH CHECK
-# ---------------------------------------------------
+@app.get("/")
+def root():
+    return {"ok": True, "service": "nen1090-api"}
+
 
 @app.get("/health")
 def health():
-    return {"status": "ok"}
+    return {"ok": True, "db": "ok"}
+
+
+@app.options("/{full_path:path}")
+def preflight_handler(full_path: str):
+    return Response(status_code=204)
