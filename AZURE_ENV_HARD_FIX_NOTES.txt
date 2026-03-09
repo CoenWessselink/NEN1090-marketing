@@ -1,0 +1,16 @@
+NEN1090 Azure env hard fix
+
+Aangepast in NEN10900-api:
+- .env verwijderd uit productie-set en vervangen door .env.example
+- .gitignore uitgebreid zodat .env niet meer wordt meegecommit/deployed
+- app/core/config.py: Azure App Settings blijven leidend; lokale localhost-URL wordt op Azure genegeerd
+- alembic/env.py: .env overschrijft Azure settings niet meer
+- app/main.py: startup debug logging toegevoegd met gemaskeerde DATABASE_URL host
+
+Na deploy testen:
+- /docs
+- /health
+- Azure Log Stream: controleer 'Startup DATABASE_URL:'
+
+Gewenste Azure DATABASE_URL:
+postgresql+psycopg://nen1090adm:Wesselink2012%21@nen1090-db.postgres.database.azure.com:5432/postgres?sslmode=require

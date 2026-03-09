@@ -17,7 +17,7 @@ def get_db():
     if SessionLocal is None:
         raise RuntimeError(
             "DATABASE_URL not configured. Set DB_* or DATABASE_URL in backend/.env. "
-            "(Default testfase: postgresql+psycopg://postgres:Wesselink2012!@localhost:5432/nen1090)"
+            "(Local dev example: postgresql+psycopg://postgres:<local-password>@localhost:5432/nen1090 or set Azure DATABASE_URL)"
         )
     db = SessionLocal()
     try:

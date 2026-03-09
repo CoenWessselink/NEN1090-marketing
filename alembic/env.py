@@ -8,7 +8,8 @@ from dotenv import load_dotenv
 # Ensure .env is loaded even when Alembic is invoked from a different working directory
 BASE_DIR = Path(__file__).resolve().parents[1]  # backend/
 ENV_PATH = BASE_DIR / '.env'
-load_dotenv(dotenv_path=ENV_PATH, override=True)
+if ENV_PATH.exists():
+    load_dotenv(dotenv_path=ENV_PATH, override=False)
 
 from app.core.config import settings
 from app.db.base import Base

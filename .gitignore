@@ -13,3 +13,4 @@ __pycache__/
 .git/
 .vscode/
 .idea/
+!.env.example

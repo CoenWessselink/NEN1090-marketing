@@ -1,5 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from urllib.parse import urlsplit, unquote
+import os
 
 from app.api.v1.router import api_router
 from app.core.config import settings
@@ -10,6 +12,25 @@ app = FastAPI(title="NEN1090 Backend (Phase 3)")
 # Dev safety: warn if JWT secrets are not configured
 if settings.JWT_ACCESS_SECRET == "change-me" or settings.JWT_REFRESH_SECRET == "change-me":
     print("WARNING: JWT secrets are still set to 'change-me'. Set JWT_ACCESS_SECRET and JWT_REFRESH_SECRET in backend/.env for real auth.")
+
+
+def _mask_startup_db_url(url: str) -> str:
+    if not url:
+        return "<empty>"
+    try:
+        parsed = urlsplit(url)
+        host = parsed.hostname or "<no-host>"
+        scheme = parsed.scheme or "<no-scheme>"
+        port = parsed.port or "<no-port>"
+        db = parsed.path.lstrip('/') or "<no-db>"
+        user = unquote(parsed.username or "")
+        user_mask = user[:3] + '***' if user else '<no-user>'
+        return f"{scheme}://{user_mask}:***@{host}:{port}/{db}"
+    except Exception:
+        return "<unparseable>"
+
+print("Startup Azure:", bool(os.getenv('WEBSITE_SITE_NAME')))
+print("Startup DATABASE_URL:", _mask_startup_db_url(settings.DATABASE_URL))
 
 
 app.add_middleware(

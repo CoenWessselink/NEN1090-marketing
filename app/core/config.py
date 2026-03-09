@@ -5,28 +5,47 @@ import urllib.parse
 
 BASE_DIR = Path(__file__).resolve().parents[2]  # backend
 ENV_PATH = BASE_DIR / '.env'  # backend/.env
-# Do not let a bundled/local .env override Azure App Service settings.
-# Local .env is only used as fallback for development.
-load_dotenv(dotenv_path=ENV_PATH, override=False)
+# Local .env is optional and must never override Azure App Service settings.
+if ENV_PATH.exists():
+    load_dotenv(dotenv_path=ENV_PATH, override=False)
 
 def _running_on_azure() -> bool:
     return any(os.getenv(k) for k in ("WEBSITE_SITE_NAME", "WEBSITE_INSTANCE_ID", "WEBSITES_PORT"))
 
 def _is_local_db_url(url: str) -> bool:
     lowered = url.lower()
-    return any(token in lowered for token in ("@localhost", "@127.0.0.1", "@::1", "://localhost", "://127.0.0.1", "://[::1]"))
+    return any(token in lowered for token in (
+        "@localhost", "@127.0.0.1", "@::1", "://localhost", "://127.0.0.1", "://[::1]"
+    ))
+
+def _normalize_driver(url: str) -> str:
+    if url.startswith('postgresql://'):
+        return 'postgresql+psycopg://' + url[len('postgresql://'):]
+    if url.startswith('postgres://'):
+        return 'postgresql+psycopg://' + url[len('postgres://'):]
+    return url
+
+def _mask_db_url(url: str) -> str:
+    if not url:
+        return '<empty>'
+    try:
+        parsed = urllib.parse.urlsplit(url)
+        host = parsed.hostname or '<no-host>'
+        scheme = parsed.scheme or '<no-scheme>'
+        port = parsed.port or '<no-port>'
+        db = parsed.path.lstrip('/') or '<no-db>'
+        user = urllib.parse.unquote(parsed.username or '')
+        user_mask = user[:3] + '***' if user else '<no-user>'
+        return f"{scheme}://{user_mask}:***@{host}:{port}/{db}"
+    except Exception:
+        return '<unparseable>'
 
 def _get_db_url() -> str:
-    # Prefer full URL if provided
     url = os.getenv("DATABASE_URL", "").strip()
     if url:
-        # Normalize driver: prefer psycopg (v3) to avoid psycopg2 dependency
-        if url.startswith('postgresql://'):
-            url = 'postgresql+psycopg://' + url[len('postgresql://'):]
-        if url.startswith('postgres://'):
-            url = 'postgresql+psycopg://' + url[len('postgres://'):]
-        # Safety net: on Azure we should never connect to a local database from a bundled .env.
+        url = _normalize_driver(url)
         if _running_on_azure() and _is_local_db_url(url):
+            print("WARNING: Ignoring local DATABASE_URL on Azure:", _mask_db_url(url))
             url = ""
         else:
             return url
@@ -41,11 +60,8 @@ def _get_db_url() -> str:
     if not (host and name and user and password):
         return ""
 
-    # Safely percent-encode user/password for URLs (Azure usernames often contain '@')
     user_enc = urllib.parse.quote(user, safe="")
     pass_enc = urllib.parse.quote(password, safe="")
-
-    # Use psycopg (v3) driver (we ship psycopg[binary] in requirements.txt)
     return f"postgresql+psycopg://{user_enc}:{pass_enc}@{host}:{port}/{name}?sslmode={sslmode}"
 
 class Settings:
