@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Response
+from fastapi import FastAPI, Response, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1.router import api_router
@@ -22,8 +22,8 @@ ALLOWED_ORIGINS = [
 app.add_middleware(
     CORSMiddleware,
     allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allow_credentials=False,
+    allow_methods=["*"],
     allow_headers=["*"],
     expose_headers=["*"],
     max_age=86400,
@@ -42,6 +42,16 @@ def health():
     return {"ok": True, "db": "ok"}
 
 
+@app.options("/health")
+def options_health():
+    return Response(status_code=204)
+
+
+@app.options("/api/v1/auth/login")
+def options_auth_login():
+    return Response(status_code=204)
+
+
 @app.options("/{full_path:path}")
-def preflight_handler(full_path: str):
+def options_all(full_path: str, request: Request):
     return Response(status_code=204)
