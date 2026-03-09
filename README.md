@@ -16,3 +16,9 @@ Dubbelklik: `START_LOCAL_WRANGLER.bat`
 - Build command: `npm run build`
 - Output directory: `dist`
 - Environment variable (optioneel): `AZURE_API_ORIGIN` (Azure origin, default staat al in de proxy)
+
+
+## Live koppeling
+- Marketing: https://nen1090-marketing-new.pages.dev
+- App: https://nen-1090-app.pages.dev/layers/projecten.html
+- API: https://nen1090-api-prod-f5ddagedbrftb4ew.westeurope-01.azurewebsites.net
