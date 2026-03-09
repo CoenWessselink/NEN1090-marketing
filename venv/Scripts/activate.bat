@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\Tasche\Downloads\NEN1090_TOTAALPAKKET_v14_TESTPASS_Wesselink2012_ALLINONE_FIX2\NEN1090_v14\_v10_build\backend\venv
+set VIRTUAL_ENV=C:\NEN1090\NEN10900-api\venv
 
 if not defined PROMPT set PROMPT=$P$G
 

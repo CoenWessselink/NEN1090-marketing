@@ -3,35 +3,40 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1.router import api_router
 
+
 app = FastAPI(
-    title="NEN1090 Backend (Phase 3)",
-    version="0.1.0",
+    title="NEN1090 API",
+    version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
-    openapi_url="/openapi.json",
+    openapi_url="/openapi.json"
 )
 
-origins = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "https://nen1090.pages.dev",
-    "https://app.nen1090.nl",
-]
 
+# CORS volledig open (voor development)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+
+# API routes
 app.include_router(api_router, prefix="/api/v1")
+
 
 @app.get("/")
 def root():
-    return {"ok": True, "service": "nen1090-api"}
+    return {
+        "status": "ok",
+        "service": "nen1090-api"
+    }
+
 
 @app.get("/health")
 def health():
-    return {"ok": True, "db": "ok"}
+    return {
+        "status": "healthy"
+    }

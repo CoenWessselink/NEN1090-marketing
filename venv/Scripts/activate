@@ -42,10 +42,10 @@ deactivate nondestructive
 if [ "$OSTYPE" = "cygwin" ] || [ "$OSTYPE" = "msys" ] ; then
     # transform D:\path\to\venv to /d/path/to/venv on MSYS
     # and to /cygdrive/d/path/to/venv on Cygwin
-    export VIRTUAL_ENV=$(cygpath "C:\Users\Tasche\Downloads\NEN1090_TOTAALPAKKET_v14_TESTPASS_Wesselink2012_ALLINONE_FIX2\NEN1090_v14\_v10_build\backend\venv")
+    export VIRTUAL_ENV=$(cygpath "C:\NEN1090\NEN10900-api\venv")
 else
     # use the path as-is
-    export VIRTUAL_ENV="C:\Users\Tasche\Downloads\NEN1090_TOTAALPAKKET_v14_TESTPASS_Wesselink2012_ALLINONE_FIX2\NEN1090_v14\_v10_build\backend\venv"
+    export VIRTUAL_ENV="C:\NEN1090\NEN10900-api\venv"
 fi
 
 _OLD_VIRTUAL_PATH="$PATH"
