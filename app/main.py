@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Response, Request
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1.router import api_router
@@ -40,18 +40,3 @@ def root():
 @app.get("/health")
 def health():
     return {"ok": True, "db": "ok"}
-
-
-@app.options("/health")
-def options_health():
-    return Response(status_code=204)
-
-
-@app.options("/api/v1/auth/login")
-def options_auth_login():
-    return Response(status_code=204)
-
-
-@app.options("/{full_path:path}")
-def options_all(full_path: str, request: Request):
-    return Response(status_code=204)
