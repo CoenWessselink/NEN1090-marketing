@@ -5,9 +5,18 @@ from typing import List
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_db, get_current_user, get_current_tenant_id, get_current_claims
+from app.api.deps import (
+    get_db,
+    get_current_user,
+    get_current_tenant,
+    get_current_tenant_id,
+    get_current_claims,
+    require_tenant_write,
+)
+from app.core.audit import audit
 from app.db.models import (
     Project,
     WeldInspection,
@@ -20,13 +29,10 @@ from app.db.models import (
     ProjectMaterial,
     ProjectWelder,
 )
-from app.core.audit import audit
 from app.schemas.projects import ProjectCreate, ProjectOut, ProjectUpdate
+from app.services.demo_seed import BASE_TEMPLATE_ITEMS, clear_demo_dataset, seed_demo_dataset
 
 router = APIRouter(prefix="/projects", tags=["projects"])
-
-
-from pydantic import BaseModel
 
 
 class ApplyTemplateBody(BaseModel):
@@ -38,14 +44,20 @@ class ApproveAllBody(BaseModel):
     mode: str  # open_only|overwrite_all
 
 
+class DemoSeedBody(BaseModel):
+    reset_first: bool = True
+    allow_non_demo: bool = False
+
+
 @router.post("/{project_id}/apply-inspection-template")
 def apply_inspection_template(
     project_id: UUID,
     body: ApplyTemplateBody,
     db: Session = Depends(get_db),
-    tenant_id = Depends(get_current_tenant_id),
-    user = Depends(get_current_user),
-    claims = Depends(get_current_claims),
+    tenant_id=Depends(get_current_tenant_id),
+    user=Depends(get_current_user),
+    claims=Depends(get_current_claims),
+    _write=Depends(require_tenant_write),
 ):
     p = db.query(Project).filter(Project.id == project_id, Project.tenant_id == tenant_id).first()
     if not p:
@@ -63,7 +75,6 @@ def apply_inspection_template(
         items = json.loads(t.items_json or "[]")
     except Exception:
         items = []
-    # Flatten to unique (group,key)
     wanted = []
     for it in items:
         g = (it.get("groep") or it.get("group") or it.get("group_key") or "pre")
@@ -71,7 +82,6 @@ def apply_inspection_template(
         if not k:
             continue
         wanted.append((str(g), str(k)))
-    # de-dup
     wanted = list(dict.fromkeys(wanted))
 
     inspections = db.query(WeldInspection).filter(WeldInspection.tenant_id == tenant_id, WeldInspection.project_id == project_id).all()
@@ -81,7 +91,6 @@ def apply_inspection_template(
         existing_checks = db.query(InspectionCheck).filter(InspectionCheck.tenant_id == tenant_id, InspectionCheck.inspection_id == insp.id).all()
         existing_by_key = {(c.group_key, c.criterion_key): c for c in existing_checks}
         if mode == "replace":
-            # Remove any check not in wanted
             wanted_set = set(wanted)
             for c in existing_checks:
                 if (c.group_key, c.criterion_key) not in wanted_set:
@@ -124,9 +133,10 @@ def _bulk_add(db: Session, tenant_id, user_id, project_id: UUID, master_model, l
 def add_all_wps(
     project_id: UUID,
     db: Session = Depends(get_db),
-    tenant_id = Depends(get_current_tenant_id),
-    user = Depends(get_current_user),
-    claims = Depends(get_current_claims),
+    tenant_id=Depends(get_current_tenant_id),
+    user=Depends(get_current_user),
+    claims=Depends(get_current_claims),
+    _write=Depends(require_tenant_write),
 ):
     p = db.query(Project).filter(Project.id == project_id, Project.tenant_id == tenant_id).first()
     if not p:
@@ -141,9 +151,10 @@ def add_all_wps(
 def add_all_materials(
     project_id: UUID,
     db: Session = Depends(get_db),
-    tenant_id = Depends(get_current_tenant_id),
-    user = Depends(get_current_user),
-    claims = Depends(get_current_claims),
+    tenant_id=Depends(get_current_tenant_id),
+    user=Depends(get_current_user),
+    claims=Depends(get_current_claims),
+    _write=Depends(require_tenant_write),
 ):
     p = db.query(Project).filter(Project.id == project_id, Project.tenant_id == tenant_id).first()
     if not p:
@@ -158,9 +169,10 @@ def add_all_materials(
 def add_all_welders(
     project_id: UUID,
     db: Session = Depends(get_db),
-    tenant_id = Depends(get_current_tenant_id),
-    user = Depends(get_current_user),
-    claims = Depends(get_current_claims),
+    tenant_id=Depends(get_current_tenant_id),
+    user=Depends(get_current_user),
+    claims=Depends(get_current_claims),
+    _write=Depends(require_tenant_write),
 ):
     p = db.query(Project).filter(Project.id == project_id, Project.tenant_id == tenant_id).first()
     if not p:
@@ -175,9 +187,10 @@ def add_all_welders(
 def add_all_lascontrole(
     project_id: UUID,
     db: Session = Depends(get_db),
-    tenant_id = Depends(get_current_tenant_id),
-    user = Depends(get_current_user),
-    claims = Depends(get_current_claims),
+    tenant_id=Depends(get_current_tenant_id),
+    user=Depends(get_current_user),
+    claims=Depends(get_current_claims),
+    _write=Depends(require_tenant_write),
 ):
     p = db.query(Project).filter(Project.id == project_id, Project.tenant_id == tenant_id).first()
     if not p:
@@ -195,16 +208,11 @@ def approve_all_lascontrole(
     project_id: UUID,
     body: ApproveAllBody,
     db: Session = Depends(get_db),
-    tenant_id = Depends(get_current_tenant_id),
-    user = Depends(get_current_user),
-    claims = Depends(get_current_claims),
+    tenant_id=Depends(get_current_tenant_id),
+    user=Depends(get_current_user),
+    claims=Depends(get_current_claims),
+    _write=Depends(require_tenant_write),
 ):
-    """Bulk approve inspection checks for all weld inspections in a project.
-
-    Modes:
-      - open_only: approve only checks that are currently not approved
-      - overwrite_all: set approved=True for all applicable checks (admin only)
-    """
     p = db.query(Project).filter(Project.id == project_id, Project.tenant_id == tenant_id).first()
     if not p:
         raise HTTPException(status_code=404, detail="Project not found")
@@ -225,7 +233,6 @@ def approve_all_lascontrole(
         return {"ok": True, "mode": mode, "inspections": 0, "checks_updated": 0, "inspections_set_ok": 0}
 
     insp_ids = [i.id for i in inspections]
-    # Load all checks in one go
     checks = db.query(InspectionCheck).filter(
         InspectionCheck.tenant_id == tenant_id,
         InspectionCheck.inspection_id.in_(insp_ids),
@@ -248,7 +255,6 @@ def approve_all_lascontrole(
                 updated += 1
             c.approved = True
 
-    # Set inspection overall_status="ok" when all applicable checks are approved
     set_ok = 0
     for insp in inspections:
         insp_checks = by_insp.get(insp.id, [])
@@ -275,8 +281,8 @@ def approve_all_lascontrole(
 def list_selected_wps(
     project_id: UUID,
     db: Session = Depends(get_db),
-    tenant_id = Depends(get_current_tenant_id),
-    _user = Depends(get_current_user),
+    tenant_id=Depends(get_current_tenant_id),
+    _user=Depends(get_current_user),
 ):
     rows = (
         db.query(ProjectWps, WpsMaster)
@@ -299,8 +305,8 @@ def list_selected_wps(
 def list_selected_materials(
     project_id: UUID,
     db: Session = Depends(get_db),
-    tenant_id = Depends(get_current_tenant_id),
-    _user = Depends(get_current_user),
+    tenant_id=Depends(get_current_tenant_id),
+    _user=Depends(get_current_user),
 ):
     rows = (
         db.query(ProjectMaterial, MaterialMaster)
@@ -323,8 +329,8 @@ def list_selected_materials(
 def list_selected_welders(
     project_id: UUID,
     db: Session = Depends(get_db),
-    tenant_id = Depends(get_current_tenant_id),
-    _user = Depends(get_current_user),
+    tenant_id=Depends(get_current_tenant_id),
+    _user=Depends(get_current_user),
 ):
     rows = (
         db.query(ProjectWelder, WelderMaster)
@@ -343,73 +349,12 @@ def list_selected_welders(
     ]
 
 
-DEMO_PROJECTS = [
-    {
-        "code": "P-1001",
-        "name": "Tasche Staalbouw – Warmtepompruimte",
-        "client_name": "Gemeente Voorbeeldstad",
-        "execution_class": "EXC2",
-        "acceptance_class": "B",
-        "status": "in_controle",
-        "locked": False,
-    },
-    {
-        "code": "P-1002",
-        "name": "Roostervloer – Industriehal",
-        "client_name": "Bouwbedrijf Delta",
-        "execution_class": "EXC3",
-        "acceptance_class": "C",
-        "status": "conform",
-        "locked": False,
-    },
-]
-
-
-def _ensure_phase1_demo_masterdata(db: Session, tenant_id):
-    # Templates
-    existing_tpl = db.query(InspectionPlanTemplate).filter(InspectionPlanTemplate.tenant_id == tenant_id).first()
-    if not existing_tpl:
-      base_items = [
-        {"groep":"pre","key":"pre.drawing_ok","label":"Tekeningen/plan aanwezig","required":True,"default_state":"na","evidence_required":False},
-        {"groep":"weld","key":"weld.wps_selected","label":"WPS/WPQR gekozen","required":True,"default_state":"na","evidence_required":False},
-        {"groep":"vt","key":"vt.visual_ok","label":"Visuele controle OK","required":True,"default_state":"na","evidence_required":False},
-        {"groep":"ndo","key":"ndo.required","label":"NDO volgens plan","required":False,"default_state":"nvt","evidence_required":False},
-        {"groep":"post","key":"post.report_done","label":"Rapportage afgerond","required":False,"default_state":"na","evidence_required":False},
-      ]
-      for exc in ["EXC1","EXC2","EXC3","EXC4"]:
-        db.add(InspectionPlanTemplate(
-          tenant_id=tenant_id,
-          name=f"{exc} standaard",
-          exc_class=exc,
-          version=1,
-          is_default=True,
-          items_json=json.dumps(base_items),
-        ))
-
-    # WPS
-    if not db.query(WpsMaster).filter(WpsMaster.tenant_id == tenant_id).first():
-      for code, title in [("WPS-135-01","MAG staal"),("WPS-111-01","Elektrode"),("WPQR-135-TS-01","WPQR kwalificatie")]:
-        db.add(WpsMaster(tenant_id=tenant_id, code=code, title=title))
-
-    # Materials
-    if not db.query(MaterialMaster).filter(MaterialMaster.tenant_id == tenant_id).first():
-      for code, title in [("S235JR","Konstruktie staal"),("S355J2","Konstruktie staal"),("A4-70","RVS bevestiging")]:
-        db.add(MaterialMaster(tenant_id=tenant_id, code=code, title=title))
-
-    # Welders
-    if not db.query(WelderMaster).filter(WelderMaster.tenant_id == tenant_id).first():
-      for code, name in [("LAS-001","Lasser Jan"),("LAS-002","Lasser Piet"),("LAS-003","Lasser Kees")]:
-        db.add(WelderMaster(tenant_id=tenant_id, code=code, name=name))
-
-    db.commit()
-
-
 @router.get("", response_model=List[ProjectOut])
 def list_projects(
     db: Session = Depends(get_db),
-    tenant_id = Depends(get_current_tenant_id),
-    _user = Depends(get_current_user),
-    claims = Depends(get_current_claims),
+    tenant_id=Depends(get_current_tenant_id),
+    _user=Depends(get_current_user),
+    _claims=Depends(get_current_claims),
 ):
     return (
         db.query(Project)
@@ -423,14 +368,16 @@ def list_projects(
 def create_project(
     payload: ProjectCreate,
     db: Session = Depends(get_db),
-    tenant_id = Depends(get_current_tenant_id),
-    _user = Depends(get_current_user),
-    claims = Depends(get_current_claims),
+    tenant_id=Depends(get_current_tenant_id),
+    user=Depends(get_current_user),
+    claims=Depends(get_current_claims),
+    _write=Depends(require_tenant_write),
 ):
     p = Project(tenant_id=tenant_id, **payload.model_dump())
     db.add(p)
     db.commit()
     db.refresh(p)
+    audit(db, tenant_id=tenant_id, user_id=user.id, action="project_create", entity="project", entity_id=str(p.id), meta={"code": p.code, "role": claims.get("role")})
     return p
 
 
@@ -438,9 +385,9 @@ def create_project(
 def get_project(
     project_id: UUID,
     db: Session = Depends(get_db),
-    tenant_id = Depends(get_current_tenant_id),
-    _user = Depends(get_current_user),
-    claims = Depends(get_current_claims),
+    tenant_id=Depends(get_current_tenant_id),
+    _user=Depends(get_current_user),
+    _claims=Depends(get_current_claims),
 ):
     p = db.query(Project).filter(Project.id == project_id, Project.tenant_id == tenant_id).first()
     if not p:
@@ -453,16 +400,16 @@ def update_project(
     project_id: UUID,
     payload: ProjectUpdate,
     db: Session = Depends(get_db),
-    tenant_id = Depends(get_current_tenant_id),
-    _user = Depends(get_current_user),
-    claims = Depends(get_current_claims),
+    tenant_id=Depends(get_current_tenant_id),
+    user=Depends(get_current_user),
+    claims=Depends(get_current_claims),
+    _write=Depends(require_tenant_write),
 ):
     p = db.query(Project).filter(Project.id == project_id, Project.tenant_id == tenant_id).first()
     if not p:
         raise HTTPException(status_code=404, detail="Project not found")
 
     data = payload.model_dump(exclude_unset=True)
-    # Enforce lock: only tenant_admin can unlock; otherwise locked projects are read-only
     if getattr(p, "locked", False):
         want_unlock = ("locked" in data and data.get("locked") is False)
         if not (want_unlock and claims.get("role") == "tenant_admin"):
@@ -471,6 +418,7 @@ def update_project(
         setattr(p, k, v)
     db.commit()
     db.refresh(p)
+    audit(db, tenant_id=tenant_id, user_id=user.id, action="project_update", entity="project", entity_id=str(p.id), meta={"fields": sorted(data.keys())})
     return p
 
 
@@ -479,21 +427,22 @@ def update_project_put(
     project_id: UUID,
     payload: ProjectUpdate,
     db: Session = Depends(get_db),
-    tenant_id = Depends(get_current_tenant_id),
-    _user = Depends(get_current_user),
-    claims = Depends(get_current_claims),
+    tenant_id=Depends(get_current_tenant_id),
+    user=Depends(get_current_user),
+    claims=Depends(get_current_claims),
+    _write=Depends(require_tenant_write),
 ):
-    """PUT alias for update (frontend uses PUT semantics)."""
-    return update_project(project_id, payload, db=db, tenant_id=tenant_id, _user=_user)
+    return update_project(project_id, payload, db=db, tenant_id=tenant_id, user=user, claims=claims)
 
 
 @router.delete("/{project_id}")
 def delete_project(
     project_id: UUID,
     db: Session = Depends(get_db),
-    tenant_id = Depends(get_current_tenant_id),
-    _user = Depends(get_current_user),
-    claims = Depends(get_current_claims),
+    tenant_id=Depends(get_current_tenant_id),
+    user=Depends(get_current_user),
+    claims=Depends(get_current_claims),
+    _write=Depends(require_tenant_write),
 ):
     p = db.query(Project).filter(Project.id == project_id, Project.tenant_id == tenant_id).first()
     if not p:
@@ -502,57 +451,69 @@ def delete_project(
         raise HTTPException(status_code=423, detail="Project is locked")
     db.delete(p)
     db.commit()
+    audit(db, tenant_id=tenant_id, user_id=user.id, action="project_delete", entity="project", entity_id=str(project_id), meta={"code": p.code})
     return {"ok": True}
 
 
 @router.post("/seed_demo")
 def seed_demo_projects(
+    body: DemoSeedBody | None = None,
     db: Session = Depends(get_db),
-    tenant_id = Depends(get_current_tenant_id),
-    _user = Depends(get_current_user),
-    claims = Depends(get_current_claims),
+    tenant_id=Depends(get_current_tenant_id),
+    tenant=Depends(get_current_tenant),
+    user=Depends(get_current_user),
+    claims=Depends(get_current_claims),
+    _write=Depends(require_tenant_write),
 ):
-    """Idempotent seed of demo projects for the current tenant."""
-    created = 0
-    updated = 0
-    for item in DEMO_PROJECTS:
-        code = item.get("code")
-        existing = None
-        if code:
-            existing = (
-                db.query(Project)
-                .filter(Project.tenant_id == tenant_id, Project.code == code)
-                .first()
-            )
-        if existing:
-            for k, v in item.items():
-                setattr(existing, k, v)
-            updated += 1
-        else:
-            p = Project(tenant_id=tenant_id, **item)
-            db.add(p)
-            created += 1
-    db.commit()
-    # Phase 1: ensure demo masterdata/templates exist so the UI can use "Alles toevoegen" and EXC apply.
+    payload = body or DemoSeedBody()
+    if claims.get("role") not in ("tenant_admin", "platform_admin"):
+        raise HTTPException(status_code=403, detail="Forbidden")
     try:
-        _ensure_phase1_demo_masterdata(db, tenant_id)
-    except Exception:
-        pass
-    return {"ok": True, "created": created, "updated": updated}
+        result = seed_demo_dataset(
+            db,
+            tenant_id,
+            tenant_name=tenant.name,
+            actor_user_id=user.id,
+            reset_first=payload.reset_first,
+            allow_non_demo=payload.allow_non_demo,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    audit(db, tenant_id=tenant_id, user_id=user.id, action="demo_seed", entity="tenant", entity_id=str(tenant_id), meta=result)
+    return {"ok": True, **result}
 
 
 @router.delete("")
 def delete_all_projects(
     db: Session = Depends(get_db),
-    tenant_id = Depends(get_current_tenant_id),
-    _user = Depends(get_current_user),
-    claims = Depends(get_current_claims),
+    tenant_id=Depends(get_current_tenant_id),
+    user=Depends(get_current_user),
+    claims=Depends(get_current_claims),
+    _write=Depends(require_tenant_write),
 ):
-    """Delete all projects for current tenant (used by 'Data leegmaken')."""
+    if claims.get("role") not in ("tenant_admin", "platform_admin"):
+        raise HTTPException(status_code=403, detail="Forbidden")
     q = db.query(Project).filter(Project.tenant_id == tenant_id)
     count = q.count()
     q.delete(synchronize_session=False)
     db.commit()
+    audit(db, tenant_id=tenant_id, user_id=user.id, action="project_delete_all", entity="tenant", entity_id=str(tenant_id), meta={"count": count})
     return {"ok": True, "deleted": count}
 
 
+@router.post("/clear_demo")
+def clear_demo_projects(
+    db: Session = Depends(get_db),
+    tenant_id=Depends(get_current_tenant_id),
+    tenant=Depends(get_current_tenant),
+    user=Depends(get_current_user),
+    claims=Depends(get_current_claims),
+    _write=Depends(require_tenant_write),
+):
+    if claims.get("role") not in ("tenant_admin", "platform_admin"):
+        raise HTTPException(status_code=403, detail="Forbidden")
+    if tenant.name.strip().lower() != "demo" and claims.get("role") != "platform_admin":
+        raise HTTPException(status_code=400, detail="Demo clear is alleen toegestaan voor tenant 'demo'.")
+    result = clear_demo_dataset(db, tenant_id)
+    audit(db, tenant_id=tenant_id, user_id=user.id, action="demo_clear", entity="tenant", entity_id=str(tenant_id), meta=result)
+    return {"ok": True, **result}

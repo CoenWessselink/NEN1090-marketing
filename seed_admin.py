@@ -1,4 +1,4 @@
-"""Seed a default tenant + admin user (run locally once after migrations).
+"""Seed tenants, admin users and a full demo dataset.
 
 Usage:
   venv\Scripts\activate
@@ -8,127 +8,117 @@ Reads:
   TENANT_NAME (default: demo)
   ADMIN_EMAIL (default: admin@demo.com)
   ADMIN_PASSWORD (default: Admin123!)
-# NOTE: Use a real email domain (e.g. demo.com). Reserved domains like .local may be rejected by email-validator.
-
+  PLATFORM_TENANT (default: platform)
+  PLATFORM_ADMIN_EMAIL (default: superadmin@nen1090.com)
+  PLATFORM_ADMIN_PASSWORD (default: Admin123!)
+  SEED_DEMO_FULL (default: 1)
+  RESET_DEMO_FIRST (default: 1)
 """
 import os
-from sqlalchemy.orm import Session
-from app.core.config import settings
-from app.db.session import get_engine
-from app.db.models import Tenant, User, TenantUser
-from app.core.security import hash_password
+import secrets
 
-# Optional demo entities (present in v13+). Keep seed_admin working even if you run an older backend.
-try:
-    from app.db.models import Project, Weld  # type: ignore
-except Exception:
-    Project = None  # type: ignore
-    Weld = None  # type: ignore
+from sqlalchemy.orm import Session
+
+from app.core.security import hash_password
+from app.db.models import Tenant, TenantUser, User
+from app.db.session import get_engine
+from app.services.demo_seed import seed_demo_dataset
+
+
+def _bcrypt_safe(value: str) -> str:
+    value_bytes = value.encode("utf-8")
+    if len(value_bytes) > 72:
+        print("WARNING: password is longer than 72 bytes; truncating for bcrypt compatibility.")
+        return value_bytes[:72].decode("utf-8", errors="ignore")
+    return value
+
+
+def _truthy(name: str, default: str = "0") -> bool:
+    return os.getenv(name, default).strip().lower() in {"1", "true", "yes", "y", "on"}
+
 
 def main():
     eng = get_engine()
     if eng is None:
         raise SystemExit("DATABASE_URL not configured.")
+
     from sqlalchemy.orm import sessionmaker
     SessionLocal = sessionmaker(bind=eng)
-    tenant_name = os.getenv("TENANT_NAME", "demo")
-    admin_email = os.getenv("ADMIN_EMAIL", "admin@demo.com").lower()
-    admin_pw = os.getenv("ADMIN_PASSWORD", "Admin123!")
 
-    # bcrypt only uses first 72 bytes of the password; longer secrets can raise errors depending on backend.
-    pw_bytes = admin_pw.encode('utf-8')
-    if len(pw_bytes) > 72:
-        print('WARNING: ADMIN_PASSWORD is longer than 72 bytes; truncating to 72 bytes for bcrypt compatibility.')
-        print('         Tip: set a shorter ADMIN_PASSWORD in your environment or .env when seeding.')
-        admin_pw = pw_bytes[:72].decode('utf-8', errors='ignore')
+    tenant_name = os.getenv("TENANT_NAME", "demo").strip()
+    admin_email = os.getenv("ADMIN_EMAIL", "admin@demo.com").strip().lower()
+    admin_pw = _bcrypt_safe(os.getenv("ADMIN_PASSWORD", "Admin123!"))
+
+    platform_tenant_name = os.getenv("PLATFORM_TENANT", "platform").strip()
+    platform_email = os.getenv("PLATFORM_ADMIN_EMAIL", "superadmin@nen1090.com").strip().lower()
+    platform_pw = _bcrypt_safe(os.getenv("PLATFORM_ADMIN_PASSWORD", "Admin123!"))
+
+    seed_demo_full = _truthy("SEED_DEMO_FULL", "1")
+    reset_demo_first = _truthy("RESET_DEMO_FIRST", "1")
 
     with SessionLocal() as db:  # type: Session
-        t = db.query(Tenant).filter(Tenant.name == tenant_name).first()
-        if not t:
-            t = Tenant(name=tenant_name)
-            db.add(t)
+        tenant = db.query(Tenant).filter(Tenant.name == tenant_name).first()
+        if not tenant:
+            tenant = Tenant(name=tenant_name, is_active=True, status="trial")
+            tenant.webhook_token = secrets.token_hex(16)
+            db.add(tenant)
             db.commit()
-            db.refresh(t)
+            db.refresh(tenant)
 
-        u = db.query(User).filter(User.email == admin_email).first()
-        if not u:
-            u = User(email=admin_email, password_hash=hash_password(admin_pw))
-            db.add(u)
+        admin = db.query(User).filter(User.email == admin_email).first()
+        if not admin:
+            admin = User(email=admin_email, password_hash=hash_password(admin_pw), is_active=True)
+            db.add(admin)
             db.commit()
-            db.refresh(u)
+            db.refresh(admin)
 
-        link = db.query(TenantUser).filter(TenantUser.tenant_id == t.id, TenantUser.user_id == u.id).first()
-        if not link:
-            link = TenantUser(tenant_id=t.id, user_id=u.id, role="tenant_admin")
-            db.add(link)
-            db.commit()
-
-        
-        # ---- Platform (Superadmin) seed ----
-        platform_tenant_name = os.getenv("PLATFORM_TENANT", "platform")
-        platform_email = os.getenv("PLATFORM_ADMIN_EMAIL", "superadmin@nen1090.com").lower()
-        platform_pw = os.getenv("PLATFORM_ADMIN_PASSWORD", "Admin123!")
-        pwb = platform_pw.encode("utf-8")
-        if len(pwb) > 72:
-            platform_pw = pwb[:72].decode("utf-8", errors="ignore")
-
-        pt = db.query(Tenant).filter(Tenant.name == platform_tenant_name).first()
-        if not pt:
-            pt = Tenant(name=platform_tenant_name)
-            try:
-                pt.webhook_token = __import__('secrets').token_hex(16)
-            except Exception:
-                pass
-            # mark as active platform tenant
-            try:
-                pt.status = "active"
-            except Exception:
-                pass
-            db.add(pt)
-            db.commit()
-            db.refresh(pt)
-
-        pu = db.query(User).filter(User.email == platform_email).first()
-        if not pu:
-            pu = User(email=platform_email, password_hash=hash_password(platform_pw))
-            db.add(pu)
-            db.commit()
-            db.refresh(pu)
-
-        plink = db.query(TenantUser).filter(TenantUser.tenant_id == pt.id, TenantUser.user_id == pu.id).first()
-        if not plink:
-            plink = TenantUser(tenant_id=pt.id, user_id=pu.id, role="platform_admin")
-            db.add(plink)
+        tenant_link = db.query(TenantUser).filter(TenantUser.tenant_id == tenant.id, TenantUser.user_id == admin.id).first()
+        if not tenant_link:
+            tenant_link = TenantUser(tenant_id=tenant.id, user_id=admin.id, role="tenant_admin")
+            db.add(tenant_link)
             db.commit()
 
-        # Seed a tiny bit of demo data (safe to run multiple times)
-        if Project is not None and Weld is not None:
-            existing_project = (
-                db.query(Project)
-                .filter(Project.tenant_id == t.id)
-                .order_by(Project.created_at.desc())
-                .first()
+        platform_tenant = db.query(Tenant).filter(Tenant.name == platform_tenant_name).first()
+        if not platform_tenant:
+            platform_tenant = Tenant(name=platform_tenant_name, is_active=True, status="active")
+            platform_tenant.webhook_token = secrets.token_hex(16)
+            db.add(platform_tenant)
+            db.commit()
+            db.refresh(platform_tenant)
+
+        platform_admin = db.query(User).filter(User.email == platform_email).first()
+        if not platform_admin:
+            platform_admin = User(email=platform_email, password_hash=hash_password(platform_pw), is_active=True)
+            db.add(platform_admin)
+            db.commit()
+            db.refresh(platform_admin)
+
+        platform_link = db.query(TenantUser).filter(TenantUser.tenant_id == platform_tenant.id, TenantUser.user_id == platform_admin.id).first()
+        if not platform_link:
+            platform_link = TenantUser(tenant_id=platform_tenant.id, user_id=platform_admin.id, role="platform_admin")
+            db.add(platform_link)
+            db.commit()
+
+        seed_result = None
+        if seed_demo_full:
+            seed_result = seed_demo_dataset(
+                db,
+                tenant.id,
+                tenant_name=tenant.name,
+                actor_user_id=admin.id,
+                reset_first=reset_demo_first,
+                allow_non_demo=False,
             )
-            if not existing_project:
-                p = Project(
-                    tenant_id=t.id,
-                    code="DEMO-001",
-                    name="Demo project (NEN1090)",
-                    status="active",
-                )
-                db.add(p)
-                db.commit()
-                db.refresh(p)
-
-                db.add_all([
-                    Weld(tenant_id=t.id, project_id=p.id, weld_no="L-001", location="Kolom A1", wps="WPS-135", result="pending"),
-                    Weld(tenant_id=t.id, project_id=p.id, weld_no="L-002", location="Ligger B2", wps="WPS-135", result="pending"),
-                ])
-                db.commit()
 
     print("Seed OK")
     print("Tenant:", tenant_name)
     print("Admin:", admin_email)
     print("Password:", admin_pw)
+    print("Platform tenant:", platform_tenant_name)
+    print("Platform admin:", platform_email)
+    if seed_result:
+        print("Demo dataset:", seed_result)
+
+
 if __name__ == "__main__":
     main()
