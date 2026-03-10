@@ -74,7 +74,7 @@
           </div>
           <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
             <button class="btn primary" type="submit" id="btn">Account aanmaken</button>
-            <a class="btn secondary" href=".https://nen-1090-app.pages.dev/layers/projecten.html">Ik heb al een account</a>
+            <a class="btn secondary" href="./app/login.html">Ik heb al een account</a>
           </div>
         </form>
 
@@ -175,7 +175,7 @@
               return;
             }
             setStatus('✅ Account aangemaakt. Ga nu naar inloggen.');
-            location.href = '.https://nen-1090-app.pages.dev/layers/projecten.html';
+            location.href = './app/login.html';
           } else {
             setStatus('❌ Kon account niet aanmaken: ' + (j && (j.error || j.message) ? (j.error || j.message) : 'onbekende fout'));
           }

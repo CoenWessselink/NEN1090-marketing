@@ -14,7 +14,7 @@
     const fromLS = (localStorage.getItem(KEY1) || localStorage.getItem(KEY2) || "").trim();
     const fallback = (window.__NEN1090_DEFAULT_API__ || "").trim();
     // Default: Pages proxy (same-origin)
-    return fromLS || fallback || "/api/v1";
+    return fromLS || fallback || "https://nen1090-api-prod-f5ddagedbrftb4ew.westeurope-01.azurewebsites.net/api/v1";
   }
 
   function setApiBase(url){

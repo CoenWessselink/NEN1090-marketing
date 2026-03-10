@@ -8,7 +8,7 @@
  *
  * Env:
  * - MOLLIE_API_KEY
- * - CHECKOUT_RETURN_BASE (e.g. https://nen1090.pages.dev)
+ * - CHECKOUT_RETURN_BASE (e.g. https://nen1090-marketing-new.pages.dev)
  * - WEBHOOK_URL (optional)
  * - TURNSTILE_SECRET (optional)
  * - RATE_LIMIT_PER_MIN (optional, default 20)
