@@ -79,3 +79,10 @@ class Settings:
     PASSWORD_HASH_ROUNDS: int = int(os.getenv("PASSWORD_HASH_ROUNDS", "12"))
 
 settings = Settings()
+
+
+RATE_LIMIT_MAX_REQUESTS: int = int(os.getenv("RATE_LIMIT_MAX_REQUESTS", "120"))
+RATE_LIMIT_WINDOW_SECONDS: int = int(os.getenv("RATE_LIMIT_WINDOW_SECONDS", "60"))
+ENABLE_RATE_LIMIT: bool = os.getenv("ENABLE_RATE_LIMIT", "1") not in ("0", "false", "False")
+EXPORT_SYNC_ENABLED: bool = os.getenv("EXPORT_SYNC_ENABLED", "1") not in ("0", "false", "False")
+BACKUP_MANIFEST_DIR: str = os.getenv("BACKUP_MANIFEST_DIR", str(BASE_DIR / "storage" / "backups"))

@@ -1,0 +1,17 @@
+PHASE 6 BUILD NOTES
+
+Added in this build:
+- migration 0015_phase6_compliance_engine.py
+- ISO 5817 reference defect catalog table + seeded defaults
+- WeldInspectionResult table
+- richer weld_defects fields for assessment and repair workflow
+- extended weld_defects schemas and API
+- auto-evaluate ISO 5817 endpoint
+- manual upsert/get result endpoints
+- docs/PHASE6_COMPLIANCE_ENGINE.md
+
+Honest status:
+- syntax checked locally
+- migration added but not run against a live user database here
+- frontend wiring to new phase 6 endpoints is not included in this backend-only build
+- CE dossier export integration still belongs to later phases

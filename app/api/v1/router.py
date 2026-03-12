@@ -1,6 +1,11 @@
 from fastapi import APIRouter
 
 from app.api.v1.attachments import router as attachments_router
+from app.api.v1.exports import router as exports_router
+from app.api.v1.health import router as health_router
+from app.api.v1.ops import router as ops_router
+from app.api.v1.compliance import router as compliance_router
+from app.api.v1.assemblies import router as assemblies_router
 from app.api.v1.auth import router as auth_router
 from app.api.v1.billing import router as billing_router
 from app.api.v1.inspections import router as inspections_router
@@ -16,6 +21,9 @@ from app.api.v1.welds_admin import router as welds_admin_router
 
 api_router = APIRouter()
 
+# Definitive SaaS route groups are kept stable here during the refactor.
+# Existing endpoint paths remain backward compatible in phase 1/2.
+
 api_router.include_router(auth_router, prefix="/auth", tags=["auth"])
 api_router.include_router(projects_router)
 api_router.include_router(welds_router)
@@ -29,3 +37,10 @@ api_router.include_router(platform_router)
 api_router.include_router(tenant_status_router)
 api_router.include_router(tenant_billing_router)
 api_router.include_router(billing_router)
+
+api_router.include_router(assemblies_router)
+api_router.include_router(compliance_router)
+api_router.include_router(exports_router)
+
+api_router.include_router(health_router)
+api_router.include_router(ops_router)

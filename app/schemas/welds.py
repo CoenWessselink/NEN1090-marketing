@@ -29,10 +29,12 @@ class WeldBase(BaseModel):
 
 
 class WeldCreate(WeldBase):
-    pass
+    assembly_id: Optional[UUID] = None
+
 
 
 class WeldUpdate(BaseModel):
+    assembly_id: Optional[UUID] = None
     weld_no: Optional[str] = Field(default=None, max_length=50)
     location: Optional[str] = Field(default=None, max_length=255)
     wps: Optional[str] = Field(default=None, max_length=100)
@@ -55,6 +57,7 @@ class WeldUpdate(BaseModel):
 class WeldOut(WeldBase):
     id: UUID
     project_id: UUID
+    assembly_id: Optional[UUID] = None
     created_at: datetime
     updated_at: datetime
 

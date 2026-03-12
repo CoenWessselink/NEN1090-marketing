@@ -9,14 +9,15 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 
 from app.api.deps import get_db, require_role
-from app.db.models import Tenant, TenantUser, User, Payment, AuditLog, RefreshToken
+from app.db.models import Tenant, TenantUser, User, Payment, AuditLog, RefreshToken, Project, Weld, WeldInspection, ExportJob, TenantUsageSnapshot
 from app.schemas.platform import (
     TenantOut, TenantPatch, TenantCreate,
     TenantUserOut, TenantUserCreate, TenantUserPatch,
     PaymentOut, AuditOut,
     BillingLink, SeatsUpdate, PaymentManualCreate, MessageOut,
     BillingPreviewIn, BillingPreviewOut, BillingChangeIn,
-    MollieCreateCustomerIn, MollieStartSubscriptionIn, MollieSyncOut
+    MollieCreateCustomerIn, MollieStartSubscriptionIn, MollieSyncOut,
+    TenantUsageSnapshotOut, PlatformOverviewOut, TenantUsageRefreshOut
 )
 from app.core.security import hash_password
 from app.core.audit import audit
@@ -40,6 +41,36 @@ def _public_base_url() -> str:
     # Used to build webhook URLs for Mollie (must be reachable from the internet in production)
     return os.getenv("PUBLIC_BASE_URL", "http://127.0.0.1:8000").rstrip("/")
 
+
+
+def _active_users_count(db: Session, tenant_id) -> int:
+    return int((
+        db.query(func.count(TenantUser.user_id))
+        .join(User, User.id == TenantUser.user_id)
+        .filter(TenantUser.tenant_id == tenant_id, User.is_active == True)
+        .scalar() or 0
+    ))
+
+
+def _tenant_usage_payload(db: Session, tenant_id) -> dict:
+    tenant = db.query(Tenant).filter(Tenant.id == tenant_id).first()
+    if not tenant:
+        raise HTTPException(status_code=404, detail="Tenant not found")
+    exports_last_24h = int((
+        db.query(func.count(ExportJob.id))
+        .filter(ExportJob.tenant_id == tenant_id, ExportJob.created_at >= datetime.now(timezone.utc) - timedelta(hours=24))
+        .scalar() or 0
+    ))
+    return {
+        "active_users": _active_users_count(db, tenant_id),
+        "seats_purchased": int(getattr(tenant, "seats_purchased", 0) or 0),
+        "projects_count": int(db.query(func.count(Project.id)).filter(Project.tenant_id == tenant_id).scalar() or 0),
+        "welds_count": int(db.query(func.count(Weld.id)).filter(Weld.tenant_id == tenant_id).scalar() or 0),
+        "inspections_count": int(db.query(func.count(WeldInspection.id)).filter(WeldInspection.tenant_id == tenant_id).scalar() or 0),
+        "exports_count": int(db.query(func.count(ExportJob.id)).filter(ExportJob.tenant_id == tenant_id).scalar() or 0),
+        "exports_last_24h": exports_last_24h,
+        "storage_bytes": 0,
+    }
 @router.post("/tenants", response_model=TenantOut)
 def create_tenant(payload: TenantCreate, request: Request, db: Session = Depends(get_db), claims=Depends(require_role("platform_admin"))):
     name = payload.name.strip()
@@ -988,3 +1019,62 @@ def mollie_sync_payments(tenant_id: str, request: Request, db: Session = Depends
     audit(db, t.id, None, 'billing_mollie_payments_sync', {'created': created, 'updated': updated, 'count': len(items)}, ip=_ip(request), user_agent=_ua(request))
     db.commit()
     return MollieSyncOut(created=created, updated=updated)
+
+
+@router.get('/overview', response_model=PlatformOverviewOut)
+def platform_overview(db: Session = Depends(get_db), claims=Depends(require_role('platform_admin'))):
+    latest_usage = db.query(func.max(TenantUsageSnapshot.snapshot_date)).scalar()
+    return PlatformOverviewOut(
+        tenants_total=int(db.query(func.count(Tenant.id)).scalar() or 0),
+        tenants_active=int(db.query(func.count(Tenant.id)).filter(Tenant.status == 'active').scalar() or 0),
+        tenants_trial=int(db.query(func.count(Tenant.id)).filter(Tenant.status == 'trial').scalar() or 0),
+        tenants_suspended=int(db.query(func.count(Tenant.id)).filter(Tenant.status == 'suspended').scalar() or 0),
+        users_total=int(db.query(func.count(User.id)).scalar() or 0),
+        seats_total=int(db.query(func.coalesce(func.sum(Tenant.seats_purchased),0)).scalar() or 0),
+        seats_used=int(db.query(func.count(TenantUser.id)).join(User, User.id == TenantUser.user_id).filter(User.is_active == True).scalar() or 0),
+        projects_total=int(db.query(func.count(Project.id)).scalar() or 0),
+        welds_total=int(db.query(func.count(Weld.id)).scalar() or 0),
+        inspections_total=int(db.query(func.count(WeldInspection.id)).scalar() or 0),
+        exports_total=int(db.query(func.count(ExportJob.id)).scalar() or 0),
+        exports_last_24h=int(db.query(func.count(ExportJob.id)).filter(ExportJob.created_at >= datetime.now(timezone.utc) - timedelta(hours=24)).scalar() or 0),
+        latest_usage_refresh=latest_usage,
+    )
+
+
+@router.get('/tenants/{tenant_id}/usage', response_model=list[TenantUsageSnapshotOut])
+def list_tenant_usage(tenant_id: str, db: Session = Depends(get_db), claims=Depends(require_role('platform_admin'))):
+    rows = (
+        db.query(TenantUsageSnapshot)
+        .filter(TenantUsageSnapshot.tenant_id == tenant_id)
+        .order_by(TenantUsageSnapshot.snapshot_date.desc())
+        .limit(30)
+        .all()
+    )
+    return [TenantUsageSnapshotOut(
+        id=str(r.id), tenant_id=str(r.tenant_id), snapshot_date=r.snapshot_date,
+        active_users=r.active_users, seats_purchased=r.seats_purchased, projects_count=r.projects_count,
+        welds_count=r.welds_count, inspections_count=r.inspections_count, exports_count=r.exports_count,
+        storage_bytes=r.storage_bytes, meta=r.meta
+    ) for r in rows]
+
+
+@router.post('/tenants/{tenant_id}/usage/refresh', response_model=TenantUsageRefreshOut)
+def refresh_tenant_usage(tenant_id: str, request: Request, db: Session = Depends(get_db), claims=Depends(require_role('platform_admin'))):
+    payload = _tenant_usage_payload(db, tenant_id)
+    snap = TenantUsageSnapshot(tenant_id=tenant_id, snapshot_date=datetime.utcnow(), meta=json.dumps({'exports_last_24h': payload.pop('exports_last_24h', 0)}), **payload)
+    db.add(snap)
+    db.commit()
+    db.refresh(snap)
+    audit(db, tenant_id=str(tenant_id), user_id=claims.get('sub'), action='tenant_usage_snapshot_refresh', entity='tenant', entity_id=str(tenant_id), ip=_ip(request), user_agent=_ua(request), meta={'snapshot_id': str(snap.id)})
+    return TenantUsageRefreshOut(tenant_id=str(tenant_id), snapshot_id=str(snap.id), message='usage snapshot refreshed')
+
+
+@router.delete('/tenants/{tenant_id}/users/{user_id}', response_model=MessageOut)
+def delete_tenant_user(tenant_id: str, user_id: str, request: Request, db: Session = Depends(get_db), claims=Depends(require_role('platform_admin'))):
+    link = db.query(TenantUser).filter(TenantUser.tenant_id == tenant_id, TenantUser.user_id == user_id).first()
+    if not link:
+        raise HTTPException(status_code=404, detail='Membership not found')
+    db.delete(link)
+    db.commit()
+    audit(db, tenant_id=str(tenant_id), user_id=claims.get('sub'), action='tenant_user_removed', entity='tenant_user', entity_id=str(user_id), ip=_ip(request), user_agent=_ua(request), meta={'tenant_id': tenant_id})
+    return MessageOut(ok=True, message='Tenant user verwijderd')

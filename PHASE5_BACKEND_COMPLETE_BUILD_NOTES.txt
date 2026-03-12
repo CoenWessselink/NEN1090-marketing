@@ -1,0 +1,13 @@
+NEN1090 Phase 5 backend complete build
+
+Deze build bevat echte codewijzigingen in de backend:
+- migration 0014 voor fase-5 backbone
+- volledige CRUD op assemblies/materials/NDT/welders/WPS/WPQR/exports
+- assembly linkage voor welds
+- audit hooks voor fase-5 create/update/delete events
+- uitgebreidere schemas voor updates
+
+Belangrijk:
+- deze build is syntax-gecontroleerd met compileall
+- migraties zijn toegevoegd maar niet tegen een live database uitgevoerd in deze omgeving
+- de export pipeline is nog voorbereidende backendlogica; fase 7 bouwt de daadwerkelijke CE-dossier generatie af
