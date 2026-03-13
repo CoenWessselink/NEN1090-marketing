@@ -3,213 +3,292 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>CWS NEN1090 Platform – NEN-EN 1090 software voor audits, lascontrole en CE-dossiers</title>
-  <meta name="description" content="CWS NEN1090 Platform voor projectbeheer, lasdocumentatie, ISO 5817 inspecties, auditlog en CE-dossier export voor staalbouwbedrijven."/>
+  <title>CWS NEN1090 Platform – NEN-EN 1090 compliance software</title>
+  <meta name="description" content="Enterprise NEN-EN 1090 platform: ISO 3834 lasdocumentatie, ISO 5817 inspecties, auditlog, CE-dossier en CE-export per project."/>
   <link rel="canonical" href="/"/>
-  <meta property="og:title" content="CWS NEN1090 Platform"/>
-  <meta property="og:description" content="Van projectstart tot CE-export: één platform voor dossiers, inspecties en auditlog."/>
+  <meta property="og:title" content="CWS NEN1090 Platform – NEN-EN 1090 compliance software"/>
+  <meta property="og:description" content="Enterprise NEN-EN 1090 platform: ISO 3834 lasdocumentatie, ISO 5817 inspecties, auditlog, CE-dossier en CE-export per project."/>
   <meta property="og:type" content="website"/>
-  <meta property="og:image" content="/assets/img/practice-welder.png"/>
+  <meta property="og:image" content="/assets/img/hero-welder.webp"/>
   <meta name="twitter:card" content="summary_large_image"/>
-  <link rel="stylesheet" href="/assets/css/style.css"/>
-  <meta name="theme-color" content="#0c1830"/>
+  <link rel="stylesheet" href="/assets/css/enterprise.css"/>
+
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "CWS NEN1090 Platform",
-    "applicationCategory": "BusinessApplication",
-    "operatingSystem": "Web",
-    "description": "Platform voor NEN-EN 1090, ISO 3834 en ISO 5817 met projectbeheer, bewijsstukken en CE-dossier export.",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "EUR",
-      "description": "Gratis demo beschikbaar"
-    }
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "CWS NEN1090 Platform",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "description": "Enterprise platform voor NEN-EN 1090 compliance, audits, ISO 3834 lasdocumentatie, ISO 5817 inspecties, CE-dossier en CE-export.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "EUR",
+    "description": "Gratis demo/proefomgeving beschikbaar"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "CWS NEN1090 Platform"
   }
+}
+  </script>
+
+  <script type='application/ld+json'>
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Wat is NEN-EN 1090?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "NEN-EN 1090 is de Europese norm voor het vervaardigen van staal- en aluminiumconstructies met CE-markering. De norm vraagt aantoonbaarheid: procedures, materialen, lassers, inspecties en documentatie."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Hoe werkt de gratis demo?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Je start een proefomgeving (trial). Je kunt projecten aanmaken, documenten uploaden, inspecties registreren en een test-export uitvoeren. Daarna kun je upgraden naar live."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Kan ik CE-documenten exporteren?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Ja. Je exporteert een dossierpakket (PDF/ZIP) met bijlagenstructuur en inhoudsopgave. Completeness-checks helpen om ontbrekende onderdelen te signaleren."
+      }
+    }
+  ]
+}
   </script>
 </head>
-<body class="lp">
-  <header class="topbar">
-    <div class="container">
-      <div class="row">
-        <a class="brand" href="/">
-          <span class="logo-dot" aria-hidden="true"></span>
-          <span>CWS NEN1090 Platform</span>
-        </a>
-        <nav class="nav" aria-label="Hoofdnavigatie">
-          <a href="#features">Features</a>
-          <a href="/iso-3834.html">ISO 3834</a>
-          <a href="/ce-markering.html">CE-markering</a>
-          <a href="/lascontrole.html">Lascontrole</a>
-          <a href="/pricing.html">Prijzen</a>
-          <a href="https://nen-1090-app.pages.dev/layers/projecten.html">Inloggen</a>
-        </nav>
-      </div>
+<body>
+<div class="site-topbar">
+  <div class="container">
+    <div class="row">
+      <a class="brand" href="/">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <b>CWS NEN1090 Platform</b>
+      </a>
+      <nav class="nav" aria-label="Hoofdnavigatie">
+        <a href="/#features">Features</a>
+        <a href="/iso-3834.html">ISO 3834</a>
+        <a href="/ce-markering.html">CE-markering</a>
+        <a href="/lascontrole.html">Lascontrole</a>
+        <a href="/pricing.html" class="pill">Prijzen</a>
+        <a href="https://nen-1090-app.pages.dev/layers/projecten.html" class="pill">Inloggen</a>
+      </nav>
     </div>
-  </header>
+  </div>
+</div>
 
-  <section class="lp-hero">
-    <div class="container lp-hero-grid">
-      <div>
-        <div class="kicker">NEN-EN 1090 • ISO 3834 • ISO 5817</div>
-        <h1 class="lp-brand">NEN-EN 1090 Compliance Tool</h1>
-        <div class="lp-subtitle">Voor audits, lasspecificaties en CE-markering</div>
-        <p class="lp-sub">Werk aantoonbaar compliant met NEN-EN 1090 zonder verspreide Excel-lijsten en mappenstructuren. Beheer projecten, lasdocumentatie (WPS/WPQR), materialen, inspecties en bewijsstukken centraal, inclusief auditlog en CE-dossier export.</p>
-        <div class="lp-cta">
-          <a class="btn cta-orange" href="/onboarding.html">Probeer Gratis Demo</a>
-          <a class="btn cta-blue" href="https://nen-1090-app.pages.dev/layers/projecten.html">Inloggen in de App</a>
-          <a class="btn btn-outline" href="/pricing.html">Prijzen</a>
-        </div>
-        <div class="chips">
-          <span class="chip">NEN-EN 1090</span>
-          <span class="chip">ISO 3834</span>
-          <span class="chip">ISO 5817</span>
-          <span class="chip">CE Marking</span>
-        </div>
-        <div class="lp-hero-note">Tip: start met een proefomgeving en zet daarna om naar live.</div>
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <span class="kicker-badge">Audit-ready staalbouwsoftware</span>
+      <h1>Van lascontrole tot CE-dossier in één strak NEN 1090 platform.</h1>
+      <div class="sub">Voor staalbouwbedrijven die aantoonbaarheid, projectbeheersing en oplevering niet meer in losse Excel-lijsten, mappen en e-mails willen beheren.</div>
+      <p>Beheer projecten, materialen, WPS/WPQR, lassers, ISO 5817 controles, NDT, documenten en auditlog in één workflow. Bouw per project een compleet, traceerbaar dossier op en exporteer een CE-pakket wanneer je klaar bent.</p>
+      <div class="hero-actions">
+        <a class="btn btn-orange" href="https://nen-1090-app.pages.dev/layers/projecten.html">Probeer gratis demo</a>
+        <a class="btn btn-blue" href="https://nen-1090-app.pages.dev/layers/projecten.html">Open de app</a>
+        <a class="btn btn-ghost" href="/pricing.html">Bekijk prijzen</a>
       </div>
-      <div class="lp-hero-visual">
-        <img src="/assets/img/practice-welder.png" alt="Lasser aan het werk voor NEN1090 software" />
+      <div class="hero-tags" aria-label="Tags">
+        <span class="tag">NEN-EN 1090</span>
+        <span class="tag">ISO 3834</span>
+        <span class="tag">ISO 5817</span>
+        <span class="tag">CE-export</span>
       </div>
+      <div class="hero-note">Gebouwd voor projectleiders, kwaliteitsmedewerkers, lasserscoördinatie en auditvoorbereiding — met duidelijke status, bewijslast en exportgereedheid per project.</div>
     </div>
-  </section>
-
-  <section class="lp-strip">
-    <div class="container lp-usps">
-      <article class="lp-usp">
-        <div class="lp-usp-ico">✓</div>
-        <div>
-          <div class="lp-usp-title">Alles op 1 plek</div>
-          <div class="lp-usp-text">Projectdossiers, bewijsstukken en export centraal per project en onderdeel.</div>
+    <aside class="hero-panel" aria-label="Product visualisatie">
+      <img src="/assets/img/practice-welder.webp" alt="Lasser in industriële omgeving" loading="eager" width="1200" height="1600"/>
+      <div class="hero-panel-overlay">
+        <div class="metric-row">
+          <div class="metric"><b>1 platform</b><span>Projecten, documenten, inspecties en CE-export in één omgeving.</span></div>
+          <div class="metric"><b>100% traceerbaar</b><span>Elke wijziging, controle en vrijgave terug te vinden in auditlog.</span></div>
+          <div class="metric"><b>Sneller opleveren</b><span>Minder zoeken, minder losse bestanden, meer grip op volledigheid.</span></div>
         </div>
+        <div class="hero-proof">
+          <strong>Direct waarde in de praktijk</strong>
+          <p>De interface is opgezet voor dagelijkse productie en kwaliteitscontrole: overzichtelijk op desktop, bruikbaar op mobiel en consistent in alle belangrijke modules.</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="section alt" id="features">
+  <div class="container">
+    <div class="grid3">
+      <div class="card pad usp"><div class="ico">✓</div><div><b>Alles op één plek</b><p>Projectdossiers, certificaten, inspecties, NDT-rapporten en exports centraal per project.</p></div></div>
+      <div class="card pad usp"><div class="ico">✓</div><div><b>Volledig auditlog</b><p>Wie heeft wat aangepast, beoordeeld of vrijgegeven? Altijd direct aantoonbaar en herleidbaar.</p></div></div>
+      <div class="card pad usp"><div class="ico">✓</div><div><b>CE-markering met zekerheid</b><p>Werk met completeness-checks, ontbrekende items en een gestructureerde dossieropbouw voor oplevering.</p></div></div>
+    </div>
+    <div class="trust">Vertrouwd door kwaliteitsgedreven staalbouwbedrijven</div>
+    <div class="trust-logos" aria-label="Partners en referenties">
+      <img src="/assets/img/partners/kiwa.svg" alt="Kiwa" loading="lazy" width="220" height="64"/>
+      <img src="/assets/img/partners/lloyds.svg" alt="Lloyd’s Register" loading="lazy" width="220" height="64"/>
+      <img src="/assets/img/partners/certpartner.svg" alt="Certificatiepartner" loading="lazy" width="220" height="64"/>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="h2">Eén workflow voor project, kwaliteit en oplevering</h2>
+    <p class="lead">Van voorbereiding tot vrijgave: het platform bundelt alle onderdelen die normaal verspreid staan over mailboxen, netwerkschijven en Excel-overzichten.</p>
+
+    <div class="feature-row" aria-label="Modules">
+      <div class="item"><span class="mini">📁</span>Projectbeheer</div>
+      <div class="item"><span class="mini">🧾</span>Bewijsstukken</div>
+      <div class="item"><span class="mini">🕒</span>Auditlog</div>
+      <div class="item"><span class="mini">📦</span>CE-export</div>
+    </div>
+
+    <div class="media-grid">
+      <article class="card media-card">
+        <img src="/assets/img/tiles/projectbeheer.svg" alt="Projectbeheer visual" loading="lazy" width="900" height="540"/>
+        <div class="cap"><b>Projectbeheer</b><span>Planning, status, open punten en documentstructuur per project in één duidelijk overzicht.</span></div>
       </article>
-      <article class="lp-usp">
-        <div class="lp-usp-ico">✓</div>
-        <div>
-          <div class="lp-usp-title">Volledig auditlog</div>
-          <div class="lp-usp-text">Wie, wat en wanneer vastgelegd. Rust tijdens audits en bij oplevering.</div>
-        </div>
+      <article class="card media-card">
+        <img src="/assets/img/tiles/inspectie.svg" alt="Inspecties visual" loading="lazy" width="900" height="540"/>
+        <div class="cap"><b>Lascontrole &amp; NDT</b><span>Leg ISO 5817 bevindingen, visuele controle, NDT en corrigerende acties aantoonbaar vast.</span></div>
       </article>
-      <article class="lp-usp">
-        <div class="lp-usp-ico">✓</div>
-        <div>
-          <div class="lp-usp-title">CE-markering zeker</div>
-          <div class="lp-usp-text">Completeness-checks en CE-export met duidelijke dossieropbouw en bijlagenstructuur.</div>
-        </div>
+      <article class="card media-card">
+        <img src="/assets/img/tiles/dashboard.svg" alt="Dashboard visual" loading="lazy" width="900" height="540"/>
+        <div class="cap"><b>Dashboard &amp; gereedheid</b><span>Zie in één oogopslag welke projecten exportklaar zijn en waar nog bewijs of goedkeuring ontbreekt.</span></div>
       </article>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="lp-trust">
-    <div class="container">
-      <div class="lp-trust-title">Vertrouwd door kwaliteitsbedrijven</div>
-      <div class="lp-trust-logos">
-        <div class="lp-logo">TÜV Rheinland</div>
-        <div class="lp-logo">Lloyd's Register</div>
-        <div class="lp-logo">Dekra</div>
+<section class="section section-dark" id="workflow">
+  <div class="container">
+    <h2 class="h2">Zo werkt het in de praktijk</h2>
+    <p class="lead">Het platform dwingt een logische, gecontroleerde werkwijze af. Daardoor ontstaat rust in de uitvoering én duidelijkheid tijdens audits en opleveringen.</p>
+
+    <div class="workflow-grid" style="margin-top:26px">
+      <div class="card pad"><b>1. Start je project strak op</b><p class="lead" style="margin-top:10px">Maak een project aan, koppel opdrachtgever, onderdelen, lassen en relevante normen. Alles begint met een nette basisstructuur.</p></div>
+      <div class="card pad"><b>2. Voeg bewijs, inspecties en documenten toe</b><p class="lead" style="margin-top:10px">Upload materiaalcertificaten, WPS/WPQR, rapporten en leg per las controlepunten, NDT en opmerkingen vast.</p></div>
+      <div class="card pad"><b>3. Controleer, keur goed en exporteer</b><p class="lead" style="margin-top:10px">Gebruik auditlog, volledigheidschecks en statusweergave om veilig vrij te geven en een compleet CE-dossier te exporteren.</p></div>
+    </div>
+
+    <div style="margin-top:28px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a class="btn btn-blue" href="/lascontrole.html">Bekijk lascontrole</a>
+      <a class="btn btn-orange" href="/ce-markering.html">Naar CE-dossier &amp; export</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <h2 class="h2">Echte schermen uit de applicatie</h2>
+    <p class="lead">Geen generieke SaaS-illustraties, maar concrete schermen die laten zien hoe projecten, lascontrole en audit/CE-export in elkaar grijpen.</p>
+
+    <div class="shots">
+      <figure class="shot">
+        <img src="/assets/img/screens/screen-projectbeheer.webp" alt="Scherm: Projectbeheer overzicht met status, EXC en open punten" loading="lazy" width="1600" height="900">
+        <figcaption><b>Projectbeheer</b> — overzicht, status, open punten en voortgang per project.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="/assets/img/screens/screen-lascontrole.webp" alt="Scherm: Lascontrole met controlepunten en bewijslast" loading="lazy" width="1600" height="900">
+        <figcaption><b>Lascontrole</b> — controlepunten, afwijkingen, bewijsstukken en beoordeling per las.</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="/assets/img/screens/screen-audit-ce.webp" alt="Scherm: Auditlog en CE-export met dossieropbouw" loading="lazy" width="1600" height="900">
+        <figcaption><b>Auditlog &amp; CE-export</b> — audittrail, exports en dossieropbouw voor oplevering.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container cta-grid">
+    <div class="cta-panel">
+      <h2 class="h2" style="color:#fff;margin:0 0 12px">Klaar om NEN 1090 aantoonbaar en beheersbaar te maken?</h2>
+      <p>Start een demo-omgeving, bekijk hoe de workflow voor jouw projecten werkt en bepaal daarna welk abonnement het beste past.</p>
+      <div class="hero-actions" style="margin-top:18px">
+        <a class="btn btn-orange" href="https://nen-1090-app.pages.dev/layers/projecten.html">Start gratis demo</a>
+        <a class="btn btn-ghost" href="/contact.html">Plan een demo-afspraak</a>
       </div>
     </div>
-  </section>
-
-  <section class="section" id="features">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <div class="kicker">Complete NEN-EN 1090 ondersteuning</div>
-          <h2 class="h2">Van projectstart tot CE-oplevering</h2>
-          <p class="p">Eén platform voor dossiers, inspecties en export. Gericht op staalbouwbedrijven die audit-ready willen werken.</p>
-        </div>
-      </div>
-      <div class="lp-pills">
-        <span class="lp-pill">Projectbeheer</span>
-        <span class="lp-pill">Bewijsstukken</span>
-        <span class="lp-pill">Auditlog</span>
-        <span class="lp-pill">CE-export</span>
-      </div>
-      <div class="lp-media-grid">
-        <div class="lp-media-card"><img src="/assets/img/practice-welder.png" alt="Projectbeheer en lasdocumentatie"/></div>
-        <div class="lp-media-card"><img src="/assets/img/practice-welder.png" alt="Visuele inspectie en kwaliteitscontrole"/></div>
-        <div class="lp-media-card"><img src="/assets/img/practice-welder.png" alt="CE dossier en auditlog"/></div>
-      </div>
+    <div class="info-panel">
+      <strong style="display:block;font-size:20px;margin-bottom:10px">Wat je direct kunt verwachten</strong>
+      <ul class="check-list">
+        <li>Snel overzicht per project, onderdeel en status.</li>
+        <li>Bewijsstukken, inspecties en auditlog centraal beschikbaar.</li>
+        <li>Duidelijke route naar CE-dossier en exportgereedheid.</li>
+      </ul>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="section" id="workflow">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <div class="kicker">Gebouwd voor NEN-EN 1090 audits</div>
-          <h2 class="h2">Werk slimmer met één vaste proceslijn</h2>
-        </div>
-      </div>
-      <div class="split">
-        <div class="panel">
-          <h3>Wat je centraal beheert</h3>
-          <ul>
-            <li>Projecten, assemblies en lassen</li>
-            <li>WPS/WPQR, materialen en lassers</li>
-            <li>ISO 5817 defectregistratie en inspecties</li>
-            <li>Auditlog, attachments en exportgeschiedenis</li>
-          </ul>
-        </div>
-        <div class="panel">
-          <h3>Wat je eruit haalt</h3>
-          <ul>
-            <li>Minder zoekwerk tijdens audits</li>
-            <li>Snellere CE-dossier opbouw</li>
-            <li>Duidelijke open punten en completeness-checks</li>
-            <li>Één bron voor projectdata en bewijsstukken</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section faq" id="faq">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <div class="kicker">Veelgestelde vragen</div>
-          <h2 class="h2">Snel antwoord op de belangrijkste vragen</h2>
-        </div>
-      </div>
-      <details open>
-        <summary>Wat is NEN-EN 1090?</summary>
-        <p>NEN-EN 1090 is de Europese norm voor het vervaardigen van staal- en aluminiumconstructies met CE-markering. De norm vraagt aantoonbaarheid van procedures, materialen, lassers, inspecties en documentatie.</p>
+<section class="section" id="faq">
+  <div class="container">
+    <h2 class="h2">Veelgestelde vragen</h2>
+    <div class="faq">
+      <details class="faq-item"><summary>Wat is NEN-EN 1090?</summary>
+        <p>NEN-EN 1090 is de Europese norm voor het vervaardigen van staal- en aluminiumconstructies met CE-markering. De norm vraagt aantoonbaarheid: procedures, materialen, lassers, inspecties en documentatie.</p>
       </details>
-      <details>
-        <summary>Hoe werkt de gratis demo?</summary>
-        <p>Je start een proefomgeving, maakt projecten aan, registreert inspecties en test export. Daarna kun je dezelfde werkwijze doorzetten in live gebruik.</p>
+      <details class="faq-item"><summary>Hoe werkt de gratis demo?</summary>
+        <p>Je start een proefomgeving. Je kunt direct projecten aanmaken, documenten uploaden, inspecties registreren en een test-export uitvoeren. Daarna kun je upgraden naar live.</p>
       </details>
-      <details>
-        <summary>Kan ik CE-documenten exporteren?</summary>
-        <p>Ja. Het platform bundelt projectdata, inspecties, materialen en auditregels in een exporteerbaar dossierpakket.</p>
+      <details class="faq-item"><summary>Kan ik CE-documenten exporteren?</summary>
+        <p>Ja. Je exporteert een dossierpakket (PDF/ZIP) met bijlagenstructuur en inhoudsopgave. Completeness-checks helpen om ontbrekende onderdelen te signaleren.</p>
       </details>
-      <details>
-        <summary>Is de app ook geschikt voor mobiel gebruik?</summary>
-        <p>Ja. De app heeft een mobiele shell voor projecten, instellingen, lascontrole, klantbeheer en abonnementen.</p>
+      <details class="faq-item"><summary>Is mijn data veilig?</summary>
+        <p>Het platform is opgezet met tenant-scheiding, rollen/rechten, auditlog en beveiligde verbindingen. Zie de Security-pagina voor het overzicht.</p>
       </details>
     </div>
-  </section>
-
-  <footer class="lp-footer">
-    <div class="container lp-footer-row">
-      <div>© <span data-year></span> CWS NEN1090 Platform</div>
-      <div class="lp-footer-links">
-        <a href="/privacy.html">Privacybeleid</a>
-        <a href="/security.html">Beveiliging</a>
+  </div>
+</section>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-columns">
+      <div class="footer-col">
+        <strong>CWS NEN1090 Platform</strong>
+        <p style="margin:0;color:rgba(255,255,255,.68);line-height:1.75">Software voor staalbouwbedrijven die projectdossiers, lascontrole, auditlog en CE-export centraal willen organiseren.</p>
+      </div>
+      <div class="footer-col">
+        <strong>Product</strong>
+        <a href="/">Home</a>
         <a href="/pricing.html">Prijzen</a>
+        <a href="/lascontrole.html">Lascontrole</a>
+        <a href="/ce-dossier.html">CE-dossier</a>
+      </div>
+      <div class="footer-col">
+        <strong>Normen</strong>
+        <a href="/nen-en-1090.html">NEN-EN 1090</a>
+        <a href="/iso-3834.html">ISO 3834</a>
+        <a href="/iso-5817.html">ISO 5817</a>
+        <a href="/ce-markering.html">CE-markering</a>
+      </div>
+      <div class="footer-col">
+        <strong>Organisatie</strong>
         <a href="/contact.html">Contact</a>
+        <a href="https://nen-1090-app.pages.dev/layers/projecten.html">Demo</a>
+        <a href="/security.html">Security</a>
+        <a href="/privacy.html">Privacy</a>
+      </div>
+      <div class="footer-col">
+        <strong>Juridisch</strong>
+        <a href="/legal/terms.html">Voorwaarden</a>
+        <a href="/privacy.html">Privacy</a>
+        <a href="/security.html">Beveiliging</a>
       </div>
     </div>
-  </footer>
-
-  <script src="/assets/js/config.js"></script>
-  <script src="/assets/js/auth_api.js"></script>
-  <script src="/assets/js/main.js"></script>
-  <script src="/assets/js/pricing_calc.js"></script>
-  <script src="/assets/js/turnstile.js"></script>
+    <div class="footer-meta">
+      <div>© 2026 CWS NEN1090 Platform</div>
+      <div>Enterprise marketing redesign – fase 4 final tuning</div>
+    </div>
+  </div>
+</footer>
 </body>
 </html>
