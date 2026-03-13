@@ -1,186 +1,100 @@
 from __future__ import annotations
 
-from datetime import date, datetime
-from typing import Optional
+from typing import List
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+
+from app.api.deps import get_current_tenant_id, get_current_user, get_db
+from app.db.models import MaterialRecord, NDTRecord, Project, WPSRecord, WPQRRecord, WelderProfile
+from app.schemas.compliance import (
+    MaterialRecordCreate, MaterialRecordOut,
+    NDTRecordCreate, NDTRecordOut,
+    WelderProfileCreate, WelderProfileOut,
+    WPSRecordCreate, WPSRecordOut,
+    WPQRRecordCreate, WPQRRecordOut,
+)
+
+router = APIRouter(tags=["compliance"])
 
 
-class MaterialRecordBase(BaseModel):
-    heat_no: Optional[str] = Field(default=None, max_length=120)
-    material_grade: str = Field(..., max_length=120)
-    profile: Optional[str] = Field(default=None, max_length=120)
-    dimensions: Optional[str] = Field(default=None, max_length=120)
-    quantity: int = 1
-    certificate_no: Optional[str] = Field(default=None, max_length=120)
-    status: str = Field(default="available", max_length=30)
-    notes: Optional[str] = None
+def _get_project(db: Session, tenant_id, project_id: UUID) -> Project:
+    project = db.query(Project).filter(Project.id == project_id, Project.tenant_id == tenant_id).first()
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+    return project
 
 
-class MaterialRecordCreate(MaterialRecordBase):
-    assembly_id: Optional[UUID] = None
+@router.get("/projects/{project_id}/materials", response_model=List[MaterialRecordOut])
+def list_materials(project_id: UUID, db: Session = Depends(get_db), tenant_id=Depends(get_current_tenant_id), _user=Depends(get_current_user)):
+    _get_project(db, tenant_id, project_id)
+    return db.query(MaterialRecord).filter(MaterialRecord.project_id == project_id, MaterialRecord.tenant_id == tenant_id).order_by(MaterialRecord.created_at.desc()).all()
 
 
-class MaterialRecordUpdate(BaseModel):
-    assembly_id: Optional[UUID] = None
-    heat_no: Optional[str] = Field(default=None, max_length=120)
-    material_grade: Optional[str] = Field(default=None, max_length=120)
-    profile: Optional[str] = Field(default=None, max_length=120)
-    dimensions: Optional[str] = Field(default=None, max_length=120)
-    quantity: Optional[int] = None
-    certificate_no: Optional[str] = Field(default=None, max_length=120)
-    status: Optional[str] = Field(default=None, max_length=30)
-    notes: Optional[str] = None
+@router.post("/projects/{project_id}/materials", response_model=MaterialRecordOut)
+def create_material(project_id: UUID, payload: MaterialRecordCreate, db: Session = Depends(get_db), tenant_id=Depends(get_current_tenant_id), _user=Depends(get_current_user)):
+    _get_project(db, tenant_id, project_id)
+    row = MaterialRecord(project_id=project_id, tenant_id=tenant_id, **payload.model_dump())
+    db.add(row)
+    db.commit()
+    db.refresh(row)
+    return row
 
 
-class MaterialRecordOut(MaterialRecordBase):
-    id: UUID
-    project_id: UUID
-    assembly_id: Optional[UUID] = None
-    created_at: datetime
-    updated_at: datetime
-
-    class Config:
-        from_attributes = True
+@router.get("/projects/{project_id}/ndt", response_model=List[NDTRecordOut])
+def list_ndt(project_id: UUID, db: Session = Depends(get_db), tenant_id=Depends(get_current_tenant_id), _user=Depends(get_current_user)):
+    _get_project(db, tenant_id, project_id)
+    return db.query(NDTRecord).filter(NDTRecord.project_id == project_id, NDTRecord.tenant_id == tenant_id).order_by(NDTRecord.created_at.desc()).all()
 
 
-class WelderProfileBase(BaseModel):
-    employee_no: Optional[str] = Field(default=None, max_length=50)
-    name: str = Field(..., max_length=200)
-    process_scope: Optional[str] = Field(default=None, max_length=120)
-    qualification: Optional[str] = Field(default=None, max_length=120)
-    certificate_no: Optional[str] = Field(default=None, max_length=120)
-    certificate_valid_until: Optional[date] = None
-    is_active: bool = True
-    notes: Optional[str] = None
+@router.post("/projects/{project_id}/ndt", response_model=NDTRecordOut)
+def create_ndt(project_id: UUID, payload: NDTRecordCreate, db: Session = Depends(get_db), tenant_id=Depends(get_current_tenant_id), _user=Depends(get_current_user)):
+    _get_project(db, tenant_id, project_id)
+    row = NDTRecord(project_id=project_id, tenant_id=tenant_id, **payload.model_dump())
+    db.add(row)
+    db.commit()
+    db.refresh(row)
+    return row
 
 
-class WelderProfileCreate(WelderProfileBase):
-    pass
+@router.get("/welders", response_model=List[WelderProfileOut])
+def list_welders(db: Session = Depends(get_db), tenant_id=Depends(get_current_tenant_id), _user=Depends(get_current_user)):
+    return db.query(WelderProfile).filter(WelderProfile.tenant_id == tenant_id).order_by(WelderProfile.name.asc()).all()
 
 
-class WelderProfileUpdate(BaseModel):
-    employee_no: Optional[str] = Field(default=None, max_length=50)
-    name: Optional[str] = Field(default=None, max_length=200)
-    process_scope: Optional[str] = Field(default=None, max_length=120)
-    qualification: Optional[str] = Field(default=None, max_length=120)
-    certificate_no: Optional[str] = Field(default=None, max_length=120)
-    certificate_valid_until: Optional[date] = None
-    is_active: Optional[bool] = None
-    notes: Optional[str] = None
+@router.post("/welders", response_model=WelderProfileOut)
+def create_welder(payload: WelderProfileCreate, db: Session = Depends(get_db), tenant_id=Depends(get_current_tenant_id), _user=Depends(get_current_user)):
+    row = WelderProfile(tenant_id=tenant_id, **payload.model_dump())
+    db.add(row)
+    db.commit()
+    db.refresh(row)
+    return row
 
 
-class WelderProfileOut(WelderProfileBase):
-    id: UUID
-    created_at: datetime
-    updated_at: datetime
-
-    class Config:
-        from_attributes = True
+@router.get("/wps", response_model=List[WPSRecordOut])
+def list_wps(db: Session = Depends(get_db), tenant_id=Depends(get_current_tenant_id), _user=Depends(get_current_user)):
+    return db.query(WPSRecord).filter(WPSRecord.tenant_id == tenant_id).order_by(WPSRecord.code.asc()).all()
 
 
-class WPSRecordBase(BaseModel):
-    code: str = Field(..., max_length=120)
-    title: str = Field(..., max_length=255)
-    process: Optional[str] = Field(default=None, max_length=50)
-    base_material: Optional[str] = Field(default=None, max_length=120)
-    filler_material: Optional[str] = Field(default=None, max_length=120)
-    thickness_range: Optional[str] = Field(default=None, max_length=120)
-    revision: Optional[str] = Field(default=None, max_length=40)
-    is_active: bool = True
-    notes: Optional[str] = None
+@router.post("/wps", response_model=WPSRecordOut)
+def create_wps(payload: WPSRecordCreate, db: Session = Depends(get_db), tenant_id=Depends(get_current_tenant_id), _user=Depends(get_current_user)):
+    row = WPSRecord(tenant_id=tenant_id, **payload.model_dump())
+    db.add(row)
+    db.commit()
+    db.refresh(row)
+    return row
 
 
-class WPSRecordCreate(WPSRecordBase):
-    pass
+@router.get("/wpqr", response_model=List[WPQRRecordOut])
+def list_wpqr(db: Session = Depends(get_db), tenant_id=Depends(get_current_tenant_id), _user=Depends(get_current_user)):
+    return db.query(WPQRRecord).filter(WPQRRecord.tenant_id == tenant_id).order_by(WPQRRecord.code.asc()).all()
 
 
-class WPSRecordUpdate(BaseModel):
-    code: Optional[str] = Field(default=None, max_length=120)
-    title: Optional[str] = Field(default=None, max_length=255)
-    process: Optional[str] = Field(default=None, max_length=50)
-    base_material: Optional[str] = Field(default=None, max_length=120)
-    filler_material: Optional[str] = Field(default=None, max_length=120)
-    thickness_range: Optional[str] = Field(default=None, max_length=120)
-    revision: Optional[str] = Field(default=None, max_length=40)
-    is_active: Optional[bool] = None
-    notes: Optional[str] = None
-
-
-class WPSRecordOut(WPSRecordBase):
-    id: UUID
-    created_at: datetime
-    updated_at: datetime
-
-    class Config:
-        from_attributes = True
-
-
-class WPQRRecordBase(BaseModel):
-    code: str = Field(..., max_length=120)
-    title: str = Field(..., max_length=255)
-    process: Optional[str] = Field(default=None, max_length=50)
-    test_standard: Optional[str] = Field(default=None, max_length=120)
-    result: str = Field(default="approved", max_length=30)
-    revision: Optional[str] = Field(default=None, max_length=40)
-    notes: Optional[str] = None
-
-
-class WPQRRecordCreate(WPQRRecordBase):
-    pass
-
-
-class WPQRRecordUpdate(BaseModel):
-    code: Optional[str] = Field(default=None, max_length=120)
-    title: Optional[str] = Field(default=None, max_length=255)
-    process: Optional[str] = Field(default=None, max_length=50)
-    test_standard: Optional[str] = Field(default=None, max_length=120)
-    result: Optional[str] = Field(default=None, max_length=30)
-    revision: Optional[str] = Field(default=None, max_length=40)
-    notes: Optional[str] = None
-
-
-class WPQRRecordOut(WPQRRecordBase):
-    id: UUID
-    created_at: datetime
-    updated_at: datetime
-
-    class Config:
-        from_attributes = True
-
-
-class NDTRecordBase(BaseModel):
-    assembly_id: Optional[UUID] = None
-    weld_id: Optional[UUID] = None
-    method: str = Field(..., max_length=30)
-    inspection_date: Optional[date] = None
-    result: str = Field(default="pending", max_length=30)
-    report_no: Optional[str] = Field(default=None, max_length=120)
-    inspector: Optional[str] = Field(default=None, max_length=120)
-    notes: Optional[str] = None
-
-
-class NDTRecordCreate(NDTRecordBase):
-    pass
-
-
-class NDTRecordUpdate(BaseModel):
-    assembly_id: Optional[UUID] = None
-    weld_id: Optional[UUID] = None
-    method: Optional[str] = Field(default=None, max_length=30)
-    inspection_date: Optional[date] = None
-    result: Optional[str] = Field(default=None, max_length=30)
-    report_no: Optional[str] = Field(default=None, max_length=120)
-    inspector: Optional[str] = Field(default=None, max_length=120)
-    notes: Optional[str] = None
-
-
-class NDTRecordOut(NDTRecordBase):
-    id: UUID
-    project_id: UUID
-    created_at: datetime
-    updated_at: datetime
-
-    class Config:
-        from_attributes = True
+@router.post("/wpqr", response_model=WPQRRecordOut)
+def create_wpqr(payload: WPQRRecordCreate, db: Session = Depends(get_db), tenant_id=Depends(get_current_tenant_id), _user=Depends(get_current_user)):
+    row = WPQRRecord(tenant_id=tenant_id, **payload.model_dump())
+    db.add(row)
+    db.commit()
+    db.refresh(row)
+    return row

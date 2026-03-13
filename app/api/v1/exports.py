@@ -1,51 +1,36 @@
 from __future__ import annotations
 
-from datetime import datetime
-from typing import Any, Optional
+from typing import List
 from uuid import UUID
 
-from pydantic import BaseModel, Field
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
+
+from app.api.deps import get_current_tenant_id, get_current_user, get_db
+from app.db.models import ExportJob, Project
+from app.schemas.exports import ExportJobCreate, ExportJobOut
+
+router = APIRouter(prefix="/projects/{project_id}/exports", tags=["exports"])
 
 
-class ExportJobCreate(BaseModel):
-    export_type: str = Field(default="ce_dossier", max_length=50)
-    requested_by: Optional[str] = Field(default=None, max_length=120)
+def _get_project(db: Session, tenant_id, project_id: UUID) -> Project:
+    project = db.query(Project).filter(Project.id == project_id, Project.tenant_id == tenant_id).first()
+    if not project:
+        raise HTTPException(status_code=404, detail="Project not found")
+    return project
 
 
-class ExportJobUpdate(BaseModel):
-    status: Optional[str] = Field(default=None, max_length=30)
-    file_path: Optional[str] = Field(default=None, max_length=500)
-    message: Optional[str] = None
-    manifest_json: Optional[str] = None
-    completed_at: Optional[datetime] = None
+@router.get("", response_model=List[ExportJobOut])
+def list_exports(project_id: UUID, db: Session = Depends(get_db), tenant_id=Depends(get_current_tenant_id), _user=Depends(get_current_user)):
+    _get_project(db, tenant_id, project_id)
+    return db.query(ExportJob).filter(ExportJob.project_id == project_id, ExportJob.tenant_id == tenant_id).order_by(ExportJob.created_at.desc()).all()
 
 
-class ExportJobOut(BaseModel):
-    id: UUID
-    project_id: UUID
-    export_type: str
-    bundle_type: Optional[str] = None
-    status: str
-    requested_by: Optional[str] = None
-    file_path: Optional[str] = None
-    message: Optional[str] = None
-    manifest_json: Optional[str] = None
-    completed_at: Optional[datetime] = None
-    created_at: datetime
-    updated_at: datetime
-
-    class Config:
-        from_attributes = True
-
-
-
-class CeDossierPreviewOut(BaseModel):
-    generated_at: datetime
-    project: dict[str, Any]
-    summary: dict[str, Any]
-    completeness: list[dict[str, Any]]
-    ready_for_export: bool
-
-
-class CeDossierExportRequest(BaseModel):
-    bundle_type: str = Field(default='zip', max_length=30)
+@router.post("", response_model=ExportJobOut)
+def create_export(project_id: UUID, payload: ExportJobCreate, db: Session = Depends(get_db), tenant_id=Depends(get_current_tenant_id), _user=Depends(get_current_user)):
+    _get_project(db, tenant_id, project_id)
+    row = ExportJob(project_id=project_id, tenant_id=tenant_id, export_type=payload.export_type, requested_by=payload.requested_by, status="queued", message="Phase 5 start: export job aangemaakt, pipeline volgt in fase 7.")
+    db.add(row)
+    db.commit()
+    db.refresh(row)
+    return row

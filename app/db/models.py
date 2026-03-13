@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, DateTime, Date, Boolean, ForeignKey, Text, UniqueConstraint, func, Float
+from sqlalchemy import Column, Integer, String, DateTime, Date, Boolean, ForeignKey, Text, UniqueConstraint, func
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.db.base import Base
@@ -127,7 +127,6 @@ class Weld(Base):
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     tenant_id = Column(UUID(as_uuid=True), ForeignKey("tenants.id", ondelete="CASCADE"), nullable=False, index=True)
     project_id = Column(UUID(as_uuid=True), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False, index=True)
-    assembly_id = Column(UUID(as_uuid=True), ForeignKey("assemblies.id", ondelete="SET NULL"), nullable=True, index=True)
 
     weld_no = Column(String(50), nullable=False)  # e.g. "L-001"
     location = Column(String(255), nullable=True)
@@ -153,7 +152,6 @@ class Weld(Base):
 
     tenant = relationship("Tenant")
     project = relationship("Project", backref="welds")
-    assembly = relationship("Assembly", backref="welds")
 
 
 class Document(Base):
@@ -220,55 +218,6 @@ class InspectionCheck(Base):
 
     tenant = relationship("Tenant")
     inspection = relationship("WeldInspection", backref="checks")
-
-
-class WeldInspectionResult(Base):
-    __tablename__ = "weld_inspection_results"
-    __table_args__ = (UniqueConstraint("inspection_id", name="uq_weld_inspection_result"),)
-
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    tenant_id = Column(UUID(as_uuid=True), ForeignKey("tenants.id", ondelete="CASCADE"), nullable=False, index=True)
-    project_id = Column(UUID(as_uuid=True), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False, index=True)
-    weld_id = Column(UUID(as_uuid=True), ForeignKey("welds.id", ondelete="CASCADE"), nullable=False, index=True)
-    inspection_id = Column(UUID(as_uuid=True), ForeignKey("weld_inspections.id", ondelete="CASCADE"), nullable=False, index=True)
-
-    iso5817_level = Column(String(2), nullable=False, server_default="C")
-    acceptance_level = Column(String(2), nullable=False, server_default="C")
-    quality_status = Column(String(30), nullable=False, server_default="pending")  # pending|accepted|rejected|repair_required
-    visual_result = Column(String(20), nullable=False, server_default="open")  # open|ok|nok|nvt
-    defect_count = Column(Integer, nullable=False, server_default="0")
-    open_defect_count = Column(Integer, nullable=False, server_default="0")
-    repair_required_count = Column(Integer, nullable=False, server_default="0")
-    accepted_defect_count = Column(Integer, nullable=False, server_default="0")
-    rejected_defect_count = Column(Integer, nullable=False, server_default="0")
-    reinspection_required = Column(Boolean, nullable=False, server_default="false")
-    approved_by = Column(String(120), nullable=True)
-    approved_at = Column(DateTime(timezone=True), nullable=True)
-    summary = Column(Text, nullable=True)
-    notes = Column(Text, nullable=True)
-
-    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
-
-    tenant = relationship("Tenant")
-    project = relationship("Project")
-    weld = relationship("Weld", backref="inspection_results")
-    inspection = relationship("WeldInspection", backref="result")
-
-
-class ISO5817ReferenceDefect(Base):
-    __tablename__ = "iso5817_reference_defects"
-    __table_args__ = (UniqueConstraint("code", name="uq_iso5817_reference_defect_code"),)
-
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    code = Column(String(40), nullable=False)
-    title = Column(String(255), nullable=False)
-    defect_group = Column(String(80), nullable=False, server_default="surface")
-    description = Column(Text, nullable=True)
-    default_severity = Column(String(20), nullable=False, server_default="major")
-    is_active = Column(Boolean, nullable=False, server_default="true")
-    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
-
 
 
 # =========================
@@ -543,52 +492,13 @@ class ExportJob(Base):
     project_id = Column(UUID(as_uuid=True), ForeignKey("projects.id", ondelete="CASCADE"), nullable=False, index=True)
 
     export_type = Column(String(50), nullable=False, server_default="ce_dossier")
-    bundle_type = Column(String(30), nullable=False, server_default="zip")
     status = Column(String(30), nullable=False, server_default="queued")
     requested_by = Column(String(120), nullable=True)
     file_path = Column(String(500), nullable=True)
     message = Column(Text, nullable=True)
-    manifest_json = Column(Text, nullable=True)
-    completed_at = Column(DateTime(timezone=True), nullable=True)
-    started_at = Column(DateTime(timezone=True), nullable=True)
-    retry_count = Column(Integer, nullable=False, server_default="0")
-    error_code = Column(String(80), nullable=True)
-    error_detail = Column(Text, nullable=True)
 
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)
 
     tenant = relationship("Tenant")
     project = relationship("Project", backref="export_jobs")
-
-
-class TenantUsageSnapshot(Base):
-    __tablename__ = "tenant_usage_snapshots"
-
-    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    tenant_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("tenants.id", ondelete="CASCADE"), nullable=False, index=True)
-    snapshot_date: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False, index=True)
-    active_users: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-    seats_purchased: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-    projects_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-    welds_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-    inspections_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-    exports_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-    storage_bytes: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-    meta: Mapped[str] = mapped_column(Text, nullable=False, default="{}")
-
-    tenant = relationship("Tenant", backref="usage_snapshots")
-
-
-
-class BackupManifest(Base):
-    __tablename__ = "backup_manifests"
-
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    tenant_id = Column(UUID(as_uuid=True), ForeignKey("tenants.id", ondelete="SET NULL"), nullable=True, index=True)
-    scope = Column(String(50), nullable=False, server_default="platform")
-    storage_path = Column(String(500), nullable=False)
-    checksum = Column(String(128), nullable=True)
-    status = Column(String(30), nullable=False, server_default="created")
-    meta = Column(Text, nullable=False, server_default="{}")
-    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
