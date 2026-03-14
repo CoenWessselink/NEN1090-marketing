@@ -44,3 +44,20 @@ h1{font-size:clamp(2.4rem,5vw,4.4rem);line-height:1.05;letter-spacing:-.03em;mar
 .mobile-nav{display:grid;gap:8px;padding:16px 0}.mobile-nav a{padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.04);color:#fff;font-weight:600}
 .mobile-actions{display:none;gap:12px;margin-top:16px}.mobile-actions .btn{flex:1 1 0}
 @media (max-width:780px){.nav{display:none}.menu-toggle{display:inline-flex}.mobile-actions{display:flex}}
+
+.mobile-top-actions{display:none;align-items:center;gap:10px;flex:0 0 auto}
+.mobile-login-btn{min-height:44px;padding:0 16px;border-radius:14px;font-size:.95rem}
+@media (max-width:780px){
+  .container{padding:0 16px}
+  .topbar-inner{gap:12px}
+  .brand{gap:10px;font-size:1rem;min-width:0}
+  .brand span:last-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .brand-mark{width:32px;height:32px;border-radius:11px}
+  .mobile-top-actions{display:inline-flex}
+  .menu-toggle{display:inline-flex;flex:0 0 46px}
+  .mobile-login-btn{display:inline-flex}
+}
+@media (max-width:420px){
+  .brand{font-size:.88rem}
+  .mobile-login-btn{padding:0 12px;font-size:.9rem}
+}
