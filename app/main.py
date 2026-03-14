@@ -2,6 +2,9 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1.router import api_router
+from app.api.v1.auth import router as auth_router
+from app.api.public.router import router as public_router
+from app.core.config import settings
 from app.middleware.tenant_context import TenantContextMiddleware
 
 app = FastAPI(
@@ -12,19 +15,11 @@ app = FastAPI(
     openapi_url="/openapi.json",
 )
 
-ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "https://nen1090-marketing-new.pages.dev",
-    "https://nen-1090-app.pages.dev",
-    "https://app.nen1090.nl",
-    "https://nen1090.nl",
-]
-
 app.add_middleware(
+
     CORSMiddleware,
-    allow_origins=ALLOWED_ORIGINS,
-    allow_credentials=False,
+    allow_origins=settings.CORS_ORIGINS,
+    allow_credentials=settings.CORS_ALLOW_CREDENTIALS,
     allow_methods=["*"],
     allow_headers=["*"],
     expose_headers=["*"],
@@ -33,6 +28,9 @@ app.add_middleware(
 app.add_middleware(TenantContextMiddleware)
 
 app.include_router(api_router, prefix="/api/v1")
+app.include_router(auth_router, prefix="/api/auth", tags=["auth-compat"])
+app.include_router(public_router, prefix="/api/public", tags=["public-compat"])
+app.include_router(public_router, prefix="/api/v1/public", tags=["public"])
 
 
 @app.get("/")
@@ -42,4 +40,4 @@ def root():
 
 @app.get("/health")
 def health():
-    return {"ok": True, "db": "ok"}
+    return {"ok": True, "db": "ok", "env": settings.ENV}
