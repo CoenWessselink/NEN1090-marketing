@@ -36,3 +36,11 @@ h1{font-size:clamp(2.4rem,5vw,4.4rem);line-height:1.05;letter-spacing:-.03em;mar
 .hero-overlay{position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 10% 0%, rgba(36,87,214,.12), transparent 35%),radial-gradient(circle at 90% 10%, rgba(255,178,29,.15), transparent 28%)}
 @media (max-width:1100px){.hero-grid,.split,.screenshot-grid,.grid-4,.grid-3,.grid-2,.price-table,.workflow,.footer-grid{grid-template-columns:1fr 1fr}}
 @media (max-width:780px){.nav{display:none}.hero-grid,.split,.screenshot-grid,.grid-4,.grid-3,.grid-2,.price-table,.workflow,.footer-grid,.form{grid-template-columns:1fr}.hero{padding-top:42px}.badge-row{grid-template-columns:1fr}.topbar-inner{min-height:68px}h1{font-size:2.4rem}.lead{font-size:1.1rem}}
+
+.menu-toggle{display:none;align-items:center;justify-content:center;width:46px;height:46px;border-radius:14px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:#fff;cursor:pointer}
+.menu-toggle span,.menu-toggle span:before,.menu-toggle span:after{content:"";display:block;width:18px;height:2px;background:#fff;border-radius:2px;position:relative}
+.menu-toggle span:before{position:absolute;top:-6px}.menu-toggle span:after{position:absolute;top:6px}
+.mobile-panel{display:none;border-top:1px solid rgba(255,255,255,.08);background:rgba(10,18,31,.98)}.mobile-panel.open{display:block}
+.mobile-nav{display:grid;gap:8px;padding:16px 0}.mobile-nav a{padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.04);color:#fff;font-weight:600}
+.mobile-actions{display:none;gap:12px;margin-top:16px}.mobile-actions .btn{flex:1 1 0}
+@media (max-width:780px){.nav{display:none}.menu-toggle{display:inline-flex}.mobile-actions{display:flex}}
