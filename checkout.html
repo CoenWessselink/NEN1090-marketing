@@ -1,73 +1,17 @@
-<!DOCTYPE html>
-
+<!doctype html>
 <html lang="nl">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width,initial-scale=1" name="viewport"/>
-<title>Checkout – CWS NEN-1090</title>
-<meta content="Checkout voor CWS NEN-1090 met API-koppeling en nette fallback." name="description"/>
-<link href="/checkout.html" rel="canonical"/>
-<meta content="Checkout – CWS NEN-1090" property="og:title"/>
-<meta content="Checkout voor CWS NEN-1090 met API-koppeling en nette fallback." property="og:description"/>
-<meta content="website" property="og:type"/>
-<meta content="/assets/img/hero-welder.webp" property="og:image"/>
-<meta content="summary_large_image" name="twitter:card"/>
-<link href="/assets/css/enterprise.css" rel="stylesheet"/>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Checkout | CWS NEN-1090</title>
+  <meta name="description" content="Afrondpagina voor pakketkeuze en offerteaanvraag.">
+  <link rel="stylesheet" href="/assets/css/enterprise-pro.css">
+  <link rel="canonical" href="https://nen1090.nl/checkout.html">
 </head>
-<body data-page="checkout"><div data-site-nav=""></div>
-
-<section class="section page-hero">
-<div class="container page-hero-grid">
-<div>
-<span class="kicker-badge">Checkout</span>
-<h1>Van demo naar betaal- en activatiestap zonder losse schermen</h1>
-<p>Deze pagina is opnieuw ontworpen als echte checkout-ervaring met samenvatting, seat-model en API-koppeling. Voor lokale preview blijft een nette fallback aanwezig.</p>
-<div class="hero-tags"><span class="tag">/api/checkout/create-session</span><span class="tag">Mollie-ready</span><span class="tag">Tenant activatie</span></div>
-</div>
-<aside class="page-side-card">
-<strong style="display:block;font-size:28px;letter-spacing:-.04em;margin-bottom:10px">Waarom dit logisch voelt</strong>
-<ul class="check-list">
-<li>Zelfde visuele taal als homepage, pricing en contact</li>
-<li>Bekende CTA’s en zachte fallback voor previewmodus</li>
-<li>Duidelijke overgang van trial naar live abonnement</li>
-</ul>
-</aside>
-</div>
-</section>
-<section class="section alt">
-<div class="container grid2">
-<div class="card pad">
-<span class="eyebrow">Bestelgegevens</span>
-<h2 style="margin:8px 0 12px;font-size:36px;letter-spacing:-.05em">Checkoutformulier</h2>
-<form data-checkout-form="">
-<div class="form-grid">
-<div><label>Bedrijfsnaam</label><input name="company" placeholder="Bijv. CWS Staalbouw" required=""/></div>
-<div><label>E-mail tenant-admin</label><input name="email" placeholder="naam@bedrijf.nl" required="" type="email"/></div>
-<div><label>Plan</label><select name="plan"><option value="starter">Starter</option><option selected="" value="professional">Professional</option><option value="enterprise">Enterprise</option></select></div>
-<div><label>Aantal gebruikers</label><input min="1" name="seats" type="number" value="5"/></div>
-</div>
-<div class="form-actions">
-<button class="btn btn-orange" type="submit">Ga naar betaling</button>
-<a class="btn btn-ghost" href="/contact.html">Eerst overleggen</a>
-</div>
-<div class="status-msg" data-checkout-msg="">Bij geconfigureerde keys wordt de checkout direct aangemaakt; anders blijft een nette previewmodus actief.</div>
-</form>
-</div>
-<div class="trust-panel">
-<span class="eyebrow">Samenvatting</span>
-<div class="grid2" style="margin-top:12px">
-<div class="inline-stat"><b>Professional</b><span>Beste keuze voor operationele teams in staalbouw en kwaliteitscontrole.</span></div>
-<div class="inline-stat"><b>5 seats</b><span>Veelgebruikte startopzet voor project + kwaliteit + werkvoorbereiding.</span></div>
-<div class="inline-stat"><b>Tenant-ready</b><span>Gereed om tenant, admin en betaalstatus samen te brengen.</span></div>
-<div class="inline-stat"><b>API-klaar</b><span>Aangesloten op Functions en voorbereid op backend activatie.</span></div>
-</div>
-<div class="hero-actions" style="margin-top:18px">
-<a class="btn btn-blue" href="/app/login.html">Ik heb al een account</a>
-</div>
-</div>
-</div>
-</section>
-
-<script src="/assets/js/site.js"></script>
-<div data-site-footer=""></div><script src="/assets/js/components.js"></script></body>
+<body>
+  <div data-site-nav></div>
+  <section class="hero"><div class="container hero-grid"><div><span class="eyebrow">Checkout</span><h1>Kies een pakket en rond uw aanvraag af</h1><p>Voor de laatste stap verwijzen we u door naar de juiste route. Zo blijft de aanvraag helder en weet u direct welk pakket het beste bij uw organisatie past.</p><div class="hero-actions"><a class="btn btn-primary" href="/onboarding.html">Plan een demo</a><a class="btn btn-blue" href="/contact.html">Stel een vraag</a></div></div><div class="image-shell"><img src="/assets/img/generated/contact-hero.webp" alt="Kies een pakket en rond uw aanvraag af"></div></div></section><section class="section"><div class="container grid-3"><div class="card"><h3>Starter</h3><div class="price">€99</div><div class="small">per maand</div><p>Voor kleinere teams of een eerste implementatie.</p><a class="btn btn-primary" href="/contact.html">Vraag offerte aan</a></div><div class="card"><h3>Professional</h3><div class="price">€249</div><div class="small">per maand</div><p>Voor groeiende organisaties die planning, controle en documentatie willen combineren.</p><a class="btn btn-primary" href="/contact.html">Vraag offerte aan</a></div><div class="card"><h3>Enterprise</h3><div class="price">Op aanvraag</div><div class="small"></div><p>Voor bedrijven met meerdere teams, vestigingen of zwaardere eisen aan procesbeheersing.</p><a class="btn btn-primary" href="/contact.html">Vraag offerte aan</a></div></div></section>
+  <div data-site-footer></div>
+  <script src="/assets/js/site-pro.js"></script>
+</body>
 </html>
