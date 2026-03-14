@@ -17,9 +17,9 @@
 
 async function verifyTurnstile(env, token, ip) {
   const secret = String(env?.TURNSTILE_SECRET || "").trim();
-  const requireTurnstile = String(env?.REQUIRE_TURNSTILE || "1").trim() !== "0";
+  const require = String(env?.REQUIRE_TURNSTILE || "1").trim() !== "0";
   if (!secret) {
-    return requireTurnstile ? { ok: false, error: "TURNSTILE_NOT_CONFIGURED" } : { ok: true, skipped: true };
+    return require ? { ok: false, error: "TURNSTILE_NOT_CONFIGURED" } : { ok: true, skipped: true };
   }
   if (requireTurnstile && !token) return { ok: false, error: "TURNSTILE_REQUIRED" };
   const form = new FormData();
