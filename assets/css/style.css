@@ -1,3 +1,5 @@
+@import url("foundation/system.css");
+
 :root{
   --primary:#2b6cff;
   --primary-2:#1f4fd6;
@@ -491,3 +493,13 @@ body{background:var(--page);color:#0b1220}
   .lp-hero .lp-brand{font-size:40px}
 }
 
+
+
+/* ===== Phase 4 marketing redesign ===== */
+
+body{background:linear-gradient(180deg,#f7f9fd 0%,#ffffff 22%,#f8fbff 100%)}
+.topbar{display:none}
+.page{padding:48px 0 68px}
+.page h1{font-size:44px;line-height:1.08;letter-spacing:-.03em}
+.card,.form-card{border-radius:24px;box-shadow:0 18px 45px rgba(8,20,35,.08)}
+.notice{border-radius:20px}
