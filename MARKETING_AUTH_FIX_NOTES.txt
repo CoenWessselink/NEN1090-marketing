@@ -1,0 +1,14 @@
+Deze marketing-zip bevat de auth-routing fix voor de redirect-loop.
+
+Aangepast:
+- _redirects: /app/login en verwante auth-routes gebruiken nu 302 naar *.html
+- assets/js/auth_api.js: DEFAULT_LOGIN_REDIRECT aangepast van /app/dashboard.html naar /dashboard
+- functions/auth.js: fallback aangepast van /app/dashboard.html naar /dashboard
+- oude marketing-doorstuurpagina's aangepast naar nieuwe app SPA-routes zonder /layers/*.html
+
+Belangrijk:
+- push deze inhoud naar de marketing repo
+- laat Cloudflare Pages daarna opnieuw deployen
+- test eerst:
+  https://nen1090-marketing.pages.dev/app/login.html
+  https://nen1090-marketing.pages.dev/app/login

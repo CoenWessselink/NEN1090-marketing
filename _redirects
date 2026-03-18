@@ -1,19 +1,21 @@
 / /index.html 200
+
 /login /app/login.html 302
 /forgot-password /app/forgot-password.html 302
 /reset-password /app/reset-password.html 302
 /change-password /app/change-password.html 302
 /set-password /app/set-password.html 302
 /logout /app/logout.html 302
-/app/login /app/login.html 200
-/app/forgot-password /app/forgot-password.html 200
-/app/reset-password /app/reset-password.html 200
-/app/change-password /app/change-password.html 200
-/app/logout /app/logout.html 200
-/app/set-password /app/set-password.html 200
+
+/app/login /app/login.html 302
+/app/forgot-password /app/forgot-password.html 302
+/app/reset-password /app/reset-password.html 302
+/app/change-password /app/change-password.html 302
+/app/logout /app/logout.html 302
+/app/set-password /app/set-password.html 302
+
 /pricing /pricing.html 200
 /checkout /checkout.html 200
 /success /success.html 200
 /cancel /cancel.html 200
-
-/subscription   /app/subscription.html   200
+/subscription /app/subscription.html 200

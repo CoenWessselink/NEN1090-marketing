@@ -24,7 +24,7 @@ function buildCookie(token, requestUrl, domain) {
 }
 
 function sanitizeNext(next) {
-  const fallback = '/app/dashboard.html';
+  const fallback = '/dashboard';
   const value = String(next || '').trim();
   if (!value || !value.startsWith('/') || value.startsWith('//')) return fallback;
   return value;

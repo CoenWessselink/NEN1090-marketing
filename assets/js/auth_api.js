@@ -1,5 +1,5 @@
 (function(){
-  const DEFAULT_LOGIN_REDIRECT = '/app/dashboard.html';
+  const DEFAULT_LOGIN_REDIRECT = '/dashboard';
   const DEFAULT_LOGIN_PAGE = '/app/login.html';
   const ENDPOINTS = Object.freeze({
     login: '/auth/login',
