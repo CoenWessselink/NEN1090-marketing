@@ -42,11 +42,17 @@ export async function onRequestGet({request, env}) {
 
   const hint = {};
   if (status) {
+    const reasons = status.reasons || status.read_only_reasons || status.readOnlyReasons || [];
     hint.tenant = status.tenant || status;
+    hint.status = (status.status || '').toString();
     hint.read_only = status.read_only ?? status.readOnly ?? false;
-    hint.reasons = status.reasons || [];
-    hint.company = (status.company || status.tenant_name || status.name || "").toString();
+    hint.reasons = Array.isArray(reasons) ? reasons : [];
+    hint.company = (status.company || status.tenant_name || status.name || '').toString();
     hint.seats = Number(status.seats_purchased || status.seats || status.seatsPurchased || 0) || undefined;
+    hint.seatsPurchased = hint.seats;
+    hint.trialUntil = (status.trial_until || status.trialUntil || '').toString() || undefined;
+    hint.validUntil = (status.valid_until || status.validUntil || '').toString() || undefined;
+    hint.subscriptionStatus = (status.mollie_subscription_status || status.subscription_status || '').toString() || undefined;
   }
   if (me) {
     hint.user = me.user || me;

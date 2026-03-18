@@ -10,6 +10,8 @@
  * - BACKEND_ONBOARDING_SET_PASSWORD_PATH (default: /api/v1/auth/set-password)
  */
 
+const DEFAULT_BACKEND_API_BASE = 'https://nen1090-api-prod-f5ddagedbrftb4ew.westeurope-01.azurewebsites.net';
+
 export async function onRequestPost(ctx) {
   try {
     const body = await ctx.request.json().catch(() => ({}));
@@ -17,40 +19,38 @@ export async function onRequestPost(ctx) {
     const password = String(body.password || '');
 
     if (!token || !password || password.length < 12) {
-      return json({ ok: false, error: 'token en wachtwoord (min 12 tekens) zijn verplicht' }, 400);
+      return json({ ok: false, error: 'token en wachtwoord (minimaal 12 tekens) zijn verplicht' }, 400);
     }
 
-    const apiBase = (ctx.env && ctx.env.BACKEND_API_BASE) ? String(ctx.env.BACKEND_API_BASE) : '';
-    const path = (ctx.env && ctx.env.BACKEND_ONBOARDING_SET_PASSWORD_PATH)
-      ? String(ctx.env.BACKEND_ONBOARDING_SET_PASSWORD_PATH)
-      : '/api/v1/auth/set-password';
+    const apiBase = String(ctx.env?.BACKEND_API_BASE || DEFAULT_BACKEND_API_BASE).trim();
+    const path = String(ctx.env?.BACKEND_ONBOARDING_SET_PASSWORD_PATH || '/api/v1/auth/set-password').trim();
 
-    if (!apiBase) {
-      // Placeholder: store nothing, just pretend success.
-      return json({ ok: true, loginUrl: './app/login.html', note: 'BACKEND_API_BASE niet gezet; placeholder.' });
-    }
-
-    const r = await fetch(joinUrl(apiBase, path), {
+    const upstream = await fetch(joinUrl(apiBase, path), {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', 'accept': 'application/json' },
       body: JSON.stringify({ token, password })
     });
-    const data = await r.json().catch(() => ({}));
-    return json({ ok: r.ok && !!data.ok, ...data }, r.ok ? 200 : (r.status || 500));
-  } catch (_e) {
+
+    const text = await upstream.text().catch(() => '');
+    let data = {};
+    try { data = text ? JSON.parse(text) : {}; } catch { data = { detail: text }; }
+
+    const ok = upstream.ok && (data.ok !== false);
+    return json({ ok, ...data }, upstream.status || (ok ? 200 : 500));
+  } catch (_error) {
     return json({ ok: false, error: 'server_error' }, 500);
   }
 }
 
 function joinUrl(base, path) {
   const b = base.replace(/\/$/, '');
-  const p = path.startsWith('/') ? path : '/' + path;
+  const p = path.startsWith('/') ? path : `/${path}`;
   return b + p;
 }
 
 function json(obj, status = 200) {
   return new Response(JSON.stringify(obj), {
     status,
-    headers: { 'content-type': 'application/json; charset=utf-8' }
+    headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' }
   });
 }

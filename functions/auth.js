@@ -1,43 +1,61 @@
 /**
  * Cloudflare Pages Function: /auth
- * Legacy bridge (compat):
- * - Accepts token via querystring (?token=...)
- * - Sets HttpOnly cookie
- * - Redirects to `next` (default /app/dashboard.html)
+ * Token bridge for magic links and onboarding/reset flows.
  *
- * Let op: Nieuwe flow gebruikt /api/v1/auth/login via de universele proxy.
- *
- * Env (optional):
- * - COOKIE_DOMAIN (leave empty for default)
+ * Supported behaviour:
+ * - ?token=...&mode=set-password   -> redirect to /set-password.html?token=...
+ * - ?token=...&mode=reset-password -> redirect to /app/reset-password.html?token=...
+ * - ?token=...&next=/app/...       -> set HttpOnly auth cookie and continue
+ * - without token                  -> redirect to login with clear message
  */
+
+function buildCookie(token, requestUrl, domain) {
+  const url = new URL(requestUrl);
+  const parts = [
+    `nen1090_access=${encodeURIComponent(token)}`,
+    'Path=/',
+    'HttpOnly',
+    'SameSite=Lax',
+    'Max-Age=604800',
+  ];
+  if (url.protocol === 'https:') parts.splice(3, 0, 'Secure');
+  if (domain) parts.push(`Domain=${domain}`);
+  return parts.join('; ');
+}
+
+function sanitizeNext(next) {
+  const fallback = '/app/dashboard.html';
+  const value = String(next || '').trim();
+  if (!value || !value.startsWith('/') || value.startsWith('//')) return fallback;
+  return value;
+}
+
+function redirectWithToken(origin, pathname, token) {
+  const target = new URL(pathname, origin);
+  target.searchParams.set('token', token);
+  return Response.redirect(target.toString(), 302);
+}
 
 export async function onRequestGet({ request, env }) {
   const url = new URL(request.url);
-  const token = url.searchParams.get("token") || "";
-  const next = url.searchParams.get("next") || "/app/dashboard.html";
+  const token = (url.searchParams.get('token') || '').trim();
+  const mode = (url.searchParams.get('mode') || '').trim();
+  const domain = (env?.COOKIE_DOMAIN || '').trim();
 
   if (!token) {
-    // No token: send to login
-    const login = new URL("/app/login.html", url.origin);
-    login.searchParams.set("next", next);
-    return Response.redirect(login.toString(), 302);
+    return Response.redirect(new URL('/app/login.html?message=Sessie%20niet%20beschikbaar', url.origin).toString(), 302);
   }
 
-  const domain = (env?.COOKIE_DOMAIN || "").trim();
+  if (mode === 'set-password') {
+    return redirectWithToken(url.origin, '/app/set-password.html', token);
+  }
 
-  const cookie = [
-    `nen1090_access=${encodeURIComponent(token)}`,
-    "Path=/",
-    "HttpOnly",
-    "SameSite=Lax",
-    // 7 days default
-    "Max-Age=604800",
-  ];
-  if (domain) cookie.push(`Domain=${domain}`);
-  // Secure only on https
-  if (url.protocol === 'https:') cookie.splice(3, 0, 'Secure');
+  if (mode === 'reset-password') {
+    return redirectWithToken(url.origin, '/app/reset-password.html', token);
+  }
 
-  const res = Response.redirect(new URL(next, url.origin).toString(), 302);
-  res.headers.append("Set-Cookie", cookie.join("; "));
-  return res;
+  const destination = sanitizeNext(url.searchParams.get('next'));
+  const response = Response.redirect(new URL(destination, url.origin).toString(), 302);
+  response.headers.append('Set-Cookie', buildCookie(token, request.url, domain));
+  return response;
 }

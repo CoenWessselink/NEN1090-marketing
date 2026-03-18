@@ -4,14 +4,142 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Checkout | CWS NEN-1090</title>
-  <meta name="description" content="Afrondpagina voor pakketkeuze en offerteaanvraag.">
+  <meta name="description" content="Rond uw pakketkeuze af en ga veilig door naar de Mollie-betaalpagina voor het NEN1090-platform.">
   <link rel="stylesheet" href="/assets/css/enterprise-pro.css">
+  <link rel="stylesheet" href="/assets/css/billing.css">
   <link rel="canonical" href="https://nen1090.nl/checkout.html">
 </head>
 <body>
   <div data-site-nav></div>
-  <section class="hero"><div class="container hero-grid"><div><span class="eyebrow">Checkout</span><h1>Kies een pakket en rond uw aanvraag af</h1><p>Voor de laatste stap verwijzen we u door naar de juiste route. Zo blijft de aanvraag helder en weet u direct welk pakket het beste bij uw organisatie past.</p><div class="hero-actions"><a class="btn btn-primary" href="/onboarding.html">Plan een demo</a><a class="btn btn-blue" href="/contact.html">Stel een vraag</a></div></div><div class="image-shell"><img src="/assets/img/generated/contact-hero.webp" alt="Kies een pakket en rond uw aanvraag af"></div></div></section><section class="section"><div class="container grid-3"><div class="card"><h3>Starter</h3><div class="price">€99</div><div class="small">per maand</div><p>Voor kleinere teams of een eerste implementatie.</p><a class="btn btn-primary" href="/contact.html">Vraag offerte aan</a></div><div class="card"><h3>Professional</h3><div class="price">€249</div><div class="small">per maand</div><p>Voor groeiende organisaties die planning, controle en documentatie willen combineren.</p><a class="btn btn-primary" href="/contact.html">Vraag offerte aan</a></div><div class="card"><h3>Enterprise</h3><div class="price">Op aanvraag</div><div class="small"></div><p>Voor bedrijven met meerdere teams, vestigingen of zwaardere eisen aan procesbeheersing.</p><a class="btn btn-primary" href="/contact.html">Vraag offerte aan</a></div></div></section>
+
+  <main class="billing-shell">
+    <section class="container billing-layout">
+      <section class="billing-card">
+        <span class="billing-kicker">Checkout</span>
+        <h1>Start uw beveiligde betaalflow</h1>
+        <p class="billing-lead">Vul de bedrijfsgegevens in, kies het pakket en ga daarna direct door naar Mollie. Na succesvolle betaling kan het tenant-account geactiveerd worden en sluit de set-password flow naadloos aan.</p>
+
+        <form data-checkout-form novalidate>
+          <input type="hidden" name="plan" value="professional">
+          <input type="hidden" name="billing" value="monthly">
+          <input type="hidden" name="turnstileToken" value="">
+
+          <div class="billing-form-grid">
+            <div class="billing-field-full">
+              <span class="billing-label">Pakket</span>
+              <div class="billing-plan-switch" role="group" aria-label="Pakket kiezen">
+                <button class="billing-select-plan" type="button" data-checkout-plan-option="starter" aria-pressed="false">Starter</button>
+                <button class="billing-select-plan" type="button" data-checkout-plan-option="professional" aria-pressed="false">Professional</button>
+                <button class="billing-select-plan" type="button" data-checkout-plan-option="enterprise" aria-pressed="false">Enterprise</button>
+              </div>
+            </div>
+
+            <div class="billing-field-full">
+              <span class="billing-label">Facturatie</span>
+              <div class="billing-toggle-group" role="group" aria-label="Facturatieperiode kiezen">
+                <button class="billing-toggle" type="button" data-billing-toggle="monthly" aria-pressed="false">Maandelijks</button>
+                <button class="billing-toggle" type="button" data-billing-toggle="yearly" aria-pressed="false">Jaarlijks <small>voordeliger</small></button>
+              </div>
+            </div>
+
+            <label class="billing-field">
+              <span class="billing-label">Bedrijfsnaam</span>
+              <input class="billing-input" type="text" name="company" autocomplete="organization" required>
+            </label>
+
+            <label class="billing-field">
+              <span class="billing-label">Contactpersoon</span>
+              <input class="billing-input" type="text" name="contactName" autocomplete="name" required>
+            </label>
+
+            <label class="billing-field">
+              <span class="billing-label">E-mailadres</span>
+              <input class="billing-input" type="email" name="email" autocomplete="email" required>
+            </label>
+
+            <label class="billing-field">
+              <span class="billing-label">Telefoon</span>
+              <input class="billing-input" type="tel" name="phone" autocomplete="tel">
+            </label>
+
+            <div class="billing-field-full billing-seat-row">
+              <label class="billing-label" for="checkout-seats">Aantal gebruikers</label>
+              <input class="billing-input" id="checkout-seats" type="range" name="seats" min="3" max="100" step="1" value="8">
+              <div class="billing-seat-meta">
+                <span>Actieve gebruikers in de eerste fase</span>
+                <strong><span data-checkout-seat-output>8</span> gebruikers</strong>
+              </div>
+            </div>
+
+            <label class="billing-field-full">
+              <span class="billing-label">Opmerkingen voor onboarding</span>
+              <textarea class="billing-textarea" name="notes" placeholder="Bijvoorbeeld gewenste startdatum, aantal vestigingen of specifieke implementatiewensen."></textarea>
+            </label>
+
+            <label class="billing-field-full billing-consent">
+              <input type="checkbox" name="acceptTerms" value="1">
+              <span>Ik ga akkoord met de <a class="billing-inline-link" href="/legal/terms.html">voorwaarden</a> en het <a class="billing-inline-link" href="/legal/privacy.html">privacybeleid</a>.</span>
+            </label>
+
+            <div class="billing-field-full">
+              <div class="turnstile" data-turnstile></div>
+              <p class="billing-footnote">De beveiligingscontrole wordt alleen getoond wanneer daarvoor een Turnstile-sitekey is ingesteld in deze omgeving.</p>
+            </div>
+          </div>
+
+          <p class="billing-status" data-checkout-status hidden></p>
+
+          <div class="billing-actions" style="margin-top:22px">
+            <button class="btn btn-primary" type="submit" data-checkout-submit>Ga door naar betalen</button>
+            <a class="btn btn-secondary" href="/pricing.html">Terug naar prijzen</a>
+          </div>
+          <p class="billing-footnote">U wordt na het versturen doorgestuurd naar de beveiligde betaalomgeving van Mollie. Het tenant-account wordt niet vanuit de browser aangemaakt.</p>
+        </form>
+      </section>
+
+      <aside class="billing-summary" aria-label="Overzicht van de gekozen checkout">
+        <span class="billing-tag">Orderoverzicht</span>
+        <h2>Uw keuze</h2>
+
+        <div class="billing-summary-line">
+          <span>Pakket</span>
+          <strong data-summary-plan>Professional</strong>
+        </div>
+        <div class="billing-summary-line">
+          <span>Facturatie</span>
+          <strong data-summary-billing>Maandelijks</strong>
+        </div>
+        <div class="billing-summary-line">
+          <span>Gebruikers</span>
+          <strong data-summary-seats>8 gebruikers</strong>
+        </div>
+        <div class="billing-summary-line">
+          <span>Tarief</span>
+          <strong data-summary-seat-price>€ 49 per gebruiker</strong>
+        </div>
+        <div class="billing-summary-line" data-summary-discount-row hidden>
+          <span>Voordeel</span>
+          <strong data-summary-discount>€ 0 voordeel</strong>
+        </div>
+
+        <div class="billing-summary-total">
+          <span class="billing-small">Totaal</span>
+          <strong data-summary-total>€ 392 per maand</strong>
+        </div>
+
+        <ul class="billing-checklist">
+          <li>Beveiligde betaling via Mollie</li>
+          <li>Onboarding kan direct na succesvolle betaling starten</li>
+          <li>Login en wachtwoordflows zijn al afgestemd in de marketingomgeving</li>
+        </ul>
+      </aside>
+    </section>
+  </main>
+
   <div data-site-footer></div>
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/turnstile.js"></script>
   <script src="/assets/js/site-pro.js"></script>
+  <script src="/assets/js/billing.js"></script>
 </body>
 </html>

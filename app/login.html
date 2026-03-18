@@ -1,2 +1,168 @@
-<!DOCTYPE html>
-<html lang="nl"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1" name="viewport"/><title>Inloggen</title><meta content="0;url=https://nen-1090-app.pages.dev/layers/projecten.html" http-equiv="refresh"/><link href="/app/login.html" rel="canonical"/><script>location.replace('https://nen-1090-app.pages.dev/layers/projecten.html');</script></head><body data-page="app-login"><div data-site-nav=""></div><p>Doorsturen naar de applicatie… <a href="/app/login.html">Klik hier</a>.</p><div data-site-footer=""></div><script src="/assets/js/components.js"></script><script src="/assets/js/site.js"></script></body></html>
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Inloggen – CWS NEN1090 Platform</title>
+  <meta name="description" content="Log in op het NEN1090-platform voor projectbeheer, lascontrole en CE-dossiers." />
+  <meta name="robots" content="noindex" />
+  <link rel="canonical" href="/app/login.html" />
+  <link rel="stylesheet" href="/assets/css/enterprise.css" />
+  <link rel="stylesheet" href="/assets/css/auth.css" />
+</head>
+<body class="auth-page">
+  <div class="site-topbar">
+    <div class="container">
+      <div class="row">
+        <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span><b>CWS NEN1090 Platform</b></a>
+        <nav class="nav" aria-label="Hoofdnavigatie">
+          <a href="/software.html">Software</a>
+          <a href="/pricing.html">Prijzen</a>
+          <a href="/contact.html">Contact</a>
+          <a class="pill" href="/demo.html">Demo aanvragen</a>
+          <a class="pill" href="/app/login.html" aria-current="page">Inloggen</a>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <main class="auth-main">
+    <div class="container auth-shell">
+      <section class="auth-panel">
+        <span class="auth-kicker">Klantbeheer & platformtoegang</span>
+        <h1>Inloggen op jouw NEN1090-omgeving.</h1>
+        <p>Toegang tot projecten, lascontrole, auditlog en CE-dossiers in dezelfde enterprise stijl als de rest van het platform.</p>
+
+        <div class="auth-badge-row">
+          <span class="auth-badge">Cloudflare Pages proxy</span>
+          <span class="auth-badge">Nederlandse authflow</span>
+          <span class="auth-badge">Responsive</span>
+        </div>
+
+        <ul class="auth-points">
+          <li><span class="auth-dot">1</span><div><strong>Directe platformtoegang</strong><span>Log in zonder redirect-shells of losse tussenpagina’s.</span></div></li>
+          <li><span class="auth-dot">2</span><div><strong>Consistente beveiligingsflow</strong><span>Wachtwoord resetten, instellen en wijzigen sluiten logisch op elkaar aan.</span></div></li>
+          <li><span class="auth-dot">3</span><div><strong>Voor productie bedoeld</strong><span>Dezelfde componenttaal, states en foutafhandeling op alle auth-pagina’s.</span></div></li>
+        </ul>
+
+        <div class="auth-panel-footer">
+          <div class="auth-mini-card"><strong>1</strong><span>centrale loginervaring voor klantbeheer en platformtoegang</span></div>
+          <div class="auth-mini-card"><strong>NL</strong><span>consistente Nederlandse meldingen en duidelijke actieknoppen</span></div>
+          <div class="auth-mini-card"><strong>24/7</strong><span>zelfde responsive auth-ervaring op desktop, tablet en mobiel</span></div>
+        </div>
+      </section>
+
+      <section class="auth-card">
+        <div class="auth-card-head">
+          <div>
+            <a class="auth-back-link" href="/">← Terug naar de website</a>
+            <h2>Welkom terug</h2>
+            <p>Log in met je accountgegevens om verder te werken in het platform.</p>
+          </div>
+        </div>
+
+        <div id="status" class="auth-status" aria-live="polite"></div>
+
+        <form id="loginForm" class="auth-form" novalidate>
+          <div class="auth-grid-2">
+            <div class="auth-field">
+              <label for="tenant">Tenant / omgeving</label>
+              <input id="tenant" name="tenant" class="auth-input" type="text" autocomplete="organization" placeholder="Bijvoorbeeld demo of cws" />
+              <div class="auth-hint">Laat leeg wanneer jouw omgeving dit niet vereist.</div>
+            </div>
+            <div class="auth-field">
+              <label for="email">E-mailadres</label>
+              <input id="email" name="email" class="auth-input" type="email" autocomplete="username" required placeholder="naam@bedrijf.nl" />
+            </div>
+          </div>
+
+          <div class="auth-field">
+            <label for="password">Wachtwoord</label>
+            <div class="auth-input-wrap">
+              <input id="password" name="password" class="auth-input has-toggle" type="password" autocomplete="current-password" required placeholder="Voer je wachtwoord in" />
+              <button class="auth-toggle" type="button" data-toggle-password="#password" aria-pressed="false">Toon</button>
+            </div>
+          </div>
+
+          <div class="auth-actions">
+            <button class="btn btn-blue" type="submit">Inloggen</button>
+            <a class="btn btn-orange" href="/app/forgot-password.html">Wachtwoord vergeten</a>
+          </div>
+
+          <div class="auth-links">
+            <a href="/">Terug naar homepage</a>
+            <a href="/demo.html">Demo aanvragen</a>
+            <a href="/contact.html">Contact</a>
+          </div>
+        </form>
+
+        <div class="auth-divider"></div>
+
+        <div class="auth-aside">
+          <h3>Na het inloggen</h3>
+          <ul>
+            <li>Je wordt doorgestuurd naar de beveiligde omgeving.</li>
+            <li>Wachtwoord vergeten? Vraag direct een resetlink aan.</li>
+            <li>Ben je uitgelogd, dan kom je met een duidelijke statusmelding terug op deze pagina.</li>
+          </ul>
+        </div>
+
+        <div class="auth-footer-links">
+          <a href="/privacy.html">Privacy</a>
+          <a href="/security.html">Beveiliging</a>
+          <a href="/legal/terms.html">Voorwaarden</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/auth_api.js"></script>
+  <script>
+    (function(){
+      const api = window.NEN1090ApiAuth;
+      api.bindGlobalHelpers();
+      const form = document.getElementById('loginForm');
+      const status = api.createStatusController(document.getElementById('status'));
+      const params = new URLSearchParams(window.location.search);
+      const hint = params.get('message') || '';
+      if (params.get('logout') === '1') {
+        status.show('success', 'Je bent uitgelogd. Log opnieuw in om verder te gaan.');
+      } else if (params.get('passwordChanged') === '1') {
+        status.show('success', 'Je wachtwoord is gewijzigd. Log opnieuw in met je nieuwe wachtwoord.');
+      } else if (params.get('passwordReset') === '1') {
+        status.show('success', 'Je wachtwoord is opnieuw ingesteld. Je kunt nu inloggen.');
+      } else if (params.get('passwordSet') === '1') {
+        status.show('success', 'Je wachtwoord is ingesteld. Je kunt nu inloggen.');
+      } else if (hint) {
+        status.show('info', hint);
+      }
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        status.clear();
+        const formData = new FormData(form);
+        const email = String(formData.get('email') || '').trim();
+        const password = String(formData.get('password') || '');
+        const tenant = String(formData.get('tenant') || '').trim();
+
+        if (!email || !password) {
+          status.show('error', 'Vul je e-mailadres en wachtwoord in.');
+          return;
+        }
+
+        try {
+          api.setBusy(form, true, 'Bezig met inloggen...');
+          await api.login({ email, password, tenant: tenant || undefined });
+          status.show('success', 'Inloggen gelukt. Je wordt doorgestuurd...');
+          window.setTimeout(() => api.redirectTo(api.getNextUrl()), 250);
+        } catch (error) {
+          status.show('error', error.message || 'Controleer je inloggegevens.');
+        } finally {
+          api.setBusy(form, false);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
