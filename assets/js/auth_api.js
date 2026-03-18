@@ -1,4 +1,5 @@
 (function(){
+  const DEFAULT_APP_ORIGIN = 'https://nen-1090-app.pages.dev';
   const DEFAULT_LOGIN_REDIRECT = '/dashboard';
   const DEFAULT_LOGIN_PAGE = '/app/login.html';
   const ENDPOINTS = Object.freeze({
@@ -22,6 +23,14 @@
     return window.NEN1090Config?.getApiBase?.() || '/api/v1';
   }
 
+  function getAppOrigin(){
+    const explicit =
+      window.NEN1090Config?.APP_BASE_URL ||
+      window.APP_BASE_URL ||
+      DEFAULT_APP_ORIGIN;
+    return String(explicit || DEFAULT_APP_ORIGIN).replace(/\/$/, '');
+  }
+
   function query(name){
     try { return new URLSearchParams(window.location.search).get(name) || ''; }
     catch { return ''; }
@@ -40,6 +49,10 @@
     if (!next || !next.startsWith('/')) return fallback;
     if (next.startsWith('//')) return fallback;
     return next;
+  }
+
+  function getAbsoluteAppUrl(path){
+    return `${getAppOrigin()}${sanitizeNextUrl(path, DEFAULT_LOGIN_REDIRECT)}`;
   }
 
   async function parseResponse(res){
@@ -120,7 +133,7 @@
   }
 
   function getNextUrl(){
-    return sanitizeNextUrl(query('next'));
+    return getAbsoluteAppUrl(query('next') || DEFAULT_LOGIN_REDIRECT);
   }
 
   function passwordStrength(password){
