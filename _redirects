@@ -6,19 +6,13 @@
 /change-password /app/change-password.html 302
 /set-password /app/set-password.html 302
 
-# APP ROUTES
-/app/login /app/login.html 302
-/app/logout /app/logout.html 302
-
 # BILLING
 /subscription /app/subscription.html 302
 
-# MARKETING PAGES
+# MARKETING
 /pricing /pricing.html 200
 /demo /demo.html 200
 /contact /contact.html 200
 /documentatie /documentatie.html 200
-
-# LEGAL
 /privacy /legal/privacy.html 200
 /terms /legal/terms.html 200
