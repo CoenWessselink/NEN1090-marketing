@@ -1,0 +1,1 @@
+Runtime smoke nog uitvoeren in doelomgeving: login, refresh, logout, reset-password/request, reset-password/confirm, change-password.

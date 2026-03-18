@@ -30,15 +30,22 @@ def tenant_status(
             return str(dt)
 
     ro = _tenant_is_read_only(t)
+    reasons = tenant_read_only_reasons(t) if ro else []
+    seats = int(getattr(t, "seats_purchased", 0) or 0)
     return {
         "tenant_id": str(t.id),
         "name": t.name,
+        "tenant_name": t.name,
+        "company": t.name,
         "is_active": bool(getattr(t, "is_active", True)),
         "status": getattr(t, "status", None),
         "trial_until": iso(getattr(t, "trial_until", None)),
         "valid_until": iso(getattr(t, "valid_until", None)),
         "read_only": ro,
-        "read_only_reasons": tenant_read_only_reasons(t) if ro else [],
+        "read_only_reasons": reasons,
+        "reasons": reasons,
+        "seats_purchased": seats,
+        "seats": seats,
         # billing signals (optional fields)
         "billing_provider": getattr(t, "billing_provider", None),
         "mollie_subscription_status": getattr(t, "mollie_subscription_status", None),

@@ -36,7 +36,11 @@ def _as_utc(dt):
         return None
 
 
-def get_current_claims(authorization: str | None = Header(default=None)):
+def get_current_claims(
+    authorization: str | None = Header(default=None),
+    x_tenant_id: str | None = Header(default=None, alias="X-Tenant-Id"),
+    x_tenant: str | None = Header(default=None, alias="X-Tenant"),
+):
     if not authorization or not authorization.lower().startswith("bearer "):
         raise HTTPException(status_code=401, detail="Missing bearer token")
     token = authorization.split(" ", 1)[1].strip()
@@ -50,6 +54,13 @@ def get_current_claims(authorization: str | None = Header(default=None)):
         raise HTTPException(status_code=401, detail="Invalid token (no sub)")
     if not claims.get("tenant_id"):
         raise HTTPException(status_code=401, detail="Invalid token (no tenant_id)")
+    if x_tenant_id and str(x_tenant_id) != str(claims.get("tenant_id")):
+        raise HTTPException(status_code=403, detail="Tenant header komt niet overeen met de sessie")
+    normalized_tenant = str(x_tenant).strip().lower() if x_tenant else ''
+    if normalized_tenant == 'undefined':
+        raise HTTPException(status_code=400, detail='Ongeldige tenant header')
+    if normalized_tenant and claims.get('tenant') and normalized_tenant != str(claims.get('tenant')).strip().lower():
+        raise HTTPException(status_code=403, detail='Tenant header komt niet overeen met de sessie')
     return claims
 
 

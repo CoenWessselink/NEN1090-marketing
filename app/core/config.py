@@ -81,6 +81,8 @@ class Settings:
     JWT_REFRESH_SECRET: str = os.getenv("JWT_REFRESH_SECRET", "change-me")
     JWT_ACCESS_TTL_MIN: int = int(os.getenv("JWT_ACCESS_TTL_MIN", "15"))
     JWT_REFRESH_TTL_DAYS: int = int(os.getenv("JWT_REFRESH_TTL_DAYS", "14"))
+    RESET_PASSWORD_SECRET: str = os.getenv("RESET_PASSWORD_SECRET", os.getenv("JWT_ACCESS_SECRET", "change-me-reset"))
+    RESET_PASSWORD_TTL_MIN: int = int(os.getenv("RESET_PASSWORD_TTL_MIN", "60"))
     PASSWORD_HASH_ROUNDS: int = int(os.getenv("PASSWORD_HASH_ROUNDS", "12"))
 
 settings = Settings()
