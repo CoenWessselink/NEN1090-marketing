@@ -6,12 +6,12 @@
   <meta name="description" content="Sluit je sessie gecontroleerd af binnen het CWS NEN1090 Platform." />
   <title>Uitloggen – CWS NEN1090 Platform</title>
   <meta name="robots" content="noindex" />
-  <link rel="canonical" href="/app/logout.html" />
+  <link rel="canonical" href="/app/logout" />
   <link rel="stylesheet" href="/assets/css/enterprise.css" />
   <link rel="stylesheet" href="/assets/css/auth.css" />
 </head>
 <body class="auth-page">
-  <div class="site-topbar"><div class="container"><div class="row"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span><b>CWS NEN1090 Platform</b></a><nav class="nav" aria-label="Hoofdnavigatie"><a href="/">Website</a><a href="/app/login.html">Inloggen</a><a class="pill" href="/app/logout.html" aria-current="page">Uitloggen</a></nav></div></div></div>
+  <div class="site-topbar"><div class="container"><div class="row"><a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span><b>CWS NEN1090 Platform</b></a><nav class="nav" aria-label="Hoofdnavigatie"><a href="/">Website</a><a href="/app/login">Inloggen</a><a class="pill" href="/app/logout" aria-current="page">Uitloggen</a></nav></div></div></div>
   <main class="auth-main">
     <div class="container auth-shell">
       <section class="auth-panel">
@@ -25,11 +25,11 @@
         </ul>
       </section>
       <section class="auth-card">
-        <div class="auth-card-head"><div><a class="auth-back-link" href="/app/login.html">← Terug naar inloggen</a><h2>Uitloggen bevestigen</h2><p>Je staat op het punt je huidige sessie te beëindigen.</p></div></div>
+        <div class="auth-card-head"><div><a class="auth-back-link" href="/app/login">← Terug naar inloggen</a><h2>Uitloggen bevestigen</h2><p>Je staat op het punt je huidige sessie te beëindigen.</p></div></div>
         <div id="status" class="auth-status info is-visible" aria-live="polite">Kies hieronder hoe je wilt doorgaan.</div>
-        <div class="auth-actions"><button id="logoutBtn" class="btn btn-blue" type="button">Nu uitloggen</button><a class="btn btn-orange" href="/app/login.html">Annuleren</a></div>
+        <div class="auth-actions"><button id="logoutBtn" class="btn btn-blue" type="button">Nu uitloggen</button><a class="btn btn-orange" href="/app/login">Annuleren</a></div>
         <div class="auth-aside"><h3>Na uitloggen</h3><ul><li>Je beveiligde sessie wordt gesloten.</li><li>Je komt terug op de loginpagina met bevestiging.</li><li>De homepage blijft bereikbaar zonder extra stappen.</li></ul></div>
-        <div class="auth-footer-links"><a href="/">Naar homepage</a><a href="/app/login.html">Naar login</a></div>
+        <div class="auth-footer-links"><a href="/">Naar homepage</a><a href="/app/login">Naar login</a></div>
       </section>
     </div>
   </main>
@@ -53,7 +53,7 @@
         status.show('info', 'Bezig met uitloggen...');
         try {
           status.show('success', 'Je sessie wordt beëindigd. Je wordt doorgestuurd naar inloggen.');
-          window.setTimeout(() => api.logoutAndRedirect({ next: '/app/login.html?logout=1' }), 250);
+          window.setTimeout(() => api.logoutAndRedirect({ next: '/app/login?logout=1' }), 250);
         } catch (error) {
           btn.disabled = false;
           btn.textContent = 'Nu uitloggen';

@@ -1,7 +1,7 @@
 (function(){
   const DEFAULT_APP_ORIGIN = 'https://nen-1090-app.pages.dev';
   const DEFAULT_LOGIN_REDIRECT = '/dashboard';
-  const DEFAULT_LOGIN_PAGE = '/app/login.html';
+  const DEFAULT_LOGIN_PAGE = '/app/login';
   const ENDPOINTS = Object.freeze({
     login: '/auth/login',
     logout: '/auth/logout',

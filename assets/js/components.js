@@ -12,7 +12,7 @@
   const footerCols = [
     {title:'Product', links:[['/','Home'],['/pricing.html','Prijzen'],['/lascontrole.html','Lascontrole'],['/ce-dossier.html','CE-dossier']]},
     {title:'Normen', links:[['/nen-en-1090.html','NEN-EN 1090'],['/iso-3834.html','ISO 3834'],['/iso-5817.html','ISO 5817'],['/ce-markering.html','CE-markering']]},
-    {title:'Flow', links:[['/onboarding.html','Demo aanvragen'],['/contact.html','Contact'],['/checkout.html','Checkout'],['/app/login.html','App login']]},
+    {title:'Flow', links:[['/onboarding.html','Demo aanvragen'],['/contact.html','Contact'],['/checkout.html','Checkout'],['/app/login','App login']]},
     {title:'Veiligheid', links:[['/security.html','Security'],['/privacy.html','Privacy'],['/auditlog-staalbouw.html','Auditlog'],['/legal/terms.html','Voorwaarden']]}
   ];
 
@@ -25,7 +25,7 @@
       <button class="mobile-nav-toggle" type="button" aria-label="Menu openen">☰</button>
       <nav class="nav" aria-label="Hoofdnavigatie">
         ${navItems.map(item => `<a href="${item.href}"${page===item.key?' class="active"':''}>${item.label}</a>`).join('')}
-        <a href="/app/login.html" class="pill${page==='app-login'?' active':''}">Login</a>
+        <a href="/app/login" class="pill${page==='app-login'?' active':''}">Login</a>
         <a href="/onboarding.html" class="pill cta${page==='onboarding' || page==='demo' ? ' active' : ''}">Demo aanvragen</a>
       </nav>
     </div>

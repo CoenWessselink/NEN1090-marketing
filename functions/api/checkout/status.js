@@ -169,7 +169,7 @@ export async function onRequestGet({ request, env }) {
     message: confirm.message || null,
     metadata: payment?.metadata || null,
     checkoutUrl: payment?._links?.checkout?.href || null,
-    dashboardUrl: '/app/login.html',
+    dashboardUrl: '/app/login',
     backend: backendResult,
     updatedAt: new Date().toISOString(),
   };

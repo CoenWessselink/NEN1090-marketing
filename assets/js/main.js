@@ -72,7 +72,7 @@
 
       // Not authenticated
       clearSession();
-      location.replace("./login.html?next=" + encodeURIComponent(here));
+      location.replace("/app/login?next=" + encodeURIComponent(here));
     })();
   }
 })();
