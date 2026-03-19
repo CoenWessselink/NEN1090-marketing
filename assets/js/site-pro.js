@@ -2,7 +2,7 @@
 const SITE = {
   name: 'CWS NEN-1090',
   apiBase: 'https://nen1090-api-prod-f5ddagedbrftb4ew.westeurope-01.azurewebsites.net/api',
-  loginUrl: 'https://nen-1090-app.pages.dev/login',
+  loginUrl: '/app/login.html',
   demoSuccessUrl: '/success.html',
   checkoutPage: '/checkout.html'
 };
@@ -16,7 +16,7 @@ function navHtml() {
         <a href="/index.html">Home</a><a href="/software.html">Software</a><a href="/lascontrole.html">Lascontrole</a><a href="/planning.html">Planning</a><a href="/documentatie.html">Documentatie</a><a href="/pricing.html">Prijzen</a><a href="/contact.html">Contact</a>
       </nav>
       <div class="nav-actions">
-        <a class="btn btn-secondary" href="https://nen-1090-app.pages.dev/login">Login</a>
+        <a class="btn btn-secondary" href="/app/login.html">Login</a>
         <a class="btn btn-primary" href="/onboarding.html">Demo aanvragen</a>
       </div>
     </div>

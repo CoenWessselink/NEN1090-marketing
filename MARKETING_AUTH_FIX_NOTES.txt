@@ -10,5 +10,5 @@ Belangrijk:
 - push deze inhoud naar de marketing repo
 - laat Cloudflare Pages daarna opnieuw deployen
 - test eerst:
-  https://nen1090-marketing.pages.dev/app/login.html
-  https://nen1090-marketing.pages.dev/app/login
+  https://nen1090-marketing-new.pages.dev/app/login.html
+  https://nen1090-marketing-new.pages.dev/app/login
