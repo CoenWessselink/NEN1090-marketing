@@ -12,10 +12,10 @@ jobs:
 
     steps:
       - name: Check homepage
-        run: curl -fL "${{ vars.MARKETING_URL }}/" || exit 1
+        run: curl -fL "https://nen1090-marketing-new.pages.dev/" || exit 1
 
-      - name: Check pricing
-        run: curl -fL "${{ vars.MARKETING_URL }}/pricing.html" || exit 1
+      - name: Check login route
+        run: curl -fL "https://nen1090-marketing-new.pages.dev/app/login" || exit 1
 
       - name: Check robots.txt
-        run: curl -fL "${{ vars.MARKETING_URL }}/robots.txt" || exit 1
+        run: curl -fL "https://nen1090-marketing-new.pages.dev/robots.txt" || exit 1

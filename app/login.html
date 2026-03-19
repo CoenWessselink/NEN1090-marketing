@@ -29,7 +29,7 @@
   <main class="auth-main">
     <div class="container auth-shell">
       <section class="auth-panel">
-        <span class="auth-kicker">Klantbeheer & platformtoegang</span>
+        <span class="auth-kicker">Klantbeheer &amp; platformtoegang</span>
         <h1>Inloggen op jouw NEN1090-omgeving.</h1>
         <p>Toegang tot projecten, lascontrole, auditlog en CE-dossiers in dezelfde enterprise stijl als de rest van het platform.</p>
 
@@ -121,11 +121,36 @@
   <script>
     (function(){
       const api = window.NEN1090ApiAuth;
+      const APP_ORIGIN = 'https://nen-1090-app.pages.dev';
       api.bindGlobalHelpers();
       const form = document.getElementById('loginForm');
       const status = api.createStatusController(document.getElementById('status'));
       const params = new URLSearchParams(window.location.search);
       const hint = params.get('message') || '';
+
+      function sanitizeNext(value) {
+        const next = String(value || '').trim();
+        if (!next || !next.startsWith('/')) return '/dashboard';
+        if (next.startsWith('//')) return '/dashboard';
+        return next;
+      }
+
+      function buildAppHandoffUrl(resultData) {
+        const target = new URL(APP_ORIGIN + sanitizeNext(params.get('next') || '/dashboard'));
+        const user = resultData && typeof resultData === 'object' ? (resultData.user || {}) : {};
+        const accessToken = resultData?.access_token || resultData?.token || '';
+        const refreshToken = resultData?.refresh_token || '';
+        if (accessToken) target.searchParams.set('access_token', accessToken);
+        if (refreshToken) target.searchParams.set('refresh_token', refreshToken);
+        if (user.email) target.searchParams.set('email', String(user.email));
+        if (user.tenant) target.searchParams.set('tenant', String(user.tenant));
+        if (user.tenant_id !== undefined && user.tenant_id !== null) target.searchParams.set('tenant_id', String(user.tenant_id));
+        if (user.role) target.searchParams.set('role', String(user.role));
+        if (user.name) target.searchParams.set('name', String(user.name));
+        target.searchParams.set('auth_source', 'marketing');
+        return target.toString();
+      }
+
       if (params.get('logout') === '1') {
         status.show('success', 'Je bent uitgelogd. Log opnieuw in om verder te gaan.');
       } else if (params.get('passwordChanged') === '1') {
@@ -153,9 +178,10 @@
 
         try {
           api.setBusy(form, true, 'Bezig met inloggen...');
-          await api.login({ email, password, tenant: tenant || undefined });
+          const result = await api.login({ email, password, tenant: tenant || undefined });
+          const destination = buildAppHandoffUrl(result.data || {});
           status.show('success', 'Inloggen gelukt. Je wordt doorgestuurd...');
-          window.setTimeout(() => api.redirectTo(api.getNextUrl()), 250);
+          window.setTimeout(() => window.location.assign(destination), 250);
         } catch (error) {
           status.show('error', error.message || 'Controleer je inloggegevens.');
         } finally {
