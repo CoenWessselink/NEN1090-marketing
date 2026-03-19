@@ -1,36 +1,15 @@
-# AUTH ROUTES (clean paths, no loops)
-/app/login /app/login.html 200
-/app/login.html /app/login.html 200
-/login /app/login.html 200
+/login /app/login 302
+/logout /app/logout 302
+/forgot-password /app/forgot-password 302
+/reset-password /app/reset-password 302
+/change-password /app/change-password 302
+/set-password /app/set-password 302
+/subscription /app/subscription 302
 
-/app/logout /app/logout.html 200
-/app/logout.html /app/logout.html 200
-/logout /app/logout.html 200
-
-/app/forgot-password /app/forgot-password.html 200
-/app/forgot-password.html /app/forgot-password.html 200
-/forgot-password /app/forgot-password.html 200
-
-/app/reset-password /app/reset-password.html 200
-/app/reset-password.html /app/reset-password.html 200
-/reset-password /app/reset-password.html 200
-
-/app/change-password /app/change-password.html 200
-/app/change-password.html /app/change-password.html 200
-/change-password /app/change-password.html 200
-
-/app/set-password /app/set-password.html 200
-/app/set-password.html /app/set-password.html 200
-/set-password /app/set-password.html 200
-
-/app/subscription /app/subscription.html 200
-/app/subscription.html /app/subscription.html 200
-/subscription /app/subscription.html 200
-
-# MARKETING PAGES
-/pricing /pricing.html 200
-/demo /demo.html 200
-/contact /contact.html 200
-/documentatie /documentatie.html 200
-/privacy /legal/privacy.html 200
-/terms /legal/terms.html 200
+/app/login.html /app/login 302
+/app/logout.html /app/logout 302
+/app/forgot-password.html /app/forgot-password 302
+/app/reset-password.html /app/reset-password 302
+/app/change-password.html /app/change-password 302
+/app/set-password.html /app/set-password 302
+/app/subscription.html /app/subscription 302
