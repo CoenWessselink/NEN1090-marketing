@@ -1,5 +1,16 @@
 {
   "version": 1,
-  "include": ["/*"],
-  "exclude": ["/api/*"]
+  "include": ["/api/*", "/auth", "/logout"],
+  "exclude": [
+    "/assets/*",
+    "/*.css",
+    "/*.js",
+    "/*.png",
+    "/*.jpg",
+    "/*.jpeg",
+    "/*.svg",
+    "/*.webp",
+    "/*.ico",
+    "/favicon.ico"
+  ]
 }

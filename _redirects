@@ -1,3 +1,18 @@
-/api/*  /functions/:splat  200
+# AUTH ROUTES
+/login /app/login.html 302
+/logout /app/logout.html 302
+/forgot-password /app/forgot-password.html 302
+/reset-password /app/reset-password.html 302
+/change-password /app/change-password.html 302
+/set-password /app/set-password.html 302
 
-/*    /index.html   200
+# BILLING
+/subscription /app/subscription.html 302
+
+# MARKETING CANONICAL ROUTES
+/pricing /pricing.html 302
+/demo /demo.html 302
+/contact /contact.html 302
+/documentatie /documentatie.html 302
+/privacy /legal/privacy.html 302
+/terms /legal/terms.html 302
