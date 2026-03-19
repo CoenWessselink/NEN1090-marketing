@@ -1,18 +1,3 @@
-# AUTH ROUTES
-/login /app/login.html 302
-/logout /app/logout.html 302
-/forgot-password /app/forgot-password.html 302
-/reset-password /app/reset-password.html 302
-/change-password /app/change-password.html 302
-/set-password /app/set-password.html 302
+/api/*  /functions/:splat  200
 
-# BILLING
-/subscription /app/subscription.html 302
-
-# MARKETING
-/pricing /pricing.html 200
-/demo /demo.html 200
-/contact /contact.html 200
-/documentatie /documentatie.html 200
-/privacy /legal/privacy.html 200
-/terms /legal/terms.html 200
+/*    /index.html   200

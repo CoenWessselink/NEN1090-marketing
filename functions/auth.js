@@ -1,61 +1,39 @@
-/**
- * Cloudflare Pages Function: /auth
- * Token bridge for magic links and onboarding/reset flows.
- *
- * Supported behaviour:
- * - ?token=...&mode=set-password   -> redirect to /set-password.html?token=...
- * - ?token=...&mode=reset-password -> redirect to /app/reset-password.html?token=...
- * - ?token=...&next=/app/...       -> set HttpOnly auth cookie and continue
- * - without token                  -> redirect to login with clear message
- */
+export async function onRequestPost(context) {
+  const { request } = context;
 
-function buildCookie(token, requestUrl, domain) {
-  const url = new URL(requestUrl);
-  const parts = [
-    `nen1090_access=${encodeURIComponent(token)}`,
-    'Path=/',
-    'HttpOnly',
-    'SameSite=Lax',
-    'Max-Age=604800',
-  ];
-  if (url.protocol === 'https:') parts.splice(3, 0, 'Secure');
-  if (domain) parts.push(`Domain=${domain}`);
-  return parts.join('; ');
-}
+  const body = await request.json();
 
-function sanitizeNext(next) {
-  const fallback = '/dashboard';
-  const value = String(next || '').trim();
-  if (!value || !value.startsWith('/') || value.startsWith('//')) return fallback;
-  return value;
-}
+  const API_URL = "https://nen1090-api-prod-f5ddagedbrftb4ew.westeurope-01.azurewebsites.net";
 
-function redirectWithToken(origin, pathname, token) {
-  const target = new URL(pathname, origin);
-  target.searchParams.set('token', token);
-  return Response.redirect(target.toString(), 302);
-}
+  const apiResponse = await fetch(`${API_URL}/api/v1/auth/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(body)
+  });
 
-export async function onRequestGet({ request, env }) {
-  const url = new URL(request.url);
-  const token = (url.searchParams.get('token') || '').trim();
-  const mode = (url.searchParams.get('mode') || '').trim();
-  const domain = (env?.COOKIE_DOMAIN || '').trim();
+  const data = await apiResponse.json();
 
-  if (!token) {
-    return Response.redirect(new URL('/app/login.html?message=Sessie%20niet%20beschikbaar', url.origin).toString(), 302);
+  if (!apiResponse.ok) {
+    return new Response(JSON.stringify(data), {
+      status: apiResponse.status,
+      headers: { "Content-Type": "application/json" }
+    });
   }
 
-  if (mode === 'set-password') {
-    return redirectWithToken(url.origin, '/app/set-password.html', token);
+  const headers = new Headers();
+  headers.set("Content-Type", "application/json");
+
+  if (data.access_token) {
+    headers.append(
+      "Set-Cookie",
+      `access_token=${data.access_token}; Path=/; HttpOnly; Secure; SameSite=Lax`
+    );
   }
 
-  if (mode === 'reset-password') {
-    return redirectWithToken(url.origin, '/app/reset-password.html', token);
-  }
-
-  const destination = sanitizeNext(url.searchParams.get('next'));
-  const response = Response.redirect(new URL(destination, url.origin).toString(), 302);
-  response.headers.append('Set-Cookie', buildCookie(token, request.url, domain));
-  return response;
+  return new Response(JSON.stringify({ success: true }), {
+    status: 200,
+    headers
+  });
 }
