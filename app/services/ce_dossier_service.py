@@ -26,7 +26,6 @@ from app.db.models import (
     Weld,
     WeldDefect,
     WeldInspection,
-    WeldInspectionResult,
     WelderProfile,
     WPSRecord,
     WPQRRecord,
@@ -59,6 +58,7 @@ def _project_or_404(db: Session, tenant_id: UUID, project_id: UUID) -> Project:
 
 def build_preview(db: Session, tenant_id: UUID, project_id: UUID) -> dict[str, Any]:
     project = _project_or_404(db, tenant_id, project_id)
+
     assemblies = (
         db.query(Assembly)
         .filter(Assembly.project_id == project_id, Assembly.tenant_id == tenant_id)
@@ -74,11 +74,6 @@ def build_preview(db: Session, tenant_id: UUID, project_id: UUID) -> dict[str, A
     inspections = (
         db.query(WeldInspection)
         .filter(WeldInspection.project_id == project_id, WeldInspection.tenant_id == tenant_id)
-        .all()
-    )
-    results = (
-        db.query(WeldInspectionResult)
-        .filter(WeldInspectionResult.project_id == project_id, WeldInspectionResult.tenant_id == tenant_id)
         .all()
     )
     defects = (
@@ -102,7 +97,10 @@ def build_preview(db: Session, tenant_id: UUID, project_id: UUID) -> dict[str, A
     )
     attachments = (
         db.query(Attachment)
-        .filter(Attachment.tenant_id == tenant_id, Attachment.scope_type.in_(["project", "weld", "inspection"]))
+        .filter(
+            Attachment.tenant_id == tenant_id,
+            Attachment.scope_type.in_(["project", "weld", "inspection"]),
+        )
         .all()
     )
     audit_rows = (
@@ -112,16 +110,24 @@ def build_preview(db: Session, tenant_id: UUID, project_id: UUID) -> dict[str, A
         .limit(250)
         .all()
     )
-    welder_profiles = db.query(WelderProfile).filter(WelderProfile.tenant_id == tenant_id, WelderProfile.is_active.is_(True)).all()
-    wps_records = db.query(WPSRecord).filter(WPSRecord.tenant_id == tenant_id, WPSRecord.is_active.is_(True)).all()
+    welder_profiles = (
+        db.query(WelderProfile)
+        .filter(WelderProfile.tenant_id == tenant_id, WelderProfile.is_active.is_(True))
+        .all()
+    )
+    wps_records = (
+        db.query(WPSRecord)
+        .filter(WPSRecord.tenant_id == tenant_id, WPSRecord.is_active.is_(True))
+        .all()
+    )
     wpqr_records = db.query(WPQRRecord).filter(WPQRRecord.tenant_id == tenant_id).all()
 
     project_attachment_count = sum(
         1 for a in attachments if _uuid(a.scope_id) == _uuid(project_id) or a.scope_type in ("weld", "inspection")
     )
-    accepted_results = sum(1 for r in results if (r.quality_status or "") == "accepted")
-    repair_required_results = sum(1 for r in results if (r.quality_status or "") == "repair_required")
-    rejected_results = sum(1 for r in results if (r.quality_status or "") == "rejected")
+    accepted_results = sum(1 for r in inspections if (r.overall_status or "") == "ok")
+    repair_required_results = 0
+    rejected_results = sum(1 for r in inspections if (r.overall_status or "") == "nok")
     materials_with_certificate = sum(1 for m in materials if (m.certificate_no or "").strip())
     welds_with_welder = sum(1 for w in welds if (w.welders or "").strip())
     welds_with_wps = sum(1 for w in welds if (w.wps or "").strip())
@@ -148,14 +154,14 @@ def build_preview(db: Session, tenant_id: UUID, project_id: UUID) -> dict[str, A
         },
         {
             "key": "inspections",
-            "label": "Inspectieresultaten",
-            "status": "complete" if len(results) >= max(1, len(welds)) and len(welds) > 0 else "incomplete",
-            "detail": f"{len(results)} resultaten voor {len(welds)} lassen.",
+            "label": "Inspecties",
+            "status": "complete" if len(inspections) >= max(1, len(welds)) and len(welds) > 0 else "incomplete",
+            "detail": f"{len(inspections)} inspecties voor {len(welds)} lassen.",
         },
         {
             "key": "iso5817",
             "label": "ISO 5817 beoordeling",
-            "status": "complete" if len(results) > 0 else "incomplete",
+            "status": "complete" if len(inspections) > 0 else "incomplete",
             "detail": f"Accepted: {accepted_results}, repair required: {repair_required_results}, rejected: {rejected_results}.",
         },
         {
@@ -167,19 +173,25 @@ def build_preview(db: Session, tenant_id: UUID, project_id: UUID) -> dict[str, A
         {
             "key": "materials",
             "label": "Materiaalcertificaten",
-            "status": "complete" if len(materials) > 0 and materials_with_certificate == len(materials) else ("warning" if materials else "incomplete"),
+            "status": "complete"
+            if len(materials) > 0 and materials_with_certificate == len(materials)
+            else ("warning" if materials else "incomplete"),
             "detail": f"{materials_with_certificate}/{len(materials)} materiaalrecords met certificaatnummer.",
         },
         {
             "key": "welders",
             "label": "Lassers / certificaten",
-            "status": "complete" if len(welds) > 0 and welds_with_welder == len(welds) else ("warning" if welds_with_welder else "incomplete"),
+            "status": "complete"
+            if len(welds) > 0 and welds_with_welder == len(welds)
+            else ("warning" if welds_with_welder else "incomplete"),
             "detail": f"{welds_with_welder}/{len(welds)} lassen hebben een lasser ingevuld. {len(welder_profiles)} actieve lassers in masterdata.",
         },
         {
             "key": "wps",
             "label": "WPS / WPQR dekking",
-            "status": "complete" if len(welds) > 0 and welds_with_wps == len(welds) else ("warning" if welds_with_wps else "incomplete"),
+            "status": "complete"
+            if len(welds) > 0 and welds_with_wps == len(welds)
+            else ("warning" if welds_with_wps else "incomplete"),
             "detail": f"{welds_with_wps}/{len(welds)} lassen hebben WPS gekoppeld. {len(wps_records)} WPS en {len(wpqr_records)} WPQR beschikbaar.",
         },
         {
@@ -214,7 +226,7 @@ def build_preview(db: Session, tenant_id: UUID, project_id: UUID) -> dict[str, A
             "assemblies_count": len(assemblies),
             "welds_count": len(welds),
             "inspections_count": len(inspections),
-            "inspection_results_count": len(results),
+            "inspection_results_count": len(inspections),
             "defects_count": len(defects),
             "ndt_count": len(ndt_records),
             "materials_count": len(materials),
@@ -258,17 +270,12 @@ def build_preview(db: Session, tenant_id: UUID, project_id: UUID) -> dict[str, A
             {
                 "id": _uuid(r.id),
                 "weld_id": _uuid(r.weld_id),
-                "quality_status": r.quality_status,
-                "visual_result": r.visual_result,
-                "iso5817_level": r.iso5817_level,
-                "acceptance_level": r.acceptance_level,
-                "defect_count": r.defect_count,
-                "repair_required_count": r.repair_required_count,
-                "approved_by": r.approved_by,
-                "approved_at": _dt(r.approved_at),
-                "summary": r.summary,
+                "status": r.overall_status,
+                "inspector": r.inspector,
+                "inspected_at": _dt(r.inspected_at),
+                "remarks": r.remarks,
             }
-            for r in results
+            for r in inspections
         ],
         "ndt_records": [
             {
@@ -322,7 +329,9 @@ def _write_text_summary(target: Path, preview: dict[str, Any]) -> None:
     lines.append("CE DOSSIER SAMENVATTING")
     lines.append(f"Project: {project.get('code') or '-'} - {project.get('name') or '-'}")
     lines.append(f"Opdrachtgever: {project.get('client_name') or '-'}")
-    lines.append(f"Executieklasse: {project.get('execution_class') or '-'} | Acceptatieklasse: {project.get('acceptance_class') or '-'}")
+    lines.append(
+        f"Executieklasse: {project.get('execution_class') or '-'} | Acceptatieklasse: {project.get('acceptance_class') or '-'}"
+    )
     lines.append("")
     lines.append("Tellingen")
     for key, value in summary.items():
@@ -339,6 +348,7 @@ def _write_pdf_summary(target: Path, preview: dict[str, Any]) -> None:
     story = []
     project = preview["project"]
     summary = preview["summary"]
+
     story.append(Paragraph("CE Dossier", styles["Title"]))
     story.append(Paragraph(f"Project: {project.get('code') or '-'} — {project.get('name') or '-'}", styles["Heading2"]))
     story.append(Paragraph(f"Opdrachtgever: {project.get('client_name') or '-'}", styles["Normal"]))
@@ -355,11 +365,11 @@ def _write_pdf_summary(target: Path, preview: dict[str, Any]) -> None:
     table.setStyle(
         TableStyle(
             [
-                ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#1f4e78")),
+                ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#1F4E78")),
                 ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
                 ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-                ("GRID", (0, 0), (-1, -1), 0.25, colors.HexColor("#b7c4d0")),
-                ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#f7f9fb")]),
+                ("GRID", (0, 0), (-1, -1), 0.25, colors.HexColor("#B7C4D0")),
+                ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#F7F9FB")]),
                 ("VALIGN", (0, 0), (-1, -1), "TOP"),
             ]
         )
@@ -371,26 +381,29 @@ def _write_pdf_summary(target: Path, preview: dict[str, Any]) -> None:
     completeness_rows = [["Onderdeel", "Status", "Detail"]]
     for item in preview["completeness"]:
         completeness_rows.append([item["label"], item["status"], item["detail"]])
+
     completeness_table = Table(completeness_rows, repeatRows=1, colWidths=[140, 80, 220])
     completeness_table.setStyle(
         TableStyle(
             [
-                ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#2f75b5")),
+                ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#2F75B5")),
                 ("TEXTCOLOR", (0, 0), (-1, 0), colors.white),
                 ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-                ("GRID", (0, 0), (-1, -1), 0.25, colors.HexColor("#d0d7de")),
-                ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#f7f9fb")]),
+                ("GRID", (0, 0), (-1, -1), 0.25, colors.HexColor("#D0D7DE")),
+                ("ROWBACKGROUNDS", (0, 1), (-1, -1), [colors.white, colors.HexColor("#F7F9FB")]),
                 ("VALIGN", (0, 0), (-1, -1), "TOP"),
             ]
         )
     )
     story.append(completeness_table)
+
     doc = SimpleDocTemplate(str(target), pagesize=A4, title="CE Dossier")
     doc.build(story)
 
 
 def _write_excel_summary(target: Path, preview: dict[str, Any]) -> None:
     workbook = Workbook()
+
     ws_summary = workbook.active
     ws_summary.title = "Samenvatting"
     ws_summary["A1"] = "CE Dossier"
@@ -401,17 +414,20 @@ def _write_excel_summary(target: Path, preview: dict[str, Any]) -> None:
     ws_summary["B4"] = preview["project"].get("client_name") or "-"
     ws_summary["A5"] = "EXC"
     ws_summary["B5"] = preview["project"].get("execution_class") or "-"
+
     ws_summary["A7"] = "Kengetal"
     ws_summary["B7"] = "Waarde"
     header_fill = PatternFill("solid", fgColor="1F4E78")
     for cell in ("A7", "B7"):
         ws_summary[cell].font = Font(color="FFFFFF", bold=True)
         ws_summary[cell].fill = header_fill
+
     row = 8
     for key, value in preview["summary"].items():
         ws_summary[f"A{row}"] = key
         ws_summary[f"B{row}"] = value
         row += 1
+
     ws_summary.column_dimensions["A"].width = 28
     ws_summary.column_dimensions["B"].width = 18
 
@@ -422,6 +438,7 @@ def _write_excel_summary(target: Path, preview: dict[str, Any]) -> None:
         cell.fill = PatternFill("solid", fgColor="2F75B5")
     for item in preview["completeness"]:
         ws_check.append([item["label"], item["status"], item["detail"]])
+
     ws_check.column_dimensions["A"].width = 28
     ws_check.column_dimensions["B"].width = 16
     ws_check.column_dimensions["C"].width = 70
@@ -431,6 +448,7 @@ def _write_excel_summary(target: Path, preview: dict[str, Any]) -> None:
     for cell in ws_welds[1]:
         cell.font = Font(color="FFFFFF", bold=True)
         cell.fill = PatternFill("solid", fgColor="1F4E78")
+
     for weld in preview["welds"]:
         ws_welds.append(
             [
@@ -444,6 +462,7 @@ def _write_excel_summary(target: Path, preview: dict[str, Any]) -> None:
                 weld.get("status"),
             ]
         )
+
     for col in ("A", "B", "C", "D", "E", "F", "G", "H"):
         ws_welds.column_dimensions[col].width = 18
 
@@ -460,6 +479,7 @@ def generate_export_bundle(
     bundle_type: str = "zip",
 ) -> ExportJob:
     preview = build_preview(db, tenant_id, project_id)
+
     job = ExportJob(
         tenant_id=tenant_id,
         project_id=project_id,
