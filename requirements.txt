@@ -11,23 +11,22 @@ alembic==1.13.1
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
 
-# Requests / HTTP
+# HTTP
 requests==2.31.0
 httpx==0.27.0
 
-# Data handling
+# Data / validation
 pydantic==2.6.4
 pydantic-settings==2.2.1
 
-# File handling / uploads
+# Uploads
 python-multipart==0.0.9
 
-# Export (FIX VOOR JOUW CRASH)
+# Export (EXCEL + PDF)
 openpyxl==3.1.2
+reportlab==4.0.8
 
-# Optional (maar vaak nodig in jouw setup)
+# Utils
 email-validator==2.1.1
 python-dotenv==1.0.1
-
-# Logging / utilities
 orjson==3.10.3
