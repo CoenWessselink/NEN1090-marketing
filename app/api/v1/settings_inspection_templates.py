@@ -129,3 +129,15 @@ def patch_template(
         is_default=t.is_default,
         items_json=items,
     )
+
+
+@router.put("/inspection-templates/{template_id}", response_model=InspectionTemplateOut)
+def update_template(
+    template_id: UUID,
+    payload: InspectionTemplatePatch,
+    db: Session = Depends(get_db),
+    tenant_id=Depends(get_current_tenant_id),
+    _user=Depends(get_current_user),
+    _claims=Depends(require_role("tenant_admin", "platform_admin")),
+):
+    return patch_template(template_id, payload, db, tenant_id, _user, _claims)

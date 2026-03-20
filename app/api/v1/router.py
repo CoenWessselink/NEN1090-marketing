@@ -16,6 +16,7 @@ from app.api.v1.tenant_status import router as tenant_status_router
 from app.api.v1.weld_defects import router as weld_defects_router
 from app.api.v1.welds import router as welds_router
 from app.api.v1.welds_admin import router as welds_admin_router
+from app.api.v1.reporting_search import router as reporting_search_router
 
 api_router = APIRouter()
 
@@ -39,3 +40,5 @@ api_router.include_router(billing_router)
 api_router.include_router(assemblies_router)
 api_router.include_router(compliance_router)
 api_router.include_router(exports_router)
+
+api_router.include_router(reporting_search_router)

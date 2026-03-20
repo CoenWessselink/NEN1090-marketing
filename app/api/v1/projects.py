@@ -18,6 +18,7 @@ from app.api.deps import (
 )
 from app.core.audit import audit
 from app.db.models import (
+    AuditLog,
     Project,
     WeldInspection,
     InspectionCheck,
@@ -47,6 +48,30 @@ class ApproveAllBody(BaseModel):
 class DemoSeedBody(BaseModel):
     reset_first: bool = True
     allow_non_demo: bool = False
+
+
+class ProjectSelectionBody(BaseModel):
+    ref_id: UUID
+
+
+def _create_project_link(db: Session, tenant_id, user_id, project_id: UUID, ref_id: UUID, link_model, kind: str):
+    exists = db.query(link_model).filter(link_model.tenant_id == tenant_id, link_model.project_id == project_id, link_model.ref_id == ref_id).first()
+    if exists:
+        return {"ok": True, "already_linked": True, "ref_id": str(ref_id)}
+    db.add(link_model(tenant_id=tenant_id, project_id=project_id, ref_id=ref_id, added_by=user_id))
+    db.commit()
+    audit(db, tenant_id=tenant_id, user_id=user_id, action=f"project_{kind}_link_add", entity="project", entity_id=str(project_id), meta={"ref_id": str(ref_id)})
+    return {"ok": True, "ref_id": str(ref_id)}
+
+
+def _delete_project_link(db: Session, tenant_id, user_id, project_id: UUID, ref_id: UUID, link_model, kind: str):
+    row = db.query(link_model).filter(link_model.tenant_id == tenant_id, link_model.project_id == project_id, link_model.ref_id == ref_id).first()
+    if not row:
+        raise HTTPException(status_code=404, detail=f"{kind} link not found")
+    db.delete(row)
+    db.commit()
+    audit(db, tenant_id=tenant_id, user_id=user_id, action=f"project_{kind}_link_delete", entity="project", entity_id=str(project_id), meta={"ref_id": str(ref_id)})
+    return {"ok": True, "ref_id": str(ref_id)}
 
 
 @router.post("/{project_id}/apply-inspection-template")
@@ -183,6 +208,57 @@ def add_all_welders(
     return {"ok": True, "welders_added": n}
 
 
+
+
+@router.post("/{project_id}/inspection-template/apply")
+def apply_inspection_template_alias(
+    project_id: UUID,
+    body: ApplyTemplateBody,
+    db: Session = Depends(get_db),
+    tenant_id=Depends(get_current_tenant_id),
+    user=Depends(get_current_user),
+    claims=Depends(get_current_claims),
+    _write=Depends(require_tenant_write),
+):
+    return apply_inspection_template(project_id, body, db=db, tenant_id=tenant_id, user=user, claims=claims, _write=_write)
+
+
+@router.post("/{project_id}/wps/add-all")
+def add_all_wps_alias(
+    project_id: UUID,
+    db: Session = Depends(get_db),
+    tenant_id=Depends(get_current_tenant_id),
+    user=Depends(get_current_user),
+    claims=Depends(get_current_claims),
+    _write=Depends(require_tenant_write),
+):
+    return add_all_wps(project_id, db=db, tenant_id=tenant_id, user=user, claims=claims, _write=_write)
+
+
+@router.post("/{project_id}/materials/add-all")
+def add_all_materials_alias(
+    project_id: UUID,
+    db: Session = Depends(get_db),
+    tenant_id=Depends(get_current_tenant_id),
+    user=Depends(get_current_user),
+    claims=Depends(get_current_claims),
+    _write=Depends(require_tenant_write),
+):
+    return add_all_materials(project_id, db=db, tenant_id=tenant_id, user=user, claims=claims, _write=_write)
+
+
+@router.post("/{project_id}/welders/add-all")
+def add_all_welders_alias(
+    project_id: UUID,
+    db: Session = Depends(get_db),
+    tenant_id=Depends(get_current_tenant_id),
+    user=Depends(get_current_user),
+    claims=Depends(get_current_claims),
+    _write=Depends(require_tenant_write),
+):
+    return add_all_welders(project_id, db=db, tenant_id=tenant_id, user=user, claims=claims, _write=_write)
+
+
 @router.post("/{project_id}/add-all-lascontrole")
 def add_all_lascontrole(
     project_id: UUID,
@@ -277,6 +353,21 @@ def approve_all_lascontrole(
     return {"ok": True, "mode": mode, "inspections": len(inspections), "checks_updated": updated, "inspections_set_ok": set_ok}
 
 
+
+
+@router.post("/{project_id}/approve-all")
+def approve_all_lascontrole_alias(
+    project_id: UUID,
+    db: Session = Depends(get_db),
+    tenant_id=Depends(get_current_tenant_id),
+    user=Depends(get_current_user),
+    claims=Depends(get_current_claims),
+    _write=Depends(require_tenant_write),
+):
+    body = ApproveAllBody(mode="open_only")
+    return approve_all_lascontrole(project_id, body, db=db, tenant_id=tenant_id, user=user, claims=claims, _write=_write)
+
+
 @router.get("/{project_id}/selected/wps")
 def list_selected_wps(
     project_id: UUID,
@@ -347,6 +438,157 @@ def list_selected_welders(
         }
         for _, m in rows
     ]
+
+
+
+
+
+
+@router.post("/{project_id}/materials")
+def add_project_material(
+    project_id: UUID,
+    body: ProjectSelectionBody,
+    db: Session = Depends(get_db),
+    tenant_id=Depends(get_current_tenant_id),
+    user=Depends(get_current_user),
+    claims=Depends(get_current_claims),
+    _write=Depends(require_tenant_write),
+):
+    p = db.query(Project).filter(Project.id == project_id, Project.tenant_id == tenant_id).first()
+    if not p:
+        raise HTTPException(status_code=404, detail="Project not found")
+    if p.locked and claims.get("role") not in ("tenant_admin", "platform_admin"):
+        raise HTTPException(status_code=423, detail="Project is locked")
+    master = db.query(MaterialMaster).filter(MaterialMaster.id == body.ref_id, MaterialMaster.tenant_id == tenant_id).first()
+    if not master:
+        raise HTTPException(status_code=404, detail="Material not found")
+    return _create_project_link(db, tenant_id, user.id, project_id, body.ref_id, ProjectMaterial, "material")
+
+
+@router.delete("/{project_id}/materials/{ref_id}")
+def delete_project_material(
+    project_id: UUID,
+    ref_id: UUID,
+    db: Session = Depends(get_db),
+    tenant_id=Depends(get_current_tenant_id),
+    user=Depends(get_current_user),
+    claims=Depends(get_current_claims),
+    _write=Depends(require_tenant_write),
+):
+    p = db.query(Project).filter(Project.id == project_id, Project.tenant_id == tenant_id).first()
+    if not p:
+        raise HTTPException(status_code=404, detail="Project not found")
+    if p.locked and claims.get("role") not in ("tenant_admin", "platform_admin"):
+        raise HTTPException(status_code=423, detail="Project is locked")
+    return _delete_project_link(db, tenant_id, user.id, project_id, ref_id, ProjectMaterial, "material")
+
+
+@router.post("/{project_id}/wps")
+def add_project_wps(
+    project_id: UUID,
+    body: ProjectSelectionBody,
+    db: Session = Depends(get_db),
+    tenant_id=Depends(get_current_tenant_id),
+    user=Depends(get_current_user),
+    claims=Depends(get_current_claims),
+    _write=Depends(require_tenant_write),
+):
+    p = db.query(Project).filter(Project.id == project_id, Project.tenant_id == tenant_id).first()
+    if not p:
+        raise HTTPException(status_code=404, detail="Project not found")
+    if p.locked and claims.get("role") not in ("tenant_admin", "platform_admin"):
+        raise HTTPException(status_code=423, detail="Project is locked")
+    master = db.query(WpsMaster).filter(WpsMaster.id == body.ref_id, WpsMaster.tenant_id == tenant_id).first()
+    if not master:
+        raise HTTPException(status_code=404, detail="WPS not found")
+    return _create_project_link(db, tenant_id, user.id, project_id, body.ref_id, ProjectWps, "wps")
+
+
+@router.delete("/{project_id}/wps/{ref_id}")
+def delete_project_wps(
+    project_id: UUID,
+    ref_id: UUID,
+    db: Session = Depends(get_db),
+    tenant_id=Depends(get_current_tenant_id),
+    user=Depends(get_current_user),
+    claims=Depends(get_current_claims),
+    _write=Depends(require_tenant_write),
+):
+    p = db.query(Project).filter(Project.id == project_id, Project.tenant_id == tenant_id).first()
+    if not p:
+        raise HTTPException(status_code=404, detail="Project not found")
+    if p.locked and claims.get("role") not in ("tenant_admin", "platform_admin"):
+        raise HTTPException(status_code=423, detail="Project is locked")
+    return _delete_project_link(db, tenant_id, user.id, project_id, ref_id, ProjectWps, "wps")
+
+
+@router.post("/{project_id}/welders")
+def add_project_welder(
+    project_id: UUID,
+    body: ProjectSelectionBody,
+    db: Session = Depends(get_db),
+    tenant_id=Depends(get_current_tenant_id),
+    user=Depends(get_current_user),
+    claims=Depends(get_current_claims),
+    _write=Depends(require_tenant_write),
+):
+    p = db.query(Project).filter(Project.id == project_id, Project.tenant_id == tenant_id).first()
+    if not p:
+        raise HTTPException(status_code=404, detail="Project not found")
+    if p.locked and claims.get("role") not in ("tenant_admin", "platform_admin"):
+        raise HTTPException(status_code=423, detail="Project is locked")
+    master = db.query(WelderMaster).filter(WelderMaster.id == body.ref_id, WelderMaster.tenant_id == tenant_id).first()
+    if not master:
+        raise HTTPException(status_code=404, detail="Welder not found")
+    return _create_project_link(db, tenant_id, user.id, project_id, body.ref_id, ProjectWelder, "welder")
+
+
+@router.delete("/{project_id}/welders/{ref_id}")
+def delete_project_welder(
+    project_id: UUID,
+    ref_id: UUID,
+    db: Session = Depends(get_db),
+    tenant_id=Depends(get_current_tenant_id),
+    user=Depends(get_current_user),
+    claims=Depends(get_current_claims),
+    _write=Depends(require_tenant_write),
+):
+    p = db.query(Project).filter(Project.id == project_id, Project.tenant_id == tenant_id).first()
+    if not p:
+        raise HTTPException(status_code=404, detail="Project not found")
+    if p.locked and claims.get("role") not in ("tenant_admin", "platform_admin"):
+        raise HTTPException(status_code=423, detail="Project is locked")
+    return _delete_project_link(db, tenant_id, user.id, project_id, ref_id, ProjectWelder, "welder")
+
+
+@router.get("/{project_id}/wps")
+def list_selected_wps_alias(
+    project_id: UUID,
+    db: Session = Depends(get_db),
+    tenant_id=Depends(get_current_tenant_id),
+    _user=Depends(get_current_user),
+):
+    return list_selected_wps(project_id, db=db, tenant_id=tenant_id, _user=_user)
+
+
+@router.get("/{project_id}/materials")
+def list_selected_materials_alias(
+    project_id: UUID,
+    db: Session = Depends(get_db),
+    tenant_id=Depends(get_current_tenant_id),
+    _user=Depends(get_current_user),
+):
+    return list_selected_materials(project_id, db=db, tenant_id=tenant_id, _user=_user)
+
+
+@router.get("/{project_id}/welders")
+def list_selected_welders_alias(
+    project_id: UUID,
+    db: Session = Depends(get_db),
+    tenant_id=Depends(get_current_tenant_id),
+    _user=Depends(get_current_user),
+):
+    return list_selected_welders(project_id, db=db, tenant_id=tenant_id, _user=_user)
 
 
 @router.get("", response_model=List[ProjectOut])
@@ -454,6 +696,44 @@ def delete_project(
     audit(db, tenant_id=tenant_id, user_id=user.id, action="project_delete", entity="project", entity_id=str(project_id), meta={"code": p.code})
     return {"ok": True}
 
+
+
+@router.get("/{project_id}/audit")
+def list_project_audit(
+    project_id: UUID,
+    limit: int = 200,
+    db: Session = Depends(get_db),
+    tenant_id=Depends(get_current_tenant_id),
+    _user=Depends(get_current_user),
+    _claims=Depends(get_current_claims),
+):
+    p = db.query(Project).filter(Project.id == project_id, Project.tenant_id == tenant_id).first()
+    if not p:
+        raise HTTPException(status_code=404, detail="Project not found")
+    rows = db.query(AuditLog).filter(AuditLog.tenant_id == tenant_id).order_by(AuditLog.created_at.desc()).limit(max(1, min(limit, 500))).all()
+    result = []
+    for row in rows:
+        try:
+            meta = json.loads(row.meta or '{}')
+        except Exception:
+            meta = {}
+        entity_id_matches = str(row.entity_id or '') == str(project_id)
+        project_match = str(meta.get('project_id') or '') == str(project_id)
+        if not (entity_id_matches or project_match):
+            continue
+        result.append({
+            'id': str(row.id),
+            'tenant_id': str(row.tenant_id),
+            'user_id': str(row.user_id) if row.user_id else None,
+            'action': row.action,
+            'entity': row.entity,
+            'entity_id': row.entity_id,
+            'ip': row.ip,
+            'user_agent': row.user_agent,
+            'created_at': row.created_at.isoformat() if row.created_at else None,
+            'meta': meta,
+        })
+    return {'items': result, 'total': len(result), 'page': 1, 'limit': min(limit, 500)}
 
 @router.post("/seed_demo")
 def seed_demo_projects(

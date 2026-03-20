@@ -518,6 +518,13 @@ class ExportJob(Base):
     requested_by = Column(String(120), nullable=True)
     file_path = Column(String(500), nullable=True)
     message = Column(Text, nullable=True)
+    bundle_type = Column(String(30), nullable=False, server_default="zip")
+    manifest_json = Column(Text, nullable=True)
+    started_at = Column(DateTime(timezone=True), nullable=True)
+    completed_at = Column(DateTime(timezone=True), nullable=True)
+    retry_count = Column(Integer, nullable=False, server_default="0")
+    error_code = Column(String(80), nullable=True)
+    error_detail = Column(Text, nullable=True)
 
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False)

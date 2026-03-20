@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 
 import json
@@ -8,6 +7,12 @@ from pathlib import Path
 from typing import Any
 from uuid import UUID
 
+from openpyxl import Workbook
+from openpyxl.styles import Font, PatternFill
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 from sqlalchemy.orm import Session
 
 from app.db.models import (
@@ -245,6 +250,101 @@ def _write_text_summary(target: Path, preview: dict[str, Any]) -> None:
     target.write_text('\n'.join(lines), encoding='utf-8')
 
 
+def _write_pdf_summary(target: Path, preview: dict[str, Any]) -> None:
+    styles = getSampleStyleSheet()
+    story = []
+    project = preview['project']
+    summary = preview['summary']
+    story.append(Paragraph('CE Dossier', styles['Title']))
+    story.append(Paragraph(f"Project: {project.get('code') or '-'} — {project.get('name') or '-'}", styles['Heading2']))
+    story.append(Paragraph(f"Opdrachtgever: {project.get('client_name') or '-'}", styles['Normal']))
+    story.append(Paragraph(f"EXC: {project.get('execution_class') or '-'} | Acceptatieklasse: {project.get('acceptance_class') or '-'}", styles['Normal']))
+    story.append(Spacer(1, 12))
+
+    table_data = [['Kengetal', 'Waarde']] + [[key, str(value)] for key, value in summary.items()]
+    table = Table(table_data, repeatRows=1, colWidths=[220, 220])
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#1f4e78')),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('GRID', (0, 0), (-1, -1), 0.25, colors.HexColor('#b7c4d0')),
+        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.HexColor('#f7f9fb')]),
+        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+    ]))
+    story.append(table)
+    story.append(Spacer(1, 12))
+    story.append(Paragraph('Completeness', styles['Heading2']))
+
+    completeness_rows = [['Onderdeel', 'Status', 'Detail']]
+    for item in preview['completeness']:
+        completeness_rows.append([item['label'], item['status'], item['detail']])
+    completeness_table = Table(completeness_rows, repeatRows=1, colWidths=[140, 80, 220])
+    completeness_table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#2f75b5')),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('GRID', (0, 0), (-1, -1), 0.25, colors.HexColor('#d0d7de')),
+        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.HexColor('#f7f9fb')]),
+        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+    ]))
+    story.append(completeness_table)
+    doc = SimpleDocTemplate(str(target), pagesize=A4, title='CE Dossier')
+    doc.build(story)
+
+
+def _write_excel_summary(target: Path, preview: dict[str, Any]) -> None:
+    workbook = Workbook()
+    ws_summary = workbook.active
+    ws_summary.title = 'Samenvatting'
+    ws_summary['A1'] = 'CE Dossier'
+    ws_summary['A1'].font = Font(bold=True, size=16)
+    ws_summary['A3'] = 'Project'
+    ws_summary['B3'] = f"{preview['project'].get('code') or '-'} - {preview['project'].get('name') or '-'}"
+    ws_summary['A4'] = 'Opdrachtgever'
+    ws_summary['B4'] = preview['project'].get('client_name') or '-'
+    ws_summary['A5'] = 'EXC'
+    ws_summary['B5'] = preview['project'].get('execution_class') or '-'
+    ws_summary['A7'] = 'Kengetal'
+    ws_summary['B7'] = 'Waarde'
+    header_fill = PatternFill('solid', fgColor='1F4E78')
+    for cell in ('A7', 'B7'):
+        ws_summary[cell].font = Font(color='FFFFFF', bold=True)
+        ws_summary[cell].fill = header_fill
+    row = 8
+    for key, value in preview['summary'].items():
+        ws_summary[f'A{row}'] = key
+        ws_summary[f'B{row}'] = value
+        row += 1
+    ws_summary.column_dimensions['A'].width = 28
+    ws_summary.column_dimensions['B'].width = 18
+
+    ws_check = workbook.create_sheet('Completeness')
+    ws_check.append(['Onderdeel', 'Status', 'Detail'])
+    for cell in ws_check[1]:
+        cell.font = Font(color='FFFFFF', bold=True)
+        cell.fill = PatternFill('solid', fgColor='2F75B5')
+    for item in preview['completeness']:
+        ws_check.append([item['label'], item['status'], item['detail']])
+    ws_check.column_dimensions['A'].width = 28
+    ws_check.column_dimensions['B'].width = 16
+    ws_check.column_dimensions['C'].width = 70
+
+    ws_welds = workbook.create_sheet('Lassen')
+    ws_welds.append(['Lasnummer', 'Locatie', 'WPS', 'Proces', 'Materiaal', 'Dikte', 'Lasser', 'Status'])
+    for cell in ws_welds[1]:
+        cell.font = Font(color='FFFFFF', bold=True)
+        cell.fill = PatternFill('solid', fgColor='1F4E78')
+    for weld in preview['welds']:
+        ws_welds.append([
+            weld.get('weld_no'), weld.get('location'), weld.get('wps'), weld.get('process'),
+            weld.get('material'), weld.get('thickness'), weld.get('welders'), weld.get('status'),
+        ])
+    for col in ('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'):
+        ws_welds.column_dimensions[col].width = 18
+
+    workbook.save(target)
+
+
 def generate_export_bundle(db: Session, tenant_id: UUID, project_id: UUID, *, user_id: UUID | None = None, requested_by: str | None = None, bundle_type: str = 'zip') -> ExportJob:
     preview = build_preview(db, tenant_id, project_id)
     job = ExportJob(
@@ -272,6 +372,17 @@ def generate_export_bundle(db: Session, tenant_id: UUID, project_id: UUID, *, us
     _write_json(export_dir / 'materials.json', preview['materials'])
     _write_json(export_dir / 'audit_log.json', preview['audit_log'])
     _write_text_summary(export_dir / 'README_CE_DOSSIER.txt', preview)
+    _write_pdf_summary(export_dir / 'CE_DOSSIER_SUMMARY.pdf', preview)
+    _write_excel_summary(export_dir / 'CE_DOSSIER_SUMMARY.xlsx', preview)
+
+    manifest = {
+        'ready_for_export': preview['ready_for_export'],
+        'generated_at': preview['generated_at'],
+        'bundle_type': (bundle_type or 'zip').lower(),
+        'project': preview['project'],
+        'files': sorted(p.name for p in export_dir.iterdir()),
+    }
+    _write_json(export_dir / 'manifest.json', manifest)
 
     zip_path = export_dir / f"ce_dossier_{preview['project'].get('code') or project_id}.zip"
     with zipfile.ZipFile(zip_path, 'w', compression=zipfile.ZIP_DEFLATED) as zf:
@@ -280,15 +391,24 @@ def generate_export_bundle(db: Session, tenant_id: UUID, project_id: UUID, *, us
                 continue
             zf.write(file, arcname=f'ce_dossier/{file.name}')
 
+    final_path = zip_path
+    final_message = 'CE-dossier ZIP-bundel aangemaakt.'
+    normalized_bundle = (bundle_type or 'zip').lower()
+    if normalized_bundle == 'pdf':
+        final_path = export_dir / 'CE_DOSSIER_SUMMARY.pdf'
+        final_message = 'CE-dossier PDF aangemaakt.'
+    elif normalized_bundle == 'excel':
+        final_path = export_dir / 'CE_DOSSIER_SUMMARY.xlsx'
+        final_message = 'CE-dossier Excel aangemaakt.'
+
     job.status = 'completed'
-    job.file_path = str(zip_path)
-    job.message = 'CE-dossier ZIP-bundel aangemaakt.'
+    job.file_path = str(final_path)
+    job.message = final_message
     job.completed_at = datetime.now(timezone.utc)
     job.manifest_json = json.dumps({
-        'ready_for_export': preview['ready_for_export'],
-        'generated_at': preview['generated_at'],
-        'files': sorted([p.name for p in export_dir.iterdir() if p.name != zip_path.name]),
+        **manifest,
         'zip_name': zip_path.name,
+        'download_name': final_path.name,
     }, ensure_ascii=False)
     db.commit()
     db.refresh(job)
