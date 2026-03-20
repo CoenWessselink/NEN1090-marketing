@@ -69,7 +69,7 @@ class Settings:
     DATABASE_URL: str = _get_db_url()
     CORS_ORIGINS: list[str] = [o.strip() for o in os.getenv(
         "CORS_ORIGINS",
-        "http://127.0.0.1:5173,http://localhost:5173,http://127.0.0.1:8080,http://localhost:8080,https://nen1090-marketing-new.pages.dev,https://nen-1090-app.pages.dev,https://nen1090.nl,https://app.nen1090.nl"
+        "http://127.0.0.1:5173,http://localhost:5173,http://127.0.0.1:8080,http://localhost:8080,https://nen1090-marketing-new.pages.dev,https://nen1090-marketing.pages.dev,https://nen-1090-app.pages.dev,https://nen1090.nl,https://www.nen1090.nl,https://app.nen1090.nl"
     ).split(",") if o.strip()]
     CORS_ALLOW_CREDENTIALS: bool = os.getenv("CORS_ALLOW_CREDENTIALS", "0").strip().lower() in {"1", "true", "yes", "on"}
     APP_URL: str = os.getenv("APP_URL", "https://nen-1090-app.pages.dev")

@@ -13,12 +13,16 @@ app = FastAPI(
 # Centrale CORS-configuratie voor app, marketing en lokale development
 origins = [
     "https://nen-1090-app.pages.dev",
+    "https://nen1090-marketing.pages.dev",
     "https://nen1090.nl",
     "https://www.nen1090.nl",
+    "https://app.nen1090.nl",
     "http://127.0.0.1:8080",
     "http://localhost:8080",
     "http://127.0.0.1:8090",
     "http://localhost:8090",
+    "http://127.0.0.1:5173",
+    "http://localhost:5173",
 ]
 
 # Neem extra origins uit settings mee als die bestaan
@@ -36,6 +40,8 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"],
+    allow_origin_regex=r"https://.*\.pages\.dev",
 )
 
 @app.get("/")
