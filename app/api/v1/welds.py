@@ -3,6 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 import json
 import os
+import shutil
 import uuid
 from pathlib import Path
 from typing import Any
@@ -144,6 +145,57 @@ def _store_attachment(
     }
 
 
+
+
+def _clone_weld_attachment(
+    db: Session,
+    tenant_id: UUID,
+    source_weld: Weld,
+    target_weld: Weld,
+    source_attachment: Attachment,
+    user_id: UUID | None,
+) -> dict[str, Any]:
+    source_path = Path(source_attachment.storage_path or "")
+    if not source_path.exists():
+        raise HTTPException(status_code=404, detail=f"Attachment file missing on disk: {source_attachment.filename}")
+
+    new_attachment_id = uuid.uuid4()
+    tenant_dir = _STORAGE_ROOT / str(tenant_id) / str(new_attachment_id)
+    _ensure_dir(tenant_dir)
+    target_path = tenant_dir / os.path.basename(source_attachment.filename or source_path.name)
+    shutil.copy2(source_path, target_path)
+
+    attachment = Attachment(
+        id=new_attachment_id,
+        tenant_id=tenant_id,
+        scope_type="weld",
+        scope_id=target_weld.id,
+        kind=source_attachment.kind,
+        filename=source_attachment.filename,
+        storage_path=str(target_path),
+        mime_type=source_attachment.mime_type,
+        size_bytes=source_attachment.size_bytes,
+        meta_json=json.dumps({
+            "project_id": str(target_weld.project_id),
+            "weld_number": target_weld.weld_no,
+            "copied_from_weld_id": str(source_weld.id),
+            "copied_from_attachment_id": str(source_attachment.id),
+        }),
+        uploaded_by=user_id,
+    )
+    db.add(attachment)
+    db.flush()
+    return {
+        "id": attachment.id,
+        "title": attachment.filename,
+        "type": attachment.kind,
+        "status": "actief",
+        "version": "1.0",
+        "uploaded_at": attachment.uploaded_at.isoformat() if attachment.uploaded_at else None,
+        "download_url": f"/api/v1/projects/{target_weld.project_id}/welds/{target_weld.id}/attachments/{attachment.id}/download",
+    }
+
+
 @router.get("/welds")
 def list_welds_global(
     search: str | None = Query(default=None),
@@ -279,6 +331,77 @@ def delete_weld(
     db.commit()
     audit(db, tenant_id=str(tenant_id), user_id=str(getattr(user, "id", "") or ""), action="weld_delete", entity="weld", entity_id=str(weld_id), meta={"project_id": str(project_id)})
     return {"ok": True}
+
+
+@router.post("/projects/{project_id}/welds/{weld_id}/copy")
+def copy_weld(
+    project_id: UUID,
+    weld_id: UUID,
+    payload: dict[str, Any] | None = None,
+    db: Session = Depends(get_db),
+    tenant_id=Depends(get_current_tenant_id),
+    user=Depends(get_current_user),
+):
+    project = _get_project(db, tenant_id, project_id)
+    if project.locked:
+        raise HTTPException(status_code=423, detail="Project locked")
+
+    source = _get_weld(db, tenant_id, project_id, weld_id)
+    requested_weld_no = str((payload or {}).get("weld_no") or (payload or {}).get("weld_number") or "").strip()
+    clone_weld_no = requested_weld_no or f"{source.weld_no}-kopie"
+
+    clone = Weld(
+        tenant_id=tenant_id,
+        project_id=source.project_id,
+        assembly_id=source.assembly_id,
+        weld_no=clone_weld_no,
+        location=source.location,
+        wps=source.wps,
+        process=source.process,
+        material=source.material,
+        thickness=source.thickness,
+        welders=source.welders,
+        vt_status=source.vt_status,
+        ndo_status=source.ndo_status,
+        photos=source.photos,
+        status="concept",
+        result="pending",
+        notes=source.notes,
+    )
+    db.add(clone)
+    db.flush()
+
+    source_attachments = db.query(Attachment).filter(
+        Attachment.tenant_id == tenant_id,
+        Attachment.scope_type == "weld",
+        Attachment.scope_id == source.id,
+        Attachment.deleted_at.is_(None),
+    ).all()
+    copied_attachments = []
+    for attachment in source_attachments:
+        copied_attachments.append(_clone_weld_attachment(db, tenant_id, source, clone, attachment, getattr(user, "id", None)))
+
+    db.commit()
+    db.refresh(clone)
+    audit(
+        db,
+        tenant_id=str(tenant_id),
+        user_id=str(getattr(user, "id", "") or ""),
+        action="weld_copy",
+        entity="weld",
+        entity_id=str(clone.id),
+        meta={
+            "project_id": str(project_id),
+            "source_weld_id": str(source.id),
+            "source_weld_no": source.weld_no,
+            "copied_attachments": len(copied_attachments),
+        },
+    )
+    return {
+        **_serialize_weld(db, clone),
+        "copied_from_weld_id": str(source.id),
+        "copied_attachments": len(copied_attachments),
+    }
 
 
 @router.post("/projects/{project_id}/welds/{weld_id}/conform")

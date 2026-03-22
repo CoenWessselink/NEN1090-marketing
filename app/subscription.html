@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Abonnement beheren – CWS NEN1090 Platform</title>
+  <meta name="description" content="Beheer je abonnement, gebruikersaantal en factuurinformatie binnen de klantbeheeromgeving van het CWS NEN1090 Platform." />
+  <meta name="robots" content="noindex" />
+  <link rel="canonical" href="/app/subscription.html" />
+  <link rel="stylesheet" href="/assets/css/enterprise.css" />
+  <link rel="stylesheet" href="/assets/css/auth.css" />
+  <link rel="stylesheet" href="/assets/css/billing.css" />
+</head>
+<body class="auth-page">
+  <div class="site-topbar">
+    <div class="container">
+      <div class="row">
+        <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span><b>CWS NEN1090 Platform</b></a>
+        <nav class="nav" aria-label="Klantbeheer navigatie">
+          <a href="/pricing.html">Prijzen</a>
+          <a href="/checkout.html">Afrekenen</a>
+          <a href="/app/change-password.html">Wachtwoord wijzigen</a>
+          <a class="pill" href="/app/logout.html">Uitloggen</a>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <main class="billing-shell billing-shell-app">
+    <div class="container">
+      <section class="billing-hero billing-subscription-hero">
+        <article class="billing-hero-card">
+          <span class="billing-kicker">Abonnement & tenantbeheer</span>
+          <h1>Beheer jouw licentie, gebruikers en facturen.</h1>
+          <p class="billing-lead">Deze pagina sluit aan op de nieuwe auth- en checkoutflow. Klanten kunnen hier hun huidige pakket bekijken, seats aanpassen en de status van het abonnement volgen.</p>
+          <ul class="billing-points">
+            <li>Overzicht van huidig pakket, seats en factuurmoment.</li>
+            <li>Wijzig abonnement zonder losse shell-pagina’s of onduidelijke tussenstappen.</li>
+            <li>Volledig in dezelfde enterprise componenttaal als login, checkout en onboarding.</li>
+          </ul>
+        </article>
+
+        <aside class="billing-summary billing-summary-tight" data-subscription-overview>
+          <span class="billing-tag">Live overzicht</span>
+          <h2>Huidige contractstatus</h2>
+          <div class="billing-overview-grid">
+            <div>
+              <span class="billing-small">Pakket</span>
+              <strong data-subscription-current-plan>Bezig met laden…</strong>
+            </div>
+            <div>
+              <span class="billing-small">Seats</span>
+              <strong data-subscription-current-seats>—</strong>
+            </div>
+            <div>
+              <span class="billing-small">Facturatie</span>
+              <strong data-subscription-current-billing>—</strong>
+            </div>
+            <div>
+              <span class="billing-small">Volgende factuur</span>
+              <strong data-subscription-next-invoice>—</strong>
+            </div>
+          </div>
+          <p class="billing-meta" data-subscription-overview-meta>De pagina controleert eerst je sessie en haalt daarna abonnement- en factuurgegevens op.</p>
+        </aside>
+      </section>
+
+      <div class="billing-layout billing-layout-app">
+        <section class="billing-card">
+          <div class="billing-card-head-row">
+            <div>
+              <span class="billing-tag">Wijzigen</span>
+              <h2>Abonnement aanpassen</h2>
+              <p class="billing-meta">Pas pakket, facturatie of seat-aantal aan. Opslaan gebruikt dezelfde backend-tenantflow als de rest van het platform.</p>
+            </div>
+          </div>
+
+          <div class="billing-status" data-subscription-status hidden></div>
+
+          <form class="billing-form-grid" data-subscription-form novalidate>
+            <div class="billing-field">
+              <label class="billing-label" for="subscriptionCompany">Bedrijf / tenant</label>
+              <input class="billing-input" id="subscriptionCompany" name="company" type="text" readonly />
+            </div>
+            <div class="billing-field">
+              <label class="billing-label" for="subscriptionEmail">Contact e-mail</label>
+              <input class="billing-input" id="subscriptionEmail" name="contactEmail" type="email" readonly />
+            </div>
+
+            <div class="billing-field-full">
+              <label class="billing-label">Pakket</label>
+              <div class="billing-plan-switch" data-subscription-plan-switch>
+                <button class="billing-select-plan" data-subscription-plan="starter" type="button">Starter</button>
+                <button class="billing-select-plan" data-subscription-plan="professional" type="button">Professional</button>
+                <button class="billing-select-plan" data-subscription-plan="enterprise" type="button">Enterprise</button>
+              </div>
+            </div>
+
+            <div class="billing-field-full">
+              <label class="billing-label">Facturatie</label>
+              <div class="billing-toggle-group" data-subscription-billing-group>
+                <button class="billing-toggle" data-subscription-billing="monthly" type="button" aria-pressed="false">Maandelijks</button>
+                <button class="billing-toggle" data-subscription-billing="yearly" type="button" aria-pressed="false">Jaarlijks <small>lager per seat</small></button>
+              </div>
+            </div>
+
+            <div class="billing-field-full">
+              <label class="billing-label" for="subscriptionSeats">Aantal gebruikers <span data-subscription-seat-output></span></label>
+              <div class="billing-seat-row">
+                <input class="billing-range" id="subscriptionSeats" name="seats" data-subscription-seats min="1" max="250" step="1" type="range" />
+                <div class="billing-seat-pill" data-subscription-seat-pill>—</div>
+              </div>
+              <p class="billing-small">Het minimum per pakket wordt automatisch afgedwongen.</p>
+            </div>
+
+            <div class="billing-actions billing-actions-split">
+              <button class="btn btn-blue" data-subscription-save type="submit">Wijzigingen opslaan</button>
+              <a class="btn btn-orange" href="/app/change-password.html">Wachtwoord wijzigen</a>
+            </div>
+          </form>
+        </section>
+
+        <aside class="billing-summary">
+          <span class="billing-tag">Samenvatting</span>
+          <h2>Nieuwe maandlast</h2>
+          <div class="billing-summary-list">
+            <div><span>Pakket</span><strong data-subscription-summary-plan>—</strong></div>
+            <div><span>Facturatie</span><strong data-subscription-summary-billing>—</strong></div>
+            <div><span>Seats</span><strong data-subscription-summary-seats>—</strong></div>
+            <div><span>Prijs per seat</span><strong data-subscription-summary-seat-price>—</strong></div>
+            <div class="billing-summary-total"><span>Totaal</span><strong data-subscription-summary-total>—</strong></div>
+          </div>
+          <div class="billing-divider"></div>
+          <button class="btn btn-secondary billing-cancel-button" data-subscription-cancel type="button">Abonnement stopzetten</button>
+          <p class="billing-small">Stopzetten gaat via de backend-billingflow en volgt de ingestelde contractregels.</p>
+          <a class="billing-inline-link" data-subscription-portal href="#" hidden>Open betaalportaal</a>
+        </aside>
+      </div>
+
+      <section class="billing-card billing-card-spaced">
+        <div class="billing-card-head-row">
+          <div>
+            <span class="billing-tag">Facturen</span>
+            <h2>Factuurhistorie</h2>
+            <p class="billing-meta">De lijst hieronder wordt gevuld vanuit de bestaande backend-billinglaag. Wijzigingen worden pas definitief na succesvolle backend-bevestiging.</p>
+          </div>
+        </div>
+        <div class="billing-empty" data-subscription-invoices-empty>Facturen worden geladen…</div>
+        <div class="billing-table-wrap" data-subscription-invoices-wrap hidden>
+          <table class="billing-table">
+            <thead>
+              <tr>
+                <th>Factuur</th>
+                <th>Datum</th>
+                <th>Status</th>
+                <th>Bedrag</th>
+                <th>Actie</th>
+              </tr>
+            </thead>
+            <tbody data-subscription-invoices></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/auth_api.js"></script>
+  <script src="/assets/js/billing.js"></script>
+</body>
+</html>

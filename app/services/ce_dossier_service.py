@@ -4,6 +4,8 @@ import json
 import zipfile
 from datetime import datetime, timezone
 from pathlib import Path
+import re
+import shutil
 from typing import Any
 from uuid import UUID
 
@@ -469,6 +471,39 @@ def _write_excel_summary(target: Path, preview: dict[str, Any]) -> None:
     workbook.save(target)
 
 
+def _safe_export_name(value: str | None, fallback: str) -> str:
+    base = (value or '').strip() or fallback
+    base = re.sub(r'[^A-Za-z0-9._-]+', '_', base)
+    base = base.strip('._-')
+    return base or fallback
+
+
+def _copy_relevant_attachments(export_dir: Path, preview: dict[str, Any], attachments: list[Attachment]) -> list[str]:
+    target_root = export_dir / 'attachments'
+    copied: list[str] = []
+    relevant_weld_ids = {str(item.get('id')) for item in preview.get('welds', []) if item.get('id')}
+    relevant_inspection_ids = {str(item.get('id')) for item in preview.get('inspection_results', []) if item.get('id')}
+    project_id = str(preview.get('project', {}).get('id') or '')
+    for attachment in attachments:
+        scope_type = (attachment.scope_type or '').lower()
+        scope_id = str(attachment.scope_id)
+        if scope_type == 'project' and scope_id != project_id:
+            continue
+        if scope_type == 'weld' and scope_id not in relevant_weld_ids:
+            continue
+        if scope_type == 'inspection' and scope_id not in relevant_inspection_ids:
+            continue
+        source = Path(attachment.storage_path or '')
+        if not source.exists() or not source.is_file():
+            continue
+        scope_dir = target_root / scope_type
+        scope_dir.mkdir(parents=True, exist_ok=True)
+        target = scope_dir / f"{scope_id}_{_safe_export_name(attachment.filename, 'attachment.bin')}"
+        shutil.copy2(source, target)
+        copied.append(str(target.relative_to(export_dir)))
+    return copied
+
+
 def generate_export_bundle(
     db: Session,
     tenant_id: UUID,
@@ -477,10 +512,11 @@ def generate_export_bundle(
     user_id: UUID | None = None,
     requested_by: str | None = None,
     bundle_type: str = "zip",
+    existing_job: ExportJob | None = None,
 ) -> ExportJob:
     preview = build_preview(db, tenant_id, project_id)
 
-    job = ExportJob(
+    job = existing_job or ExportJob(
         tenant_id=tenant_id,
         project_id=project_id,
         export_type="ce_dossier",
@@ -490,9 +526,20 @@ def generate_export_bundle(
         bundle_type=bundle_type,
         manifest_json=json.dumps({"ready_for_export": preview["ready_for_export"]}, ensure_ascii=False),
     )
-    db.add(job)
-    db.commit()
-    db.refresh(job)
+    if existing_job is None:
+        db.add(job)
+        db.commit()
+        db.refresh(job)
+    else:
+        job.export_type = 'ce_dossier'
+        job.status = 'running'
+        job.requested_by = requested_by or job.requested_by
+        job.message = 'CE-dossier wordt opgebouwd.'
+        job.bundle_type = bundle_type
+        job.manifest_json = json.dumps({"ready_for_export": preview["ready_for_export"]}, ensure_ascii=False)
+        db.add(job)
+        db.commit()
+        db.refresh(job)
 
     export_dir = EXPORT_ROOT / str(project_id) / str(job.id)
     export_dir.mkdir(parents=True, exist_ok=True)
@@ -508,16 +555,28 @@ def generate_export_bundle(
     _write_pdf_summary(export_dir / "CE_DOSSIER_SUMMARY.pdf", preview)
     _write_excel_summary(export_dir / "CE_DOSSIER_SUMMARY.xlsx", preview)
 
+    relevant_attachments = (
+        db.query(Attachment)
+        .filter(
+            Attachment.tenant_id == tenant_id,
+            Attachment.deleted_at.is_(None),
+            Attachment.scope_type.in_(["project", "weld", "inspection"]),
+        )
+        .all()
+    )
+    copied_attachment_files = _copy_relevant_attachments(export_dir, preview, relevant_attachments)
+
     manifest = {
         "ready_for_export": preview["ready_for_export"],
         "generated_at": preview["generated_at"],
         "bundle_type": (bundle_type or "zip").lower(),
         "project": preview["project"],
-        "files": sorted(p.name for p in export_dir.iterdir()),
+        "files": sorted(str(p.relative_to(export_dir)) for p in export_dir.rglob('*') if p.is_file()),
+        "attachment_files": copied_attachment_files,
     }
     _write_json(export_dir / "manifest.json", manifest)
 
-    zip_path = export_dir / f"ce_dossier_{preview['project'].get('code') or project_id}.zip"
+    zip_path = export_dir / f"ce_dossier_{_safe_export_name(preview['project'].get('code'), str(project_id))}.zip"
     with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
         for file in sorted(export_dir.iterdir()):
             if file == zip_path:

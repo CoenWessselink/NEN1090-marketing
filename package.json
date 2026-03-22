@@ -1,0 +1,16 @@
+{
+  "name": "nen1090-marketing-full",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1 --port 5173",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 4173",
+    "pages:dev": "wrangler pages dev dist --ip 127.0.0.1 --port 8788"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0",
+    "wrangler": "^3.0.0"
+  }
+}

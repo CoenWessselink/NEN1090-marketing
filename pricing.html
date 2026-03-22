@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prijzen | CWS NEN-1090</title>
+  <meta name="description" content="Kies het pakket dat past bij uw staalbouwbedrijf en reken door met aantal gebruikers en maand- of jaarbetaling.">
+  <link rel="stylesheet" href="/assets/css/enterprise-pro.css">
+  <link rel="stylesheet" href="/assets/css/billing.css">
+  <link rel="canonical" href="https://nen1090.nl/pricing.html">
+</head>
+<body>
+  <div data-site-nav></div>
+
+  <main class="billing-shell" data-billing-pricing>
+    <section class="container billing-hero">
+      <article class="billing-hero-card">
+        <span class="billing-kicker">SaaS prijzen</span>
+        <h1>Heldere pakketten voor NEN-1090, projectbeheer en lascontrole</h1>
+        <p class="billing-lead">Kies een pakket op basis van het aantal gebruikers en de gewenste mate van begeleiding. De checkout sluit direct aan op de onboarding- en loginflow die al binnen het platform is ingericht.</p>
+
+        <div class="billing-toggle-group" role="group" aria-label="Facturatieperiode kiezen">
+          <button class="billing-toggle" type="button" data-billing-toggle="monthly" aria-pressed="false">Maandelijks</button>
+          <button class="billing-toggle" type="button" data-billing-toggle="yearly" aria-pressed="false">Jaarlijks <small>voordeliger</small></button>
+        </div>
+
+        <ul class="billing-points">
+          <li>Alle bedragen zijn exclusief btw en gebaseerd op actieve gebruikers.</li>
+          <li>Checkout start vanuit de marketingomgeving en leidt door naar de beveiligde betaalpagina.</li>
+          <li>Na succesvolle betaling kan de onboarding direct starten via de set-password flow.</li>
+        </ul>
+      </article>
+
+      <aside class="billing-preview" data-pricing-preview>
+        <span class="billing-tag">Advies op basis van uw team</span>
+        <div>
+          <p class="muted" style="margin:0 0 8px">Aanbevolen configuratie</p>
+          <h2 data-preview-plan style="margin:0">Professional</h2>
+          <p class="muted" data-preview-text style="margin:8px 0 0">8 gebruikers · maandbetaling</p>
+        </div>
+
+        <div>
+          <p class="muted" style="margin:0 0 8px">Rekenvoorbeeld</p>
+          <div class="billing-preview-price" data-preview-price>€ 392 per maand</div>
+          <p class="muted" data-preview-seats style="margin:8px 0 0">8 gebruikers</p>
+        </div>
+
+        <div class="billing-seat-row">
+          <label class="billing-label" for="pricing-seats">Aantal gebruikers</label>
+          <input class="billing-input" id="pricing-seats" type="range" min="3" max="100" step="1" value="8" data-pricing-seats>
+          <div class="billing-seat-meta">
+            <span>Gebruikers</span>
+            <strong><span data-pricing-seats-output>8</span> actief</strong>
+          </div>
+        </div>
+
+        <div class="billing-actions">
+          <a class="btn btn-primary" data-preview-cta href="/checkout.html?plan=professional&amp;billing=monthly&amp;seats=8">Ga door naar checkout</a>
+          <a class="btn btn-secondary" href="/contact.html">Advies nodig?</a>
+        </div>
+      </aside>
+    </section>
+
+    <section class="container billing-grid" aria-label="Pakketten">
+      <article class="billing-plan-card" data-plan-card="starter">
+        <div class="billing-plan-head">
+          <span class="billing-tag" data-plan-badge>Snel starten</span>
+          <h3 data-plan-name>Starter</h3>
+          <p class="billing-meta" data-plan-subtitle>Voor kleinere staalbouwteams</p>
+        </div>
+        <div class="billing-plan-price">
+          <strong data-plan-price>€ 29</strong>
+          <span class="billing-plan-note" data-plan-price-note>per gebruiker per maand</span>
+          <span class="billing-small" data-plan-setup>Standaard onboarding inbegrepen</span>
+        </div>
+        <ul class="billing-plan-features" data-plan-features></ul>
+        <div class="billing-actions">
+          <button class="billing-select-plan" type="button" data-select-plan>Selecteer</button>
+          <a class="btn btn-secondary" data-plan-action href="/checkout.html?plan=starter&amp;billing=monthly&amp;seats=5">Kies Starter</a>
+        </div>
+      </article>
+
+      <article class="billing-plan-card" data-plan-card="professional">
+        <div class="billing-plan-head">
+          <span class="billing-tag" data-plan-badge>Meest gekozen</span>
+          <h3 data-plan-name>Professional</h3>
+          <p class="billing-meta" data-plan-subtitle>Voor teams die projectbeheer en lascontrole combineren</p>
+        </div>
+        <div class="billing-plan-price">
+          <strong data-plan-price>€ 49</strong>
+          <span class="billing-plan-note" data-plan-price-note>per gebruiker per maand</span>
+          <span class="billing-small" data-plan-setup>Implementatiegesprek inbegrepen</span>
+        </div>
+        <ul class="billing-plan-features" data-plan-features></ul>
+        <div class="billing-actions">
+          <button class="billing-select-plan" type="button" data-select-plan>Selecteer</button>
+          <a class="btn btn-primary" data-plan-action href="/checkout.html?plan=professional&amp;billing=monthly&amp;seats=8">Kies Professional</a>
+        </div>
+      </article>
+
+      <article class="billing-plan-card" data-plan-card="enterprise">
+        <div class="billing-plan-head">
+          <span class="billing-tag" data-plan-badge>Schaalbaar</span>
+          <h3 data-plan-name>Enterprise</h3>
+          <p class="billing-meta" data-plan-subtitle>Voor meerdere teams of vestigingen</p>
+        </div>
+        <div class="billing-plan-price">
+          <strong data-plan-price>€ 69</strong>
+          <span class="billing-plan-note" data-plan-price-note>per gebruiker per maand</span>
+          <span class="billing-small" data-plan-setup>Implementatie en afstemming op maat</span>
+        </div>
+        <ul class="billing-plan-features" data-plan-features></ul>
+        <div class="billing-actions">
+          <button class="billing-select-plan" type="button" data-select-plan>Selecteer</button>
+          <a class="btn btn-secondary" data-plan-action href="/checkout.html?plan=enterprise&amp;billing=monthly&amp;seats=15">Kies Enterprise</a>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <div data-site-footer></div>
+  <script src="/assets/js/config.js"></script>
+  <script src="/assets/js/site-pro.js"></script>
+  <script src="/assets/js/billing.js"></script>
+</body>
+</html>

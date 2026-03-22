@@ -11,6 +11,7 @@ from sqlalchemy.orm import Session
 from app.api.deps import get_current_tenant_id, get_current_user, get_db
 from app.db.models import ExportJob, Project
 from app.schemas.exports import ExportJobCreate, ExportJobOut
+from app.services.ce_dossier_service import build_preview
 from app.services.export_worker import process_export_job_now
 
 router = APIRouter(prefix="/projects/{project_id}/exports", tags=["exports"])
@@ -81,6 +82,12 @@ def create_excel_export(project_id: UUID, db: Session = Depends(get_db), tenant_
     return _queue_and_run(project_id, 'excel_export', 'excel', getattr(current_user, 'email', None), db, tenant_id, current_user)
 
 
+@router.get('/preview')
+def get_export_preview(project_id: UUID, db: Session = Depends(get_db), tenant_id=Depends(get_current_tenant_id), _user=Depends(get_current_user)):
+    _get_project(db, tenant_id, project_id)
+    return build_preview(db, tenant_id, project_id)
+
+
 @router.get('/{export_id}', response_model=ExportJobOut)
 def get_export(project_id: UUID, export_id: UUID, db: Session = Depends(get_db), tenant_id=Depends(get_current_tenant_id), _user=Depends(get_current_user)):
     _get_project(db, tenant_id, project_id)
@@ -88,6 +95,24 @@ def get_export(project_id: UUID, export_id: UUID, db: Session = Depends(get_db),
     if not row:
         raise HTTPException(status_code=404, detail='Export job not found')
     return _as_out(row, project_id)
+
+@router.get('/{export_id}/manifest')
+def get_export_manifest(project_id: UUID, export_id: UUID, db: Session = Depends(get_db), tenant_id=Depends(get_current_tenant_id), _user=Depends(get_current_user)):
+    _get_project(db, tenant_id, project_id)
+    row = db.query(ExportJob).filter(ExportJob.id == export_id, ExportJob.project_id == project_id, ExportJob.tenant_id == tenant_id).first()
+    if not row:
+        raise HTTPException(status_code=404, detail='Export job not found')
+    return {
+        'id': str(row.id),
+        'project_id': str(project_id),
+        'status': row.status,
+        'export_type': row.export_type,
+        'bundle_type': row.bundle_type,
+        'created_at': row.created_at,
+        'completed_at': row.completed_at,
+        'manifest': _as_out(row, project_id).manifest,
+    }
+
 
 
 @router.get('/{export_id}/download')

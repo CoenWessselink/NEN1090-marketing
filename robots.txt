@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://nen1090.nl/sitemap.xml

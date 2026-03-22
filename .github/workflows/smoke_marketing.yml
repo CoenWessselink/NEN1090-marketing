@@ -1,0 +1,21 @@
+name: Smoke Test Marketing
+
+on:
+  workflow_run:
+    workflows: ["Deploy Marketing to Cloudflare Pages"]
+    types: [completed]
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check homepage
+        run: curl -fL "https://nen1090-marketing-new.pages.dev/" || exit 1
+
+      - name: Check login route
+        run: curl -fL "https://nen1090-marketing-new.pages.dev/app/login" || exit 1
+
+      - name: Check robots.txt
+        run: curl -fL "https://nen1090-marketing-new.pages.dev/robots.txt" || exit 1

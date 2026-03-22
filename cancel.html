@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Betaling niet afgerond | CWS NEN-1090</title>
+  <meta name="description" content="Terugkeerpagina wanneer de betaling nog niet is afgerond. U kunt direct opnieuw starten of eerst contact opnemen.">
+  <link rel="stylesheet" href="/assets/css/enterprise-pro.css">
+  <link rel="stylesheet" href="/assets/css/billing.css">
+  <link rel="canonical" href="https://nen1090.nl/cancel.html">
+</head>
+<body>
+  <div data-site-nav></div>
+  <main class="section billing-shell">
+    <div class="container">
+      <section class="billing-hero">
+        <article class="billing-hero-card">
+          <span class="billing-kicker">Checkout onderbroken</span>
+          <h1>Uw bestelling is nog niet afgerond.</h1>
+          <p class="billing-lead">Geen probleem. Uw gekozen pakket en seat-aantal kunnen we opnieuw invullen, zodat u zonder extra zoekwerk verder kunt.</p>
+          <div class="billing-inline-alert is-warning" data-cancel-reason>De checkout is nog niet afgerond. U kunt dezelfde bestelling opnieuw openen of eerst de pakketkeuze aanpassen.</div>
+          <ul class="billing-points">
+            <li>Uw pakketkeuze en bestelreferentie blijven in de terugkeerl link opgenomen.</li>
+            <li>U kunt direct opnieuw verder naar checkout.</li>
+            <li>Heeft u nog vragen over licenties of prijzen, dan helpen we u direct.</li>
+          </ul>
+        </article>
+        <aside class="billing-summary">
+          <span class="billing-tag">Opnieuw starten</span>
+          <h2>Ga verder waar u was gebleven</h2>
+          <div class="billing-summary-line"><span>Pakket</span><strong data-cancel-plan>Professional</strong></div>
+          <div class="billing-summary-line"><span>Facturatie</span><strong data-cancel-billing>Maandelijks</strong></div>
+          <div class="billing-summary-line"><span>Gebruikers</span><strong data-cancel-seats>5 gebruikers</strong></div>
+          <div class="billing-actions">
+            <a class="btn btn-primary" href="/checkout.html" data-cancel-resume>Opnieuw naar checkout</a>
+            <a class="btn btn-secondary" href="/pricing.html" data-cancel-pricing>Prijskeuze aanpassen</a>
+          </div>
+          <p class="billing-footnote">De betaling is pas actief zodra Mollie deze succesvol heeft bevestigd.</p>
+        </aside>
+      </section>
+    </div>
+  </main>
+  <div data-site-footer></div>
+  <script src="/assets/js/site-pro.js"></script>
+  <script src="/assets/js/billing.js"></script>
+</body>
+</html>

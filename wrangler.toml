@@ -1,0 +1,5 @@
+name = "nen1090-marketing"
+compatibility_date = "2025-01-01"
+
+[vars]
+BACKEND_API_BASE = "https://nen1090-api-prod-f5ddagedbrftb4ew.westeurope-01.azurewebsites.net"

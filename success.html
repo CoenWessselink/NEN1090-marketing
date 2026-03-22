@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="nl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Betaling verwerken | CWS NEN-1090</title>
+  <meta name="description" content="Controlepagina voor de status van uw bestelling en onboarding van uw CWS NEN-1090 omgeving.">
+  <link rel="stylesheet" href="/assets/css/enterprise-pro.css">
+  <link rel="stylesheet" href="/assets/css/billing.css">
+  <link rel="canonical" href="https://nen1090.nl/success.html">
+</head>
+<body>
+  <div data-site-nav></div>
+  <main class="section billing-shell">
+    <div class="container">
+      <section class="billing-hero">
+        <article class="billing-hero-card">
+          <span class="billing-kicker">Betaling ontvangen</span>
+          <h1>We verwerken uw bestelling en activeren uw omgeving.</h1>
+          <p class="billing-lead">Na een succesvolle betaling koppelen we uw bestelling aan de tenant, activeren we het account en sturen we de set-password mail naar de opgegeven beheerder.</p>
+          <ul class="billing-points">
+            <li>Uw bestelling wordt gecontroleerd bij Mollie.</li>
+            <li>Daarna wordt de tenant in de backend bevestigd.</li>
+            <li>Na activatie kunt u direct verder met set password en inloggen.</li>
+          </ul>
+        </article>
+        <aside class="billing-summary billing-success-panel" data-success-panel>
+          <span class="billing-tag">Status</span>
+          <h2 data-success-title>Betaling wordt gecontroleerd</h2>
+          <p class="billing-lead billing-success-copy" data-success-copy>Een ogenblik. We controleren de terugkoppeling van de betaling en de activatie van uw omgeving.</p>
+          <div class="billing-status is-info" data-success-status>Bezig met controleren…</div>
+          <div class="billing-summary-line"><span>Betalingsreferentie</span><strong data-success-payment-id>Wordt opgehaald</strong></div>
+          <div class="billing-summary-line"><span>Pakket</span><strong data-success-plan>—</strong></div>
+          <div class="billing-summary-line"><span>Facturatie</span><strong data-success-billing>—</strong></div>
+          <div class="billing-summary-line"><span>Gebruikers</span><strong data-success-seats>—</strong></div>
+          <div class="billing-actions">
+            <a class="btn btn-primary" href="/app/login" data-success-login hidden>Naar login</a>
+            <a class="btn btn-blue" href="/app/set-password" data-success-onboarding hidden>Set password openen</a>
+            <button class="btn btn-secondary" type="button" data-success-refresh>Status opnieuw controleren</button>
+          </div>
+          <p class="billing-footnote">Geen e-mail ontvangen? Controleer eerst spam/ongewenst. Als de activatie nog loopt, probeer deze pagina na enkele minuten opnieuw.</p>
+          <div class="billing-inline-alert is-info">Blijft de status hangen op <strong>activatie loopt nog</strong>? Dan wacht de marketinglaag nog op backend-bevestiging of webhook-verwerking.</div>
+        </aside>
+      </section>
+
+      <section class="billing-layout">
+        <article class="billing-card">
+          <span class="billing-tag">Volgende stappen</span>
+          <h2>Wat gebeurt er nu?</h2>
+          <ol class="billing-timeline">
+            <li><strong>1. Mollie bevestigt de betaling.</strong><span>De betaalstatus wordt opgehaald met uw betalingsreferentie.</span></li>
+            <li><strong>2. Tenant en admin worden verwerkt.</strong><span>De backend bevestigt het abonnement en activeert de eerste beheerder.</span></li>
+            <li><strong>3. U ontvangt de onboarding-link.</strong><span>Met de set-password link activeert u het wachtwoord en logt u in.</span></li>
+          </ol>
+        </article>
+        <article class="billing-card">
+          <span class="billing-tag">Hulp nodig?</span>
+          <h2>Als de status blijft hangen</h2>
+          <ul class="billing-checklist">
+            <li>Controleer of uw betaling bij Mollie is afgerond.</li>
+            <li>Open deze pagina opnieuw via de bestelreferentie uit de redirect of betaalbevestiging.</li>
+            <li>Gebruik de knop ‘Status opnieuw controleren’ om de activatie opnieuw op te halen.</li>
+            <li>Neem contact op als de set-password e-mail na enkele minuten nog niet is ontvangen.</li>
+          </ul>
+          <div class="billing-actions">
+            <a class="btn btn-primary" href="/contact.html">Neem contact op</a>
+            <a class="btn btn-secondary" href="/pricing.html">Terug naar prijzen</a>
+          </div>
+        </article>
+      </section>
+    </div>
+  </main>
+  <div data-site-footer></div>
+  <script src="/assets/js/site-pro.js"></script>
+  <script src="/assets/js/billing.js"></script>
+</body>
+</html>

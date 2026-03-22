@@ -21,18 +21,17 @@ def process_export_job_now(db: Session, tenant_id: UUID, project_id: UUID, expor
     db.commit()
     db.refresh(row)
     try:
-        generated = generate_export_bundle(db, tenant_id, project_id, user_id=None, requested_by=requested_by or row.requested_by, bundle_type=row.bundle_type or 'zip')
-        if generated.id != row.id:
-            row.file_path = generated.file_path
-            row.message = generated.message
-            row.manifest_json = generated.manifest_json
-            row.status = generated.status
-            row.completed_at = generated.completed_at
-            row.bundle_type = generated.bundle_type
-            db.add(row)
-            db.commit()
-            db.refresh(row)
-        return row
+        generated = generate_export_bundle(
+            db,
+            tenant_id,
+            project_id,
+            user_id=None,
+            requested_by=requested_by or row.requested_by,
+            bundle_type=row.bundle_type or 'zip',
+            existing_job=row,
+        )
+        db.refresh(generated)
+        return generated
     except Exception as exc:
         row.status = 'failed'
         row.retry_count = int(row.retry_count or 0) + 1
