@@ -1,56 +1,14 @@
 name: Deploy API to Azure (clean)
 
 on:
-  push:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
-  deploy:
+  blocked:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Build clean package folder
+      - name: Stop wrong-repo API deployment
         run: |
-          python -m pip install --upgrade pip
-          rm -rf sitepackages backend-clean.zip
-          mkdir -p sitepackages
-          pip install -r requirements.txt --target sitepackages
-
-      - name: Build deployment zip
-        run: |
-          python - <<'PY'
-          import os, zipfile
-          exclude_dirs={'.git','venv','.venv','antenv','__pycache__','.pytest_cache','.mypy_cache','.ruff_cache','.idea','.vscode','storage','.python_packages'}
-          exclude_names={'.env','backend','.gitignore.txt','backend-clean.zip','requirements.txt'}
-          exclude_ext={'.pyc','.pyo','.pyd','.db','.sqlite','.sqlite3'}
-          with zipfile.ZipFile('backend-clean.zip','w',zipfile.ZIP_DEFLATED) as z:
-              for root, dirs, files in os.walk('.'):
-                  rel=os.path.relpath(root,'.')
-                  parts=set(rel.split(os.sep))
-                  dirs[:] = [d for d in dirs if d not in exclude_dirs]
-                  if 'storage' in parts or '.git' in parts:
-                      dirs[:] = []
-                      continue
-                  for f in files:
-                      if f in exclude_names or any(f.endswith(ext) for ext in exclude_ext):
-                          continue
-                      path=os.path.join(root,f)
-                      arc=os.path.relpath(path,'.')
-                      z.write(path, arc)
-          PY
-
-      - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: nen1090-api-prod
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
-          package: backend-clean.zip
+          echo "Deze workflow is bewust gedeactiveerd."
+          echo "API deploy hoort NIET in NEN1090-marketing."
+          echo "Gebruik de workflow in repo: CoenWessselink/NEN10900-api"
