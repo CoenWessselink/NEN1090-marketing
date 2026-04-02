@@ -8,22 +8,23 @@ on:
 
 jobs:
   smoke:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
       - name: Check homepage
         run: curl -fL "https://nen1090-marketing-new.pages.dev/" || exit 1
 
-      - name: Check app login link on homepage
+      - name: Check app login link exists
         run: |
           curl -fsSL "https://nen1090-marketing-new.pages.dev/" | grep -q "https://nen-1090-app.pages.dev/login"
 
-      - name: Check legacy login route is gone or redirected away from hosted marketing auth
+      - name: Ensure marketing does NOT host login anymore
         run: |
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" "https://nen1090-marketing-new.pages.dev/app/login")
-          echo "HTTP status for /app/login: $STATUS"
+          echo "Status: $STATUS"
           if [ "$STATUS" = "200" ]; then
-            echo "Legacy marketing auth page still exists and should be removed or redirected."
+            echo "ERROR: marketing still hosts login"
             exit 1
           fi
 
