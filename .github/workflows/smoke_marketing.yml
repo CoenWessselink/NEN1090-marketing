@@ -14,8 +14,18 @@ jobs:
       - name: Check homepage
         run: curl -fL "https://nen1090-marketing-new.pages.dev/" || exit 1
 
-      - name: Check login route
-        run: curl -fL "https://nen1090-marketing-new.pages.dev/app/login" || exit 1
+      - name: Check app login link on homepage
+        run: |
+          curl -fsSL "https://nen1090-marketing-new.pages.dev/" | grep -q "https://nen-1090-app.pages.dev/login"
+
+      - name: Check legacy login route is gone or redirected away from hosted marketing auth
+        run: |
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "https://nen1090-marketing-new.pages.dev/app/login")
+          echo "HTTP status for /app/login: $STATUS"
+          if [ "$STATUS" = "200" ]; then
+            echo "Legacy marketing auth page still exists and should be removed or redirected."
+            exit 1
+          fi
 
       - name: Check robots.txt
         run: curl -fL "https://nen1090-marketing-new.pages.dev/robots.txt" || exit 1
