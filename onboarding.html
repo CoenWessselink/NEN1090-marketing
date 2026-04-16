@@ -4,11 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Start Trial | WeldInspect</title>
-  <meta name="description" content="Start your WeldInspect trial, create your tenant, invite the first admin and continue to password setup and login.">
+  <meta name="description" content="Start your WeldInspect trial, create your tenant and activate the first admin account.">
   <link rel="canonical" href="https://weldinspectapp.com/onboarding.html">
   <link rel="stylesheet" href="/assets/css/weldinspect.css">
   <style>
-    .onboarding-grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(280px,.9fr);gap:24px;align-items:start}.onboarding-form{display:grid;gap:16px}.field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.field label,.field span{display:block}.field span{font-weight:600;margin-bottom:8px}.field input,.field select,.field textarea{width:100%;border:1px solid rgba(15,23,42,.14);border-radius:14px;padding:14px 16px;font:inherit;background:#fff}.field textarea{min-height:120px;resize:vertical}.status-box{display:none;border-radius:16px;padding:14px 16px;font-weight:500}.status-box.is-visible{display:block}.status-box.info{background:#eff6ff;color:#1d4ed8}.status-box.success{background:#ecfdf3;color:#027a48}.status-box.error{background:#fef2f2;color:#b42318}.summary-list{display:grid;gap:12px}.summary-item{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid rgba(148,163,184,.2);padding-bottom:12px}.summary-item:last-child{border-bottom:0;padding-bottom:0}.helper{font-size:.92rem;color:#475467}.result-panel{display:none;gap:12px}.result-panel.is-visible{display:grid}.result-actions{display:flex;gap:12px;flex-wrap:wrap}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace}.small-note{font-size:.85rem;color:#667085}.badge-inline{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;background:#eef2ff;color:#4338ca;font-size:.82rem;font-weight:700}.form-footer{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.btn[disabled]{opacity:.65;pointer-events:none}@media (max-width:900px){.onboarding-grid,.field-grid{grid-template-columns:1fr}}
+    .trial-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:24px}.card{background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:24px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
+    .form-grid{display:grid;gap:14px}.form-grid.two{grid-template-columns:1fr 1fr}.field{display:grid;gap:8px}.field input,.field select,.field textarea{width:100%;padding:12px 14px;border:1px solid #cbd5e1;border-radius:12px;font:inherit}.status{margin-top:12px;padding:12px 14px;border-radius:12px;background:#f8fafc;border:1px solid #e2e8f0;white-space:pre-wrap}.actions{display:flex;gap:12px;flex-wrap:wrap}.result-links a{display:block;margin-top:8px} @media (max-width:900px){.trial-grid,.form-grid.two{grid-template-columns:1fr}}
   </style>
 </head>
 <body data-page="pricing">
@@ -18,201 +19,139 @@
       <div class="container page-hero-grid">
         <div>
           <span class="kicker">Trial & onboarding</span>
-          <h1>Start your tenant in one flow</h1>
-          <p class="lead">This phase now creates the tenant, provisions the first admin, sends the activation link and leads straight into password setup and login.</p>
+          <h1>Start your tenant and activate the first admin</h1>
+          <p class="lead">This flow now creates the tenant, starts the trial, creates the first admin and gives you the activation link or preview-mail path when SMTP is not configured yet.</p>
         </div>
         <aside class="hero-card">
           <div class="stat-list">
-            <div class="stat-item"><strong>1</strong><span>Create tenant and trial access</span></div>
-            <div class="stat-item"><strong>2</strong><span>Create the first admin account</span></div>
-            <div class="stat-item"><strong>3</strong><span>Receive email or preview activation link</span></div>
-            <div class="stat-item"><strong>4</strong><span>Set password and log in</span></div>
+            <div class="stat-item"><strong>1</strong><span>Create tenant</span></div>
+            <div class="stat-item"><strong>2</strong><span>Create first admin</span></div>
+            <div class="stat-item"><strong>3</strong><span>Set password</span></div>
+            <div class="stat-item"><strong>4</strong><span>Login to the app</span></div>
           </div>
         </aside>
       </div>
     </section>
 
     <section class="section">
-      <div class="container onboarding-grid">
+      <div class="container trial-grid">
         <article class="card">
-          <span class="badge-inline">Public trial onboarding</span>
-          <h2 style="margin-top:14px">Start your 14-day trial</h2>
-          <p class="helper">The first user is created as tenant admin. After submission, the activation link is emailed or shown in preview mode when SMTP is not configured.</p>
-
-          <div class="status-box info is-visible" data-onboarding-status>Fill in the company and admin details to start the trial.</div>
-
-          <form class="onboarding-form" data-onboarding-form novalidate>
-            <div class="field-grid">
-              <label class="field">
-                <span>Company name</span>
-                <input type="text" name="company" autocomplete="organization" required>
-              </label>
-              <label class="field">
-                <span>Admin email</span>
-                <input type="email" name="email" autocomplete="email" required>
-              </label>
+          <h3>Start free trial</h3>
+          <form id="trial-form" class="form-grid">
+            <div class="form-grid two">
+              <label class="field"><span>Company</span><input name="company" required minlength="2" placeholder="CWS Projectmanagement"></label>
+              <label class="field"><span>Work email</span><input name="email" type="email" required placeholder="name@company.com"></label>
             </div>
-
-            <div class="field-grid">
-              <label class="field">
-                <span>Admin name</span>
-                <input type="text" name="contactName" autocomplete="name">
-              </label>
-              <label class="field">
-                <span>Phone</span>
-                <input type="tel" name="phone" autocomplete="tel">
-              </label>
+            <div class="form-grid two">
+              <label class="field"><span>Contact name</span><input name="contact_name" placeholder="Your name"></label>
+              <label class="field"><span>Seats</span><input name="seats" type="number" min="1" max="500" value="3"></label>
             </div>
-
-            <div class="field-grid">
-              <label class="field">
-                <span>Plan</span>
-                <select name="plan">
-                  <option value="starter">Starter</option>
-                  <option value="professional" selected>Professional</option>
-                  <option value="enterprise">Enterprise</option>
-                </select>
-              </label>
-              <label class="field">
-                <span>Seats</span>
-                <input type="number" name="seats" min="1" max="500" value="3" required>
-              </label>
+            <div class="form-grid two">
+              <label class="field"><span>Plan</span><select name="plan"><option value="professional">Professional</option><option value="enterprise">Enterprise</option></select></label>
+              <label class="field"><span>Trial days</span><input name="trial_days" type="number" min="1" max="60" value="14"></label>
             </div>
-
-            <label class="field">
-              <span>Implementation notes</span>
-              <textarea name="notes" placeholder="Optional context for onboarding, rollout timing or team setup."></textarea>
-            </label>
-
-            <div class="form-footer">
-              <button class="btn btn-primary" type="submit" data-onboarding-submit>Start trial</button>
+            <label class="field"><span>Notes</span><textarea name="notes" rows="4" placeholder="Optional rollout notes"></textarea></label>
+            <div class="actions">
+              <button class="btn btn-primary" type="submit">Create trial tenant</button>
               <a class="btn btn-secondary" href="/pricing.html">Back to pricing</a>
             </div>
-            <p class="small-note">After the activation link has been opened, the user sets a password in the app and can then log in with the tenant name shown below.</p>
           </form>
-
-          <div class="result-panel" data-onboarding-result>
-            <div class="summary-list">
-              <div class="summary-item"><span>Tenant</span><strong data-result-tenant>—</strong></div>
-              <div class="summary-item"><span>Admin email</span><strong data-result-email>—</strong></div>
-              <div class="summary-item"><span>Trial until</span><strong data-result-trial>—</strong></div>
-              <div class="summary-item"><span>Delivery mode</span><strong data-result-delivery>—</strong></div>
-            </div>
-            <div class="helper">Activation link</div>
-            <div class="mono" data-result-link style="word-break:break-all"></div>
-            <div class="small-note" data-result-outbox hidden></div>
-            <div class="result-actions">
-              <a class="btn btn-primary" data-result-activate href="#">Open activation link</a>
-              <a class="btn btn-secondary" data-result-login href="#">Go to login</a>
-            </div>
-          </div>
+          <div id="trial-status" class="status" hidden></div>
+          <div id="trial-links" class="result-links"></div>
         </article>
 
-        <aside class="card">
+        <article class="card">
           <h3>What happens next</h3>
           <ul class="feature-list">
-            <li>Tenant status starts as trial with full access.</li>
-            <li>The first admin is attached as <strong>tenant_admin</strong>.</li>
-            <li>The same link works for first password setup and regular password reset.</li>
-            <li>If SMTP is not configured, the API falls back to preview/outbox delivery.</li>
+            <li>The tenant is created with trial access.</li>
+            <li>The first admin receives an activation/reset link.</li>
+            <li>Without SMTP, a preview outbox path is returned so you can still continue testing.</li>
+            <li>The app login opens with tenant and email prefilled.</li>
           </ul>
           <div class="section-actions" style="margin-top:18px">
+            <a class="btn btn-secondary" href="/app/login.html">Login</a>
             <a class="btn btn-secondary" href="/app/forgot-password.html">Forgot password</a>
-            <a class="btn btn-dark" href="/contact.html">Book rollout call</a>
           </div>
-        </aside>
+        </article>
       </div>
     </section>
   </main>
-
   <div data-site-footer></div>
   <script type="module" src="/assets/js/weldinspect-site.js"></script>
-  <script type="module">
-    const form = document.querySelector('[data-onboarding-form]');
-    const statusNode = document.querySelector('[data-onboarding-status]');
-    const submit = document.querySelector('[data-onboarding-submit]');
-    const result = document.querySelector('[data-onboarding-result]');
+  <script>
+    const form = document.getElementById('trial-form');
+    const statusEl = document.getElementById('trial-status');
+    const linksEl = document.getElementById('trial-links');
 
-    function setStatus(kind, message){
-      if (!statusNode) return;
-      statusNode.className = `status-box ${kind} is-visible`;
-      statusNode.textContent = message;
+    function showStatus(message, isError = false) {
+      statusEl.hidden = false;
+      statusEl.textContent = message;
+      statusEl.style.borderColor = isError ? '#fecaca' : '#e2e8f0';
+      statusEl.style.background = isError ? '#fef2f2' : '#f8fafc';
     }
 
-    function api(path, payload){
-      return fetch(path, {
-        method: 'POST',
-        headers: { 'content-type': 'application/json', 'accept': 'application/json' },
-        body: JSON.stringify(payload || {})
-      }).then(async (response) => {
-        const text = await response.text().catch(() => '');
-        let data = {};
-        try { data = text ? JSON.parse(text) : {}; } catch { data = { detail: text }; }
-        if (!response.ok || data.ok === false) {
-          throw new Error(String(data.detail || data.error || data.message || 'Request failed'));
-        }
-        return data;
-      });
+    function renderLinks(result) {
+      const links = [];
+      if (result.reset_url || result.activation_url) {
+        const href = result.reset_url || result.activation_url;
+        links.push(`<a href="${href}">Open activation link</a>`);
+      }
+      if (result.login_url) {
+        links.push(`<a href="${result.login_url}">Open app login</a>`);
+      }
+      if (result.delivery_outbox_path) {
+        links.push(`<div>Preview outbox: <code>${result.delivery_outbox_path}</code></div>`);
+      }
+      linksEl.innerHTML = links.join('');
     }
 
     form?.addEventListener('submit', async (event) => {
       event.preventDefault();
-      const formData = new FormData(form);
-      const payload = Object.fromEntries(formData.entries());
-      const company = String(payload.company || '').trim();
-      const email = String(payload.email || '').trim();
-      const seats = Number(payload.seats || 3);
-      if (!company || !email) {
-        setStatus('error', 'Company name and admin email are required.');
-        return;
-      }
+      linksEl.innerHTML = '';
+      showStatus('Creating tenant and first admin...');
 
-      submit?.setAttribute('disabled', 'disabled');
-      result?.classList.remove('is-visible');
-      setStatus('info', 'Creating tenant and admin account...');
+      const formData = new FormData(form);
+      const tenantPayload = {
+        company: String(formData.get('company') || ''),
+        plan: String(formData.get('plan') || 'professional'),
+        seats: Number(formData.get('seats') || 3),
+        trial_days: Number(formData.get('trial_days') || 14),
+        contact_name: String(formData.get('contact_name') || ''),
+        notes: String(formData.get('notes') || ''),
+      };
+      const email = String(formData.get('email') || '').trim();
 
       try {
-        const tenant = await api('/api/onboarding/create-tenant', {
-          company,
-          plan: String(payload.plan || 'professional'),
-          seats,
-          trial_days: 14,
-          contact_name: String(payload.contactName || '').trim(),
-          phone: String(payload.phone || '').trim(),
-          notes: String(payload.notes || '').trim(),
+        const tenantResp = await fetch('/api/onboarding/create-tenant', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify(tenantPayload),
         });
-
-        const admin = await api('/api/onboarding/create-admin', {
-          tenant_id: tenant.tenant_id,
-          email,
-          name: String(payload.contactName || '').trim(),
-          role: 'tenant_admin',
-          send_email: true,
-        });
-
-        document.querySelector('[data-result-tenant]').textContent = tenant.tenant || '—';
-        document.querySelector('[data-result-email]').textContent = admin.email || email;
-        document.querySelector('[data-result-trial]').textContent = tenant.trial_until ? new Date(tenant.trial_until).toLocaleString() : '—';
-        document.querySelector('[data-result-delivery]').textContent = admin.delivery_mode || 'preview';
-        document.querySelector('[data-result-link]').textContent = admin.activation_url || admin.reset_url || '—';
-        document.querySelector('[data-result-activate]').href = admin.activation_url || admin.reset_url || '#';
-        document.querySelector('[data-result-login]').href = admin.login_url || `/app/login?tenant=${encodeURIComponent(tenant.tenant || '')}&email=${encodeURIComponent(email)}`;
-        const outbox = document.querySelector('[data-result-outbox]');
-        if (outbox) {
-          if (admin.delivery_outbox_path) {
-            outbox.hidden = false;
-            outbox.textContent = `Preview/outbox: ${admin.delivery_outbox_path}`;
-          } else {
-            outbox.hidden = true;
-            outbox.textContent = '';
-          }
+        const tenantJson = await tenantResp.json().catch(() => ({}));
+        if (!tenantResp.ok || !tenantJson?.tenant_id) {
+          throw new Error(tenantJson?.detail || tenantJson?.message || 'Tenant creation failed.');
         }
-        result?.classList.add('is-visible');
-        setStatus('success', 'Trial created. Open the activation link from the email or from the preview link below.');
+
+        const adminResp = await fetch('/api/onboarding/create-admin', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ tenant_id: tenantJson.tenant_id, email, role: 'tenant_admin', send_email: true }),
+        });
+        const adminJson = await adminResp.json().catch(() => ({}));
+        if (!adminResp.ok) {
+          throw new Error(adminJson?.detail || adminJson?.message || 'Admin creation failed.');
+        }
+
+        const pieces = [
+          `Tenant created: ${tenantJson.tenant}`,
+          `Trial until: ${tenantJson.trial_until || 'n/a'}`,
+          `Admin: ${adminJson.email || email}`,
+          adminJson.delivery_mode ? `Delivery: ${adminJson.delivery_mode}` : null,
+        ].filter(Boolean);
+        showStatus(pieces.join('\n'));
+        renderLinks(adminJson);
       } catch (error) {
-        setStatus('error', error instanceof Error ? error.message : 'Trial start failed.');
-      } finally {
-        submit?.removeAttribute('disabled');
+        showStatus(error instanceof Error ? error.message : 'Trial start failed.', true);
       }
     });
   </script>
