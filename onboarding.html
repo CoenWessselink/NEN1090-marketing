@@ -37,13 +37,13 @@
       <div class="container trial-grid">
         <article class="card">
           <h3>Start free trial</h3>
-          <form id="trial-form" class="form-grid">
+          <form id="trial-form" class="form-grid" data-trial-signup-form>
             <div class="form-grid two">
               <label class="field"><span>Company</span><input name="company" required minlength="2" placeholder="CWS Projectmanagement"></label>
               <label class="field"><span>Work email</span><input name="email" type="email" required placeholder="name@company.com"></label>
             </div>
             <div class="form-grid two">
-              <label class="field"><span>Contact name</span><input name="contact_name" placeholder="Your name"></label>
+              <label class="field"><span>Contact name</span><input name="contactName" placeholder="Your name"></label>
               <label class="field"><span>Seats</span><input name="seats" type="number" min="1" max="500" value="3"></label>
             </div>
             <div class="form-grid two">
@@ -52,12 +52,19 @@
             </div>
             <label class="field"><span>Notes</span><textarea name="notes" rows="4" placeholder="Optional rollout notes"></textarea></label>
             <div class="actions">
-              <button class="btn btn-primary" type="submit">Create trial tenant</button>
+              <button class="btn btn-primary" type="submit" data-trial-submit>Create trial tenant</button>
               <a class="btn btn-secondary" href="/pricing.html">Back to pricing</a>
             </div>
           </form>
-          <div id="trial-status" class="status" hidden></div>
-          <div id="trial-links" class="result-links"></div>
+          <div id="trial-status" class="status trial-status" data-trial-status></div>
+          <div class="result-links" data-trial-result>
+            <strong data-result-message></strong>
+            <div>Tenant: <code data-result-tenant></code></div>
+            <div>Delivery mode: <code data-result-delivery></code></div>
+            <div data-result-outbox-wrap hidden>Preview outbox: <code data-result-outbox></code></div>
+            <a data-result-activate href="#">Open activation link</a>
+            <a data-result-login href="#">Open app login</a>
+          </div>
         </article>
 
         <article class="card">
@@ -78,82 +85,6 @@
   </main>
   <div data-site-footer></div>
   <script type="module" src="/assets/js/weldinspect-site.js"></script>
-  <script>
-    const form = document.getElementById('trial-form');
-    const statusEl = document.getElementById('trial-status');
-    const linksEl = document.getElementById('trial-links');
-
-    function showStatus(message, isError = false) {
-      statusEl.hidden = false;
-      statusEl.textContent = message;
-      statusEl.style.borderColor = isError ? '#fecaca' : '#e2e8f0';
-      statusEl.style.background = isError ? '#fef2f2' : '#f8fafc';
-    }
-
-    function renderLinks(result) {
-      const links = [];
-      if (result.reset_url || result.activation_url) {
-        const href = result.reset_url || result.activation_url;
-        links.push(`<a href="${href}">Open activation link</a>`);
-      }
-      if (result.login_url) {
-        links.push(`<a href="${result.login_url}">Open app login</a>`);
-      }
-      if (result.delivery_outbox_path) {
-        links.push(`<div>Preview outbox: <code>${result.delivery_outbox_path}</code></div>`);
-      }
-      linksEl.innerHTML = links.join('');
-    }
-
-    form?.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      linksEl.innerHTML = '';
-      showStatus('Creating tenant and first admin...');
-
-      const formData = new FormData(form);
-      const tenantPayload = {
-        company: String(formData.get('company') || ''),
-        plan: String(formData.get('plan') || 'professional'),
-        seats: Number(formData.get('seats') || 3),
-        trial_days: Number(formData.get('trial_days') || 14),
-        contact_name: String(formData.get('contact_name') || ''),
-        notes: String(formData.get('notes') || ''),
-      };
-      const email = String(formData.get('email') || '').trim();
-
-      try {
-        const tenantResp = await fetch('/api/onboarding/create-tenant', {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify(tenantPayload),
-        });
-        const tenantJson = await tenantResp.json().catch(() => ({}));
-        if (!tenantResp.ok || !tenantJson?.tenant_id) {
-          throw new Error(tenantJson?.detail || tenantJson?.message || 'Tenant creation failed.');
-        }
-
-        const adminResp = await fetch('/api/onboarding/create-admin', {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify({ tenant_id: tenantJson.tenant_id, email, role: 'tenant_admin', send_email: true }),
-        });
-        const adminJson = await adminResp.json().catch(() => ({}));
-        if (!adminResp.ok) {
-          throw new Error(adminJson?.detail || adminJson?.message || 'Admin creation failed.');
-        }
-
-        const pieces = [
-          `Tenant created: ${tenantJson.tenant}`,
-          `Trial until: ${tenantJson.trial_until || 'n/a'}`,
-          `Admin: ${adminJson.email || email}`,
-          adminJson.delivery_mode ? `Delivery: ${adminJson.delivery_mode}` : null,
-        ].filter(Boolean);
-        showStatus(pieces.join('\n'));
-        renderLinks(adminJson);
-      } catch (error) {
-        showStatus(error instanceof Error ? error.message : 'Trial start failed.', true);
-      }
-    });
-  </script>
+  <script type="module" src="/assets/js/trial-signup.js"></script>
 </body>
 </html>

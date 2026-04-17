@@ -13,7 +13,7 @@ export async function onRequestPost(context) {
   let body;
   try { body = await request.json(); } catch { body = {}; }
 
-  const url = joinUrl(apiBase, "api/v1/onboarding/create-tenant");
+  const url = joinUrl(apiBase, body && body.email ? "api/public/trial/signup" : "api/v1/onboarding/create-tenant");
   const resp = await fetch(url, {
     method: "POST",
     headers: { "content-type": "application/json" },
