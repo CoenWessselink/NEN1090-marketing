@@ -1,90 +1,22 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Start Trial | WeldInspect</title>
-  <meta name="description" content="Start your WeldInspect trial, create your tenant and activate the first admin account.">
-  <link rel="canonical" href="https://weldinspectapp.com/onboarding.html">
-  <link rel="stylesheet" href="/assets/css/weldinspect.css">
-  <style>
-    .trial-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:24px}.card{background:#fff;border:1px solid #e2e8f0;border-radius:18px;padding:24px;box-shadow:0 10px 30px rgba(15,23,42,.06)}
-    .form-grid{display:grid;gap:14px}.form-grid.two{grid-template-columns:1fr 1fr}.field{display:grid;gap:8px}.field input,.field select,.field textarea{width:100%;padding:12px 14px;border:1px solid #cbd5e1;border-radius:12px;font:inherit}.status{margin-top:12px;padding:12px 14px;border-radius:12px;background:#f8fafc;border:1px solid #e2e8f0;white-space:pre-wrap}.actions{display:flex;gap:12px;flex-wrap:wrap}.result-links a{display:block;margin-top:8px} @media (max-width:900px){.trial-grid,.form-grid.two{grid-template-columns:1fr}}
-  </style>
+    <title>Onboarding</title>
 </head>
-<body data-page="pricing">
-  <div data-site-nav></div>
-  <main>
-    <section class="page-hero">
-      <div class="container page-hero-grid">
-        <div>
-          <span class="kicker">Trial & onboarding</span>
-          <h1>Start your tenant and activate the first admin</h1>
-          <p class="lead">This flow now creates the tenant, starts the trial, creates the first admin and gives you the activation link or preview-mail path when SMTP is not configured yet.</p>
-        </div>
-        <aside class="hero-card">
-          <div class="stat-list">
-            <div class="stat-item"><strong>1</strong><span>Create tenant</span></div>
-            <div class="stat-item"><strong>2</strong><span>Create first admin</span></div>
-            <div class="stat-item"><strong>3</strong><span>Set password</span></div>
-            <div class="stat-item"><strong>4</strong><span>Login to the app</span></div>
-          </div>
-        </aside>
-      </div>
-    </section>
+<body>
+<form id="trialForm">
+    <input name="company" placeholder="Company">
+    <input name="work_email" placeholder="Email">
+    <input name="contact_name" placeholder="Name">
+    <input name="seats" type="number" value="1">
+    <select name="plan">
+        <option value="professional">Professional</option>
+    </select>
+    <input name="trial_days" type="number" value="14">
+    <textarea name="notes"></textarea>
+    <button type="submit">Start trial</button>
+</form>
 
-    <section class="section">
-      <div class="container trial-grid">
-        <article class="card">
-          <h3>Start free trial</h3>
-          <form id="trial-form" class="form-grid" data-trial-signup-form>
-            <div class="form-grid two">
-              <label class="field"><span>Company</span><input name="company" required minlength="2" placeholder="CWS Projectmanagement"></label>
-              <label class="field"><span>Work email</span><input name="email" type="email" required placeholder="name@company.com"></label>
-            </div>
-            <div class="form-grid two">
-              <label class="field"><span>Contact name</span><input name="contactName" placeholder="Your name"></label>
-              <label class="field"><span>Seats</span><input name="seats" type="number" min="1" max="500" value="3"></label>
-            </div>
-            <div class="form-grid two">
-              <label class="field"><span>Plan</span><select name="plan"><option value="professional">Professional</option><option value="enterprise">Enterprise</option></select></label>
-              <label class="field"><span>Trial days</span><input name="trial_days" type="number" min="1" max="60" value="14"></label>
-            </div>
-            <label class="field"><span>Notes</span><textarea name="notes" rows="4" placeholder="Optional rollout notes"></textarea></label>
-            <div class="actions">
-              <button class="btn btn-primary" type="submit" data-trial-submit>Create trial tenant</button>
-              <a class="btn btn-secondary" href="/pricing.html">Back to pricing</a>
-            </div>
-          </form>
-          <div id="trial-status" class="status trial-status" data-trial-status></div>
-          <div class="result-links" data-trial-result>
-            <strong data-result-message></strong>
-            <div>Tenant: <code data-result-tenant></code></div>
-            <div>Delivery mode: <code data-result-delivery></code></div>
-            <div data-result-outbox-wrap hidden>Preview outbox: <code data-result-outbox></code></div>
-            <a data-result-activate href="#">Open activation link</a>
-            <a data-result-login href="#">Open app login</a>
-          </div>
-        </article>
-
-        <article class="card">
-          <h3>What happens next</h3>
-          <ul class="feature-list">
-            <li>The tenant is created with trial access.</li>
-            <li>The first admin receives an activation/reset link.</li>
-            <li>Without SMTP, a preview outbox path is returned so you can still continue testing.</li>
-            <li>The app login opens with tenant and email prefilled.</li>
-          </ul>
-          <div class="section-actions" style="margin-top:18px">
-            <a class="btn btn-secondary" href="/app/login.html">Login</a>
-            <a class="btn btn-secondary" href="/app/forgot-password.html">Forgot password</a>
-          </div>
-        </article>
-      </div>
-    </section>
-  </main>
-  <div data-site-footer></div>
-  <script type="module" src="/assets/js/weldinspect-site.js"></script>
-  <script type="module" src="/assets/js/trial-signup.js"></script>
+<script src="/assets/js/trial-signup.js"></script>
 </body>
 </html>
