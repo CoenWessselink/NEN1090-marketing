@@ -1,22 +1,71 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Onboarding</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Start Trial | WeldInspect</title>
 </head>
 <body>
+
+<h1>Start trial</h1>
+
 <form id="trialForm">
-    <input name="company" placeholder="Company">
-    <input name="work_email" placeholder="Email">
-    <input name="contact_name" placeholder="Name">
-    <input name="seats" type="number" value="1">
-    <select name="plan">
-        <option value="professional">Professional</option>
-    </select>
-    <input name="trial_days" type="number" value="14">
-    <textarea name="notes"></textarea>
-    <button type="submit">Start trial</button>
+  <input name="company" placeholder="Company" required>
+  <input name="email" placeholder="Email" required>
+  <input name="contact_name" placeholder="Name">
+  <input name="seats" type="number" value="3">
+  <button type="submit">Start trial</button>
 </form>
 
-<script src="/assets/js/trial-signup.js"></script>
+<pre id="result"></pre>
+
+<script>
+const form = document.getElementById("trialForm");
+const result = document.getElementById("result");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const payload = {
+    company: form.company.value,
+    plan: "professional",
+    seats: Number(form.seats.value || 3),
+    trial_days: 14,
+    contact_name: form.contact_name.value,
+    phone: "",
+    notes: ""
+  };
+
+  try {
+    const tenant = await fetch("/api/onboarding/create-tenant", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(payload)
+    }).then(r => r.json());
+
+    const admin = await fetch("/api/onboarding/create-admin", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        tenant_id: tenant.tenant_id,
+        email: form.email.value,
+        name: form.contact_name.value,
+        role: "tenant_admin",
+        send_email: true
+      })
+    }).then(r => r.json());
+
+    result.textContent = JSON.stringify({ tenant, admin }, null, 2);
+
+    if (admin.activation_url) {
+      window.location.href = admin.activation_url;
+    }
+
+  } catch (err) {
+    result.textContent = String(err);
+  }
+});
+</script>
+
 </body>
 </html>
