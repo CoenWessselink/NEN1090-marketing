@@ -1,6 +1,6 @@
 (function(){
   const page = document.body.dataset.page || '';
-  const APP_LOGIN = '/app/login.html';
+  const APP_LOGIN = 'https://nen-1090-app.pages.dev/login';
   const START_TRIAL = '/onboarding.html';
   const DEMO = '/contact.html';
   const nav = [
