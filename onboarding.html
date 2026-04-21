@@ -12,60 +12,13 @@
 <form id="trialForm">
   <input name="company" placeholder="Company" required>
   <input name="email" placeholder="Email" required>
-  <input name="contact_name" placeholder="Name">
-  <input name="seats" type="number" value="3">
+  <input name="contact_name" placeholder="Name" required>
+  <input name="seats" type="number" value="3" min="1">
   <button type="submit">Start trial</button>
 </form>
 
 <pre id="result"></pre>
 
-<script>
-const form = document.getElementById("trialForm");
-const result = document.getElementById("result");
-
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const payload = {
-    company: form.company.value,
-    plan: "professional",
-    seats: Number(form.seats.value || 3),
-    trial_days: 14,
-    contact_name: form.contact_name.value,
-    phone: "",
-    notes: ""
-  };
-
-  try {
-    const tenant = await fetch("/api/onboarding/create-tenant", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(payload)
-    }).then(r => r.json());
-
-    const admin = await fetch("/api/onboarding/create-admin", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({
-        tenant_id: tenant.tenant_id,
-        email: form.email.value,
-        name: form.contact_name.value,
-        role: "tenant_admin",
-        send_email: true
-      })
-    }).then(r => r.json());
-
-    result.textContent = JSON.stringify({ tenant, admin }, null, 2);
-
-    if (admin.activation_url) {
-      window.location.href = admin.activation_url;
-    }
-
-  } catch (err) {
-    result.textContent = String(err);
-  }
-});
-</script>
-
+<script src="/assets/js/trial-signup.js"></script>
 </body>
 </html>
