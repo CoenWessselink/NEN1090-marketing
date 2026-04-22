@@ -2,10 +2,10 @@
  * Cloudflare Pages Function: /auth
  * Simpele en robuuste token bridge voor magic links, onboarding en reset flows.
  *
- * Doel:
- * - Altijd redirecten naar de echte app-origin
- * - Geen relatieve /app/* routes op marketing
- * - Minimale Cloudflare Pages runtime-complexiteit
+ * Belangrijk:
+ * - redirect responses worden handmatig opgebouwd
+ * - Set-Cookie wordt direct in de response headers gezet
+ * - voorkomt 1101 door mutatie van Response.redirect()
  */
 
 function getAppOrigin(env) {
@@ -48,8 +48,18 @@ function sanitizeNext(nextValue) {
   return value;
 }
 
-function redirect(url, status = 302) {
-  return Response.redirect(url, status);
+function redirectResponse(location, cookieValue) {
+  const headers = new Headers();
+  headers.set("Location", location);
+
+  if (cookieValue) {
+    headers.append("Set-Cookie", cookieValue);
+  }
+
+  return new Response(null, {
+    status: 302,
+    headers,
+  });
 }
 
 export async function onRequest(context) {
@@ -64,25 +74,24 @@ export async function onRequest(context) {
   if (!token) {
     const target = new URL("/login", appOrigin);
     target.searchParams.set("message", "Sessie niet beschikbaar");
-    return redirect(target.toString());
+    return redirectResponse(target.toString());
   }
 
   if (mode === "set-password") {
     const target = new URL("/set-password", appOrigin);
     target.searchParams.set("token", token);
-    return redirect(target.toString());
+    return redirectResponse(target.toString());
   }
 
   if (mode === "reset-password") {
     const target = new URL("/reset-password", appOrigin);
     target.searchParams.set("token", token);
-    return redirect(target.toString());
+    return redirectResponse(target.toString());
   }
 
   const destination = sanitizeNext(url.searchParams.get("next"));
   const target = new URL(destination, appOrigin);
+  const cookieValue = buildCookie(token, request.url, domain);
 
-  const response = redirect(target.toString());
-  response.headers.append("Set-Cookie", buildCookie(token, request.url, domain));
-  return response;
+  return redirectResponse(target.toString(), cookieValue);
 }
