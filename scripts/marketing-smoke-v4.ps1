@@ -1,5 +1,5 @@
 param(
-  [string]$BaseUrl = "https://nen1090-marketing-new.pages.dev"
+  [string]$BaseUrl = "https://nen1090-marketing.pages.dev"
 )
 
 $ErrorActionPreference = "Stop"

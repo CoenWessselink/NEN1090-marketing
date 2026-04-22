@@ -31,4 +31,24 @@ if not existing:
     db.add(user)
     db.commit()
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 print("Superadmin klaar")
