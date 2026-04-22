@@ -2,7 +2,8 @@ name: Deploy Marketing to Cloudflare Pages
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -26,4 +27,6 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
         run: |
-          wrangler pages deploy . --project-name=${{ vars.CF_PAGES_PROJECT_NAME }}
+          wrangler pages deploy . \
+            --project-name=nen1090-marketing \
+            --commit-dirty=true
