@@ -13,15 +13,15 @@ jobs:
 
     steps:
       - name: Check homepage
-        run: curl -fL "https://nen1090-marketing-new.pages.dev/" || exit 1
+        run: curl -fL "https://nen1090-marketing.pages.dev/" || exit 1
 
       - name: Check app login link exists
         run: |
-          curl -fsSL "https://nen1090-marketing-new.pages.dev/" | grep -q "https://nen-1090-app.pages.dev/login"
+          curl -fsSL "https://nen1090-marketing.pages.dev/" | grep -q "https://nen-1090-app.pages.dev/login"
 
       - name: Ensure marketing does NOT host login anymore
         run: |
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "https://nen1090-marketing-new.pages.dev/app/login")
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" "https://nen1090-marketing.pages.dev/app/login")
           echo "Status: $STATUS"
           if [ "$STATUS" = "200" ]; then
             echo "ERROR: marketing still hosts login"
@@ -29,4 +29,4 @@ jobs:
           fi
 
       - name: Check robots.txt
-        run: curl -fL "https://nen1090-marketing-new.pages.dev/robots.txt" || exit 1
+        run: curl -fL "https://nen1090-marketing.pages.dev/robots.txt" || exit 1
