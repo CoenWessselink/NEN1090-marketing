@@ -110,18 +110,36 @@
         submitBtn.textContent = "Bezig...";
       }
 
-      const res = await fetch("/api/onboarding/trial-signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
+      const candidateEndpoints = [
+        "/api/v1/onboarding/trial-signup",
+        "/api/public/trial/signup",
+      ];
 
+      let res = null;
       let data = null;
-      try {
-        data = await res.json();
-      } catch (_) {}
+      for (const endpoint of candidateEndpoints) {
+        res = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
 
-      if (!res.ok) {
+        try {
+          data = await res.json();
+        } catch (_) {
+          data = null;
+        }
+
+        if (res.ok) {
+          break;
+        }
+
+        if (![404, 405].includes(res.status)) {
+          break;
+        }
+      }
+
+      if (!res || !res.ok) {
         const detail =
           data?.error?.message ||
           data?.detail?.message ||
