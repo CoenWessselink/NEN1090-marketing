@@ -1,4 +1,6 @@
 (function () {
+  const CANONICAL_ENDPOINT = "/api/v1/onboarding/trial-signup";
+
   function qs(sel) {
     return document.querySelector(sel);
   }
@@ -16,38 +18,46 @@
     return el ? String(el.value || "").trim() : "";
   }
 
-  function setMessage(kind, message) {
-    const box =
-      pick("[data-trial-message]", "#trial-message") ||
-      (() => {
-        const form = pick("[data-trial-form]", "#trial-form", "form");
-        const div = document.createElement("div");
-        div.id = "trial-message";
-        div.setAttribute("data-trial-message", "1");
-        div.style.marginBottom = "16px";
-        div.style.padding = "14px 18px";
-        div.style.borderRadius = "16px";
-        div.style.fontSize = "16px";
-        div.style.lineHeight = "1.5";
-        form?.prepend(div);
-        return div;
-      })();
+  function showMessage(target, kind, message, html) {
+    if (!target) return;
+    target.className = `message ${kind} visible`;
+    if (html) target.innerHTML = html;
+    else target.textContent = message || "";
+  }
 
-    box.textContent = message;
-    box.style.display = "block";
-    box.style.background = kind === "error" ? "#fef2f2" : "#ecfdf3";
-    box.style.color = kind === "error" ? "#b42318" : "#027a48";
-    box.style.border = kind === "error" ? "1px solid #fecdca" : "1px solid #abefc6";
+  function clearMessage(target) {
+    if (!target) return;
+    target.className = "message";
+    target.textContent = "";
+    target.innerHTML = "";
+  }
+
+  function readErrorMessage(data) {
+    return (
+      data?.error?.message ||
+      data?.detail?.message ||
+      data?.detail ||
+      data?.message ||
+      "Trialaanvraag kon niet worden verwerkt."
+    );
   }
 
   async function submitTrialSignup(evt) {
     evt.preventDefault();
 
+    const form = evt.currentTarget;
+    const errorBox = pick("#formMessage", "[data-trial-message]", "#trial-message");
+    const successBox = pick("#successMessage");
+    const submitBtn = pick("#submitButton", 'button[type="submit"]', "#trial-submit");
+
+    clearMessage(errorBox);
+    clearMessage(successBox);
+
     const company = value(
-      'input[name="company"]',
       'input[name="company_name"]',
-      "#company",
-      "#company_name"
+      'input[name="company"]',
+      "#company_name",
+      "#company"
     );
     const contactName = value(
       'input[name="contact_name"]',
@@ -62,110 +72,105 @@
       "#work_email"
     );
     const seatRaw = value(
-      'input[name="seats"]',
       'input[name="seat_count"]',
-      "#seats",
-      "#seat_count"
+      'input[name="seats"]',
+      "#seat_count",
+      "#seats"
     );
     const notes = value('textarea[name="notes"]', "#notes");
     const phone = value('input[name="phone"]', "#phone");
+    const planCode = value('input[name="plan_code"]') || "trial";
 
-    const seats = Number.parseInt(seatRaw || "1", 10);
-    const submitBtn = pick('button[type="submit"]', "#trial-submit");
+    const seatCount = Number.parseInt(seatRaw || "1", 10);
 
     if (!company) {
-      setMessage("error", "Bedrijfsnaam is verplicht.");
+      showMessage(errorBox, "error", "Bedrijfsnaam is verplicht.");
       return;
     }
     if (!contactName) {
-      setMessage("error", "Contactpersoon is verplicht.");
+      showMessage(errorBox, "error", "Contactpersoon is verplicht.");
       return;
     }
     if (!email) {
-      setMessage("error", "Zakelijk e-mailadres is verplicht.");
+      showMessage(errorBox, "error", "Zakelijk e-mailadres is verplicht.");
+      return;
+    }
+    if (!Number.isFinite(seatCount) || seatCount < 1) {
+      showMessage(errorBox, "error", "Aantal gebruikers moet minimaal 1 zijn.");
       return;
     }
 
     const payload = {
-      // legacy/public endpoint compatibility
-      company: company,
-      seats: Number.isFinite(seats) ? seats : 1,
-
-      // newer/canonical endpoint compatibility
       company_name: company,
       contact_name: contactName,
-      email: email,
+      email,
+      seat_count: seatCount,
+      notes,
+      phone,
+      plan_code: planCode,
+      source: "marketing-onboarding",
+
+      // tijdelijke compatibiliteit richting oudere API-contracten
+      company,
       work_email: email,
-      seat_count: Number.isFinite(seats) ? seats : 1,
-      notes: notes,
-      phone: phone,
-      plan_code: "trial",
-      source: "marketing-onboarding"
+      seats: seatCount
     };
 
     try {
       if (submitBtn) {
         submitBtn.disabled = true;
-        submitBtn.dataset.originalText = submitBtn.textContent || "Start trial";
+        submitBtn.dataset.originalText = submitBtn.textContent || "Start gratis proefperiode";
         submitBtn.textContent = "Bezig...";
       }
 
-      const candidateEndpoints = [
-        "/api/v1/onboarding/trial-signup",
-        "/api/public/trial/signup",
-      ];
+      const res = await fetch(CANONICAL_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
 
-      let res = null;
       let data = null;
-      for (const endpoint of candidateEndpoints) {
-        res = await fetch(endpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload)
-        });
-
-        try {
-          data = await res.json();
-        } catch (_) {
-          data = null;
-        }
-
-        if (res.ok) {
-          break;
-        }
-
-        if (![404, 405].includes(res.status)) {
-          break;
-        }
+      try {
+        data = await res.json();
+      } catch (_) {
+        data = null;
       }
 
-      if (!res || !res.ok) {
-        const detail =
-          data?.error?.message ||
-          data?.detail?.message ||
-          data?.detail ||
-          data?.message ||
-          "Trialaanvraag kon niet worden verwerkt.";
-        setMessage("error", String(detail));
+      if (!res.ok) {
+        showMessage(errorBox, "error", readErrorMessage(data));
         return;
       }
 
-      setMessage(
+      form.reset();
+
+      showMessage(
+        successBox,
         "success",
-        "Je trialaanvraag is ontvangen. Controleer je e-mail voor de activatiestap."
+        "",
+        `
+          <strong>Je trialaanvraag is ontvangen.</strong><br>
+          Controleer je e-mail voor de activatiestap van je eerste beheeraccount.
+          <div class="success-actions">
+            <a class="secondary-btn" href="https://nen-1090-app.pages.dev/login">Naar login</a>
+            <a class="secondary-btn" href="/contact.html">Demo of vragen</a>
+          </div>
+        `
       );
-    } catch (err) {
-      setMessage("error", "Netwerkfout bij het versturen van de trialaanvraag.");
+    } catch (_) {
+      showMessage(errorBox, "error", "Netwerkfout bij het versturen van de trialaanvraag.");
     } finally {
       if (submitBtn) {
         submitBtn.disabled = false;
-        submitBtn.textContent = submitBtn.dataset.originalText || "Start trial";
+        submitBtn.textContent = submitBtn.dataset.originalText || "Start gratis proefperiode";
       }
     }
   }
 
   document.addEventListener("DOMContentLoaded", function () {
-    const form = pick("[data-trial-form]", "#trial-form", "form");
+    const form = pick("#trialForm", "[data-trial-form]", "#trial-form", "form");
     if (form && !form.dataset.trialBound) {
       form.addEventListener("submit", submitTrialSignup);
       form.dataset.trialBound = "1";

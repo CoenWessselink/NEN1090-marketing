@@ -1,7 +1,10 @@
-# Voor lokale tests (WRANGLER)
-# In Cloudflare Pages zet je dit als env vars (Production/Preview).
+# Voor lokale tests (Wrangler)
+# In Cloudflare Pages zet je dit als env vars voor Preview en Production.
 
+APP_ORIGIN=http://localhost:5173
+AZURE_API_ORIGIN=http://localhost:8000
 BACKEND_API_BASE=http://localhost:8000
+
 MOLLIE_API_KEY=test_xxx
 CHECKOUT_RETURN_BASE=http://localhost:8788
 

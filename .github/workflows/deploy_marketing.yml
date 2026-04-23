@@ -29,4 +29,5 @@ jobs:
         run: |
           wrangler pages deploy . \
             --project-name=nen1090-marketing \
+            --branch=main \
             --commit-dirty=true

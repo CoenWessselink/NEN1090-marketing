@@ -1,19 +1,18 @@
 /**
  * Cloudflare Pages Function: /auth
- * Simpele en robuuste token bridge voor magic links, onboarding en reset flows.
+ * Canonieke marketing token bridge voor onboarding, activatie en reset.
  *
- * Belangrijk:
- * - redirect responses worden handmatig opgebouwd
- * - Set-Cookie wordt direct in de response headers gezet
- * - voorkomt 1101 door mutatie van Response.redirect()
+ * Regels:
+ * - redirect altijd naar de app-origin
+ * - geen relatieve /app/* routes op marketing
+ * - activate/set-password landen op /activate-account
+ * - reset-password landt op /reset-password
+ * - normale token-login zet HttpOnly cookie en gaat naar volgende app-route
  */
 
 function getAppOrigin(env) {
   const origin = String(env?.APP_ORIGIN || "").trim();
-  if (!origin) {
-    return "https://nen-1090-app.pages.dev";
-  }
-  return origin.replace(/\/+$/, "");
+  return (origin || "https://nen-1090-app.pages.dev").replace(/\/+$/, "");
 }
 
 function buildCookie(token, requestUrl, domain) {
@@ -23,7 +22,7 @@ function buildCookie(token, requestUrl, domain) {
     "Path=/",
     "HttpOnly",
     "SameSite=Lax",
-    "Max-Age=604800",
+    "Max-Age=604800"
   ];
 
   if (url.protocol === "https:") {
@@ -56,15 +55,17 @@ function redirectResponse(location, cookieValue) {
     headers.append("Set-Cookie", cookieValue);
   }
 
-  return new Response(null, {
-    status: 302,
-    headers,
-  });
+  return new Response(null, { status: 302, headers });
+}
+
+function redirectWithToken(appOrigin, pathname, token) {
+  const target = new URL(pathname, appOrigin);
+  target.searchParams.set("token", token);
+  return redirectResponse(target.toString());
 }
 
 export async function onRequest(context) {
   const { request, env } = context;
-
   const url = new URL(request.url);
   const appOrigin = getAppOrigin(env);
   const token = (url.searchParams.get("token") || "").trim();
@@ -77,16 +78,12 @@ export async function onRequest(context) {
     return redirectResponse(target.toString());
   }
 
-  if (mode === "set-password") {
-    const target = new URL("/set-password", appOrigin);
-    target.searchParams.set("token", token);
-    return redirectResponse(target.toString());
+  if (mode === "activate" || mode === "set-password") {
+    return redirectWithToken(appOrigin, "/activate-account", token);
   }
 
   if (mode === "reset-password") {
-    const target = new URL("/reset-password", appOrigin);
-    target.searchParams.set("token", token);
-    return redirectResponse(target.toString());
+    return redirectWithToken(appOrigin, "/reset-password", token);
   }
 
   const destination = sanitizeNext(url.searchParams.get("next"));
