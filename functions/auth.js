@@ -10,9 +10,11 @@
  * - normale token-login zet HttpOnly cookie en gaat naar volgende app-route
  */
 
+const DEFAULT_APP_ORIGIN = "https://app.weldinspectpro.com";
+
 function getAppOrigin(env) {
-  const origin = String(env?.APP_ORIGIN || "").trim();
-  return (origin || "https://nen-1090-app.pages.dev").replace(/\/+$/, "");
+  const origin = String(env?.APP_ORIGIN || env?.FRONTEND_URL || env?.APP_URL || "").trim();
+  return (origin || DEFAULT_APP_ORIGIN).replace(/\/+$/, "");
 }
 
 function buildCookie(token, requestUrl, domain) {
