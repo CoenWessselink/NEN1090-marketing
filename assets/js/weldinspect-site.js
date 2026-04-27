@@ -2,6 +2,13 @@
   const APP_LOGIN = 'https://app.weldinspectpro.com/login';
   const START_TRIAL = '/onboarding.html';
   const DEMO = '/contact.html';
+
+  // Inject global polish stylesheet
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = '/assets/css/site-polish.css?v=20260427';
+  document.head.appendChild(link);
+
   const current = (window.location.pathname || '/').replace('/index.html', '/');
   const nav = [
     ['/', 'Home'],
