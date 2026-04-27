@@ -1,27 +1,11 @@
-# NEN1090 API – fase 11
+# WeldInspect Pro Marketing — Phase 5 Authority & Trust
 
-FastAPI backend voor projecten, assemblies, lassen, inspecties, foto's en CE export.
+Final marketing expansion on top of Phase 4. Existing Cloudflare/Azure/Resend onboarding flow is preserved.
 
-## Start lokaal
-
-```bash
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8010
-```
-
-## Endpoints
-
-- `/health`
-- `/api/v1/projects`
-- `/api/v1/projects/import_bundle`
-- `/api/v1/assemblies`
-- `/api/v1/welds`
-- `/api/v1/inspections`
-- `/api/v1/photos`
-- `/api/v1/ce_export/{project_id}`
-
-## PostgreSQL
-
-Gebruik `DATABASE_URL` uit `.env`.
+## Added
+- Security & trust page
+- Use cases page
+- Case studies page
+- Pricing comparison and FAQ
+- Homepage trust layer
+- Updated sitemap and redirects

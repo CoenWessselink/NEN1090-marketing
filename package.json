@@ -1,16 +1,1 @@
-{
-  "name": "nen1090-marketing-full",
-  "private": true,
-  "version": "1.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "node ./node_modules/vite/bin/vite.js --host 127.0.0.1 --port 5173",
-    "build": "node ./node_modules/vite/bin/vite.js build",
-    "preview": "node ./node_modules/vite/bin/vite.js preview --host 127.0.0.1 --port 4173",
-    "pages:dev": "wrangler pages dev dist --ip 127.0.0.1 --port 8788"
-  },
-  "devDependencies": {
-    "vite": "^5.4.0",
-    "wrangler": "^3.0.0"
-  }
-}
+{"name":"weldinspect-marketing","version":"1.0.0","private":true,"scripts":{"build":"node scripts/validate-build.mjs","validate":"node scripts/validate-build.mjs"},"devDependencies":{}}
