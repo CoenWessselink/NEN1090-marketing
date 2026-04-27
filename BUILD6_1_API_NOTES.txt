@@ -1,0 +1,1 @@
+Build 6.1 API update: confirmed Azure API remains the system of record, CORS origins explicitly include the Cloudflare app and marketing domains, and frontend should target the Azure API base URL directly.

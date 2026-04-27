@@ -1,0 +1,12 @@
+# Push commands — WeldInspect Pro marketing redesign
+
+cd C:\NEN1090\NEN1090-marketing
+
+git status
+git add index.html standards.html pricing.html software.html contact.html onboarding.html inspection-reporting.html inspection-software.html qa-qc-software.html assets/css/weldinspect.css assets/js/weldinspect-site.js assets/img/brand public/favicon.svg PUSH_COMMANDS_MARKETING_REDESIGN.txt
+git commit -m "feat: redesign marketing site for WeldInspect Pro standards workflow"
+git push origin main
+
+# Optional local validation
+npm install
+npm run build

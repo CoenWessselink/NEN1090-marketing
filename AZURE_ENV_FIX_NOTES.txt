@@ -1,0 +1,9 @@
+NEN10900-api Azure environment fix
+
+Applied changes:
+1. app/core/config.py now loads .env with override=False so Azure App Settings remain leading.
+2. Added an Azure safety net: if DATABASE_URL resolves to localhost/127.0.0.1/::1 while running on Azure, the local URL is ignored.
+3. Updated .env header comments to clarify it is only for local development.
+
+Expected Azure App Setting:
+DATABASE_URL=postgresql+psycopg://nen1090adm:Wesselink2012%21@nen1090-db.postgres.database.azure.com:5432/postgres?sslmode=require

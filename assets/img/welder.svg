@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="560" viewBox="0 0 980 560" fill="none">
+<defs>
+  <linearGradient id="g" x1="120" y1="40" x2="860" y2="520" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#2F7BFF"/><stop offset="1" stop-color="#39D6B5"/>
+  </linearGradient>
+  <filter id="sh" x="-40%" y="-40%" width="180%" height="180%">
+    <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#0b1a3a" flood-opacity="0.18"/>
+  </filter>
+</defs>
+<rect x="30" y="30" width="920" height="500" rx="30" fill="url(#g)" opacity="0.08"/>
+<rect x="80" y="80" width="820" height="400" rx="26" fill="#FFFFFF" stroke="#E7EEFC" filter="url(#sh)"/>
+
+<!-- steel beams -->
+<rect x="120" y="350" width="740" height="42" rx="16" fill="#F6F8FF" stroke="#E7EEFC"/>
+<rect x="150" y="402" width="680" height="22" rx="11" fill="#F2FBF8" stroke="#E7EEFC"/>
+
+<!-- weld seam -->
+<path d="M220 371c40 22 80-22 120 0s80 22 120 0 80-22 120 0 80 22 120 0 80-22 120 0" stroke="#2F7BFF" stroke-width="6" stroke-linecap="round" opacity="0.55"/>
+
+<!-- welder silhouette (simple) -->
+<circle cx="220" cy="220" r="54" fill="#0B1220" opacity="0.06"/>
+<path d="M210 152c-22 6-36 28-34 52 2 26 22 46 48 48 27 2 50-16 55-42 6-30-14-58-45-62-9-2-16-1-24 4z" fill="#0B1220" opacity="0.16"/>
+<path d="M186 232c-12 44-14 92-8 140 2 16 14 28 30 30h66c18-2 32-16 34-34 4-36 1-76-10-118-4-14-14-25-28-30l-16-6c-6 12-14 20-28 20-13 0-22-8-28-20l-14 6c-10 4-18 14-20 22z" fill="#0B1220" opacity="0.12"/>
+
+<!-- torch + sparks -->
+<path d="M310 290l52 20" stroke="#58627A" stroke-width="10" stroke-linecap="round" opacity="0.35"/>
+<path d="M358 310l26 10" stroke="#58627A" stroke-width="8" stroke-linecap="round" opacity="0.25"/>
+<path d="M404 326c18 6 40 4 56-8" stroke="#39D6B5" stroke-width="6" stroke-linecap="round" opacity="0.65"/>
+<path d="M410 306l10-18" stroke="#2F7BFF" stroke-width="4" stroke-linecap="round" opacity="0.75"/>
+<path d="M430 312l18-10" stroke="#39D6B5" stroke-width="4" stroke-linecap="round" opacity="0.75"/>
+<path d="M434 332l18 10" stroke="#2F7BFF" stroke-width="4" stroke-linecap="round" opacity="0.60"/>
+
+<!-- labels (no text-heavy) -->
+<rect x="540" y="150" width="320" height="44" rx="16" fill="#F6F8FF" stroke="#E7EEFC"/>
+<rect x="540" y="210" width="260" height="44" rx="16" fill="#F2FBF8" stroke="#E7EEFC"/>
+<rect x="540" y="270" width="300" height="44" rx="16" fill="#F6F8FF" stroke="#E7EEFC"/>
+<path d="M566 172h150" stroke="#2F7BFF" stroke-width="6" stroke-linecap="round" opacity="0.55"/>
+<path d="M566 232h110" stroke="#39D6B5" stroke-width="6" stroke-linecap="round" opacity="0.55"/>
+<path d="M566 292h130" stroke="#2F7BFF" stroke-width="6" stroke-linecap="round" opacity="0.45"/>
+</svg>

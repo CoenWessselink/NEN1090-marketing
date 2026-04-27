@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#eef6ff"/><stop offset="1" stop-color="#fff7ed"/>
+  </linearGradient>
+  <linearGradient id="acc" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#1f5bd6"/><stop offset="1" stop-color="#f59e0b"/>
+  </linearGradient>
+</defs>
+<rect x="0" y="0" width="1200" height="700" rx="36" fill="url(#bg)"/>
+<rect x="100" y="110" width="1000" height="480" rx="28" fill="#fff" stroke="#e6edf7" stroke-width="8"/>
+<rect x="150" y="160" width="420" height="32" rx="14" fill="rgba(15,27,45,.10)"/>
+<rect x="150" y="220" width="900" height="220" rx="22" fill="rgba(31,91,214,.06)"/>
+<circle cx="420" cy="330" r="78" fill="rgba(31,91,214,.15)"/>
+<circle cx="420" cy="330" r="44" fill="rgba(245,158,11,.20)"/>
+<path d="M392 330l20 20 44-52" fill="none" stroke="#0f1b2d" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="640" y="260" width="360" height="54" rx="18" fill="url(#acc)" opacity=".92"/>
+<rect x="640" y="330" width="360" height="54" rx="18" fill="rgba(31,91,214,.10)"/>
+<rect x="640" y="400" width="360" height="54" rx="18" fill="rgba(245,158,11,.10)"/>
+</svg>
