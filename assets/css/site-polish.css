@@ -1,2 +1,78 @@
-/* WeldInspect Pro polish */
-body{overflow-x:hidden}
+/* WeldInspect Pro global marketing polish build 2 */
+:root{
+  --wip-dark:#050c16;
+  --wip-bg:#06111f;
+  --wip-blue:#1478ff;
+  --wip-orange:#ff7816;
+  --wip-soft:#f4f8fe;
+  --wip-card:#ffffff;
+  --wip-line:#e0eaf6;
+  --wip-text:#0a2140;
+  --wip-muted:#5f728a;
+}
+html{background:var(--wip-bg)}
+body{overflow-x:hidden;text-rendering:geometricPrecision}
+a{transition:background .18s ease,color .18s ease,border-color .18s ease,transform .18s ease,box-shadow .18s ease}
+.btn:hover,.pp-btn:hover{transform:translateY(-1px)}
+.btn-primary,.btn-accent,.pp-primary{background:#ff7816!important;color:#fff!important;box-shadow:0 15px 36px rgba(255,120,22,.24)!important}
+.btn-secondary,.pp-outline{border-color:rgba(255,255,255,.42)!important}
+.brand-mark svg path:first-child{fill:#061d42;stroke:#1678ff;stroke-width:3}
+.brand-mark svg path:last-child{fill:#fff}
+
+/* Homepage final refinements */
+body.landing-pp .site-footer-lite{display:none!important}
+body.landing-pp .pp-desktop{overflow:hidden}
+body.landing-pp .pp-desktop:after{content:'';position:absolute;left:0;top:0;bottom:0;width:58px;background:#f1f5fb;border-right:1px solid #dce7f3}
+body.landing-pp .pp-desktop .pp-bar,body.landing-pp .pp-desktop .pp-table{position:relative;z-index:2;margin-left:52px}
+body.landing-pp .pp-desktop .pp-bar:before{content:'Inspections';position:absolute;left:0;top:-20px;color:#0f2f61;font-size:11px;font-weight:900}
+body.landing-pp .pp-table i:nth-child(4n+1){background:#b7cff1!important}
+body.landing-pp .pp-table i:nth-child(4n+3){background:#23ad68!important}
+body.landing-pp .pp-phone{overflow:hidden}
+body.landing-pp .pp-phone:before{content:'';position:absolute;left:0;top:0;right:0;height:31px;background:#f2f6fb;border-bottom:1px solid #e1e9f2}
+body.landing-pp .pp-phone b,body.landing-pp .pp-phone i,body.landing-pp .pp-phone span{position:relative;z-index:2}
+body.landing-pp .pp-steps i{box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 12px 30px rgba(0,0,0,.24)}
+body.landing-pp .pp-std-grid article,body.landing-pp .pp-feature-row article,body.landing-pp .pp-std-grid aside{box-shadow:0 10px 30px rgba(10,33,64,.07)}
+
+/* Global dark enterprise header */
+body:not(.landing-pp) .topbar{background:rgba(5,12,22,.96)!important;border-bottom:1px solid rgba(255,255,255,.12)!important;box-shadow:none!important}
+body:not(.landing-pp) .topbar-row{min-height:68px!important}
+body:not(.landing-pp) .brand strong{color:#fff!important}
+body:not(.landing-pp) .brand small{color:#c8d4e4!important}
+body:not(.landing-pp) .nav a{color:#fff!important;background:transparent!important;box-shadow:none!important}
+body:not(.landing-pp) .nav a.active,body:not(.landing-pp) .nav a:hover{color:#fff!important;background:rgba(255,255,255,.08)!important}
+body:not(.landing-pp) .nav-actions .btn-secondary{background:transparent!important;color:#fff!important;border-color:rgba(255,255,255,.45)!important;box-shadow:none!important}
+
+/* Inner pages visual consistency */
+body:not(.landing-pp){background:linear-gradient(180deg,#06111f 0,#071827 220px,#f4f8fe 221px,#f4f8fe 100%)!important;color:var(--wip-text)!important}
+body:not(.landing-pp) .hero,body:not(.landing-pp) .page-hero,body:not(.landing-pp) .hero-dark{position:relative;overflow:hidden;background:linear-gradient(90deg,rgba(5,12,20,.98),rgba(5,12,20,.86) 42%,rgba(5,12,20,.45)),url('https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=2200&q=88') center 42%/cover!important;color:#fff!important;border-radius:0!important;margin:0!important;box-shadow:none!important;min-height:auto!important;padding:70px 0!important}
+body:not(.landing-pp) .hero h1,body:not(.landing-pp) .page-hero h1,body:not(.landing-pp) .hero-dark h1{color:#fff!important;font-size:clamp(2.6rem,4.9vw,5.4rem)!important;line-height:.98!important;letter-spacing:-.065em!important}
+body:not(.landing-pp) .hero .lead,body:not(.landing-pp) .page-hero .lead,body:not(.landing-pp) .hero-dark .lead{color:#dbe5f0!important}
+body:not(.landing-pp) .kicker{background:#0d5ec3!important;color:#fff!important;border:0!important;border-radius:7px!important}
+body:not(.landing-pp) .section{background:#f4f8fe!important}
+body:not(.landing-pp) .card,body:not(.landing-pp) .panel,body:not(.landing-pp) .pricing-card,body:not(.landing-pp) .standard-card,body:not(.landing-pp) .feature-card,body:not(.landing-pp) aside.card{border:1px solid var(--wip-line)!important;border-radius:16px!important;box-shadow:0 12px 34px rgba(10,33,64,.08)!important;background:#fff!important}
+body:not(.landing-pp) input,body:not(.landing-pp) textarea,body:not(.landing-pp) select{border:1px solid #d6e3f4!important;border-radius:12px!important;min-height:46px!important;padding:11px 13px!important;font:inherit!important;background:#fff!important;color:#0a2140!important}
+body:not(.landing-pp) textarea{min-height:110px!important}
+body:not(.landing-pp) .site-footer-lite{background:#050c16!important;color:#fff!important}
+body:not(.landing-pp) .site-footer-lite .brand strong{color:#fff!important}
+body:not(.landing-pp) .site-footer-lite .brand small,body:not(.landing-pp) .site-footer-lite a,body:not(.landing-pp) .site-footer-lite p{color:#aebed2!important}
+
+/* Trial page polish without touching JS ids */
+body[data-page="onboarding"] .hero-grid{display:grid;grid-template-columns:minmax(0,1fr) 480px;gap:34px;align-items:center}
+body[data-page="onboarding"] .trial-form-card{overflow:hidden;border-radius:22px!important;background:#fff!important}
+body[data-page="onboarding"] .trial-form-head{background:linear-gradient(180deg,#fff,#f3f8ff)!important}
+body[data-page="onboarding"] .trial-form-body{background:#fff!important}
+body[data-page="onboarding"] .message{border-radius:14px!important}
+body[data-page="onboarding"] .trial-submit{background:#ff7816!important;color:#fff!important}
+body[data-page="onboarding"] .legal{color:#65758a!important}
+
+@media(max-width:900px){
+  body:not(.landing-pp) .topbar-row>.nav,body:not(.landing-pp) .topbar-row>.nav-actions{display:none!important}
+  .mobile-toggle{display:inline-flex!important;color:#fff;background:transparent;border:1px solid rgba(255,255,255,.3);border-radius:10px;width:42px;height:42px;align-items:center;justify-content:center}
+  .topbar.open .mobile-panel{display:block!important;background:#050c16;border-top:1px solid rgba(255,255,255,.12);padding:14px 0}
+  .nav-stack,.mobile-actions{display:grid;gap:10px}
+  .nav-stack a{color:#fff!important;padding:10px 0}
+  body[data-page="onboarding"] .hero-grid{grid-template-columns:1fr}
+  body:not(.landing-pp) .hero h1,body:not(.landing-pp) .page-hero h1,body:not(.landing-pp) .hero-dark h1{font-size:42px!important}
+  .container{width:calc(100% - 28px)!important}
+  .site-footer-lite .cols{grid-template-columns:1fr!important}
+}
