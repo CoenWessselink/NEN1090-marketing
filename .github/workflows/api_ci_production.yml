@@ -1,0 +1,78 @@
+name: Marketing Static Site CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: nen1090-marketing-static-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  validate-static-site:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate required files
+        run: |
+          set -e
+          test -f index.html
+          test -f robots.txt
+          test -f sitemap.xml
+          test -f assets/css/weldinspect.css
+          test -f assets/css/hotfix.css
+          test -f assets/js/weldinspect-site.js
+
+      - name: Validate important pages exist
+        run: |
+          set -e
+          for file in \
+            software.html \
+            weld-inspection-software.html \
+            inspection-reporting.html \
+            welding-compliance.html \
+            qa-qc-software.html \
+            inspection-software.html \
+            weld-tracking-software.html \
+            welding-management-software.html \
+            pricing.html \
+            contact.html \
+            onboarding.html; do
+            test -f "$file" || (echo "Missing $file" && exit 1)
+          done
+
+      - name: Check for broken legacy header text
+        run: |
+          set -e
+          if grep -R "WeldInspectWeld" -n . \
+            --exclude-dir=.git \
+            --exclude-dir=.github \
+            --exclude-dir=node_modules \
+            --exclude-dir=dist; then
+            echo "Broken concatenated header text found"
+            exit 1
+          fi
+
+      - name: Check HTML pages include viewport and CSS
+        run: |
+          set -e
+          for file in *.html; do
+            grep -q 'name="viewport"' "$file" || (echo "$file missing viewport" && exit 1)
+            grep -q 'assets/css' "$file" || (echo "$file missing stylesheet" && exit 1)
+          done
+
+      - name: Validate sitemap contains core SEO pages
+        run: |
+          set -e
+          grep -q 'weld-inspection-software.html' sitemap.xml
+          grep -q 'inspection-software.html' sitemap.xml
+          grep -q 'weld-tracking-software.html' sitemap.xml
+          grep -q 'qa-qc-software.html' sitemap.xml
