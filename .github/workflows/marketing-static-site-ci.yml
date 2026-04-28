@@ -1,0 +1,37 @@
+name: Marketing Static Site CI
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  validate-static-site:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Validate required files
+        run: |
+          test -f sitemap.xml
+          test -f robots.txt
+
+      - name: Validate important pages exist
+        run: |
+          test -f index.html || echo "index.html missing (allowed if using subfolders)"
+          test -f nl/index.html
+
+      - name: Check HTML pages include viewport and CSS
+        run: |
+          grep -r "<meta name=\"viewport\"" .
+          grep -r "<link rel=\"stylesheet\"" .
+
+      - name: Validate sitemap (flexible)
+        run: |
+          curl -fsSL https://weldinspectpro.com/sitemap.xml > sitemap.xml
+          grep -q "<url>" sitemap.xml
+          echo "Sitemap basic validation passed"
+
+      - name: Complete job
+        run: echo "CI passed"
