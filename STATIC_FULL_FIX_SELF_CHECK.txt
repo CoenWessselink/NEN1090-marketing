@@ -1,0 +1,12 @@
+STATIC FULL FIX BUILD SELF-CHECK
+Date: 2026-04-28
+HTML files: 55
+Google Analytics ID: G-76WG0RRTNN
+Checks:
+- GA tag present in every HTML file
+- Required NL internal links present in every /nl/*.html, /nl/blog/*.html and /nl/gidsen/*.html file
+- Canonical present in every generated HTML file
+- sitemap.xml contains root, /nl/ and all generated HTML URLs
+- robots.txt points to https://weldinspectpro.com/sitemap.xml
+
+Result: PASS
