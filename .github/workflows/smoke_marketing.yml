@@ -1,0 +1,43 @@
+name: Smoke Test Marketing
+
+on:
+  workflow_run:
+    workflows: ["Deploy Marketing to Cloudflare Pages"]
+    types: [completed]
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check homepage is reachable
+        run: curl -fsSL --max-time 20 "https://nen1090-marketing.pages.dev/" >/tmp/home.html
+
+      - name: Check app login CTA exists
+        run: grep -q "https://app.weldinspectapp.com/login" /tmp/home.html
+
+      - name: Check core marketing navigation exists
+        run: |
+          grep -q "trial.html" /tmp/home.html
+          grep -q "demo.html" /tmp/home.html
+          grep -q "standards.html" /tmp/home.html
+          grep -q "pricing.html" /tmp/home.html
+
+      - name: Ensure homepage does not reference legacy marketing-new
+        run: |
+          if grep -q "nen1090-marketing-new" /tmp/home.html; then
+            echo "ERROR: legacy marketing-new reference found on homepage"
+            exit 1
+          fi
+
+      - name: Check robots.txt
+        run: curl -fsSL --max-time 20 "https://nen1090-marketing.pages.dev/robots.txt" >/dev/null
+
+      - name: Check sitemap.xml
+        run: |
+          curl -fsSL --max-time 20 "https://nen1090-marketing.pages.dev/sitemap.xml" >/tmp/sitemap.xml
+          grep -q "weld-inspection-software.html" /tmp/sitemap.xml
+          grep -q "inspection-reporting.html" /tmp/sitemap.xml
+          grep -q "welding-compliance.html" /tmp/sitemap.xml
