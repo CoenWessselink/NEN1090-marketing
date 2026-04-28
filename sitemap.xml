@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
-  <!-- VERPLICHT VOOR CI -->
-  <url><loc>https://weldinspectpro.com/</loc></url>
-  <url><loc>https://weldinspectpro.com/en-1090.html</loc></url>
-  <url><loc>https://weldinspectpro.com/weld-inspection-software.html</loc></url>
-  <url><loc>https://weldinspectpro.com/inspection-reporting.html</loc></url>
-  <url><loc>https://weldinspectpro.com/welding-compliance.html</loc></url>
-
-  <!-- BELANGRIJK -->
-  <url><loc>https://weldinspectpro.com/pricing.html</loc></url>
-  <url><loc>https://weldinspectpro.com/demo.html</loc></url>
-  <url><loc>https://weldinspectpro.com/trial.html</loc></url>
-
-  <!-- NL -->
-  <url><loc>https://weldinspectpro.com/nl/index.html</loc></url>
-  <url><loc>https://weldinspectpro.com/nl/lasinspectie-software.html</loc></url>
-
+  <url><loc>https://weldinspectpro.com/nl/</loc><lastmod>2026-04-28</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://weldinspectpro.com/nl/blog/</loc><lastmod>2026-04-28</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://weldinspectpro.com/nl/blog/ce-dossier-uitleg-staalbouw.html</loc><lastmod>2026-04-28</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://weldinspectpro.com/nl/blog/digitale-lasinspectie-voordelen.html</loc><lastmod>2026-04-28</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://weldinspectpro.com/nl/blog/hoe-werkt-lasinspectie.html</loc><lastmod>2026-04-28</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://weldinspectpro.com/nl/blog/iso-3834-eisen.html</loc><lastmod>2026-04-28</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://weldinspectpro.com/nl/blog/kwaliteitscontrole-staalbouw.html</loc><lastmod>2026-04-28</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://weldinspectpro.com/nl/blog/lasfouten-herkennen.html</loc><lastmod>2026-04-28</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://weldinspectpro.com/nl/blog/lasinspectie-checklist.html</loc><lastmod>2026-04-28</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://weldinspectpro.com/nl/blog/wat-is-en-1090.html</loc><lastmod>2026-04-28</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://weldinspectpro.com/nl/blog/wpq-wat-is-dat.html</loc><lastmod>2026-04-28</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://weldinspectpro.com/nl/blog/wps-wat-is-dat.html</loc><lastmod>2026-04-28</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://weldinspectpro.com/nl/ce-dossier-software.html</loc><lastmod>2026-04-28</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://weldinspectpro.com/nl/en-1090-software.html</loc><lastmod>2026-04-28</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://weldinspectpro.com/nl/gidsen/</loc><lastmod>2026-04-28</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://weldinspectpro.com/nl/gidsen/complete-gids-en-1090.html</loc><lastmod>2026-04-28</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://weldinspectpro.com/nl/gidsen/complete-gids-iso-3834.html</loc><lastmod>2026-04-28</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://weldinspectpro.com/nl/gidsen/complete-gids-lasinspectie.html</loc><lastmod>2026-04-28</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://weldinspectpro.com/nl/iso-3834-software.html</loc><lastmod>2026-04-28</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://weldinspectpro.com/nl/lascontrole-software.html</loc><lastmod>2026-04-28</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://weldinspectpro.com/nl/lasinspectie-software-nederland.html</loc><lastmod>2026-04-28</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://weldinspectpro.com/nl/lasinspectie-software.html</loc><lastmod>2026-04-28</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://weldinspectpro.com/nl/wps-wpq-beheer.html</loc><lastmod>2026-04-28</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
 </urlset>
