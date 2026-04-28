@@ -1,0 +1,11 @@
+/* Phase 12 dominance content utilities — additive only */
+.seo-dominance{max-width:1120px;margin:56px auto;padding:0 24px}
+.seo-dominance__panel{border:1px solid rgba(148,163,184,.28);border-radius:24px;padding:clamp(22px,3vw,42px);background:rgba(255,255,255,.04)}
+.seo-dominance__links{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0}
+.seo-dominance__links a{display:inline-flex;border:1px solid rgba(59,130,246,.35);border-radius:999px;padding:9px 13px;text-decoration:none}
+.seo-dominance__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:22px 0}
+.seo-dominance__card{border:1px solid rgba(148,163,184,.25);border-radius:18px;padding:18px;background:rgba(255,255,255,.04)}
+.seo-dominance table{width:100%;border-collapse:collapse;margin:20px 0}
+.seo-dominance th,.seo-dominance td{border:1px solid rgba(148,163,184,.25);padding:12px;text-align:left;vertical-align:top}
+.seo-dominance details{border:1px solid rgba(148,163,184,.25);border-radius:14px;padding:12px;margin:10px 0}
+@media(max-width:850px){.seo-dominance__grid{grid-template-columns:1fr}.seo-dominance{margin:34px auto}}
