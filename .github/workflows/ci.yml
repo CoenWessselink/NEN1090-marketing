@@ -1,8 +1,38 @@
 name: CI
-on: [push]
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: echo "CI OK"
+      - name: Validate required files
+        run: |
+          test -f sitemap.xml
+          test -f robots.txt
+          test -d nl
+          test -f nl/index.html
+      - name: Validate sitemap has required core URLs
+        run: |
+          grep -Fq "https://weldinspectpro.com/" sitemap.xml
+          grep -Fq "https://weldinspectpro.com/nl/" sitemap.xml
+      - name: Validate Dutch SEO pages exist
+        run: |
+          test -f nl/lasinspectie-software.html
+          test -f nl/en-1090-software.html
+          test -f nl/ce-dossier-software.html
+      - name: Validate required internal links
+        run: |
+          find nl -name "*.html" -print0 | while IFS= read -r -d '' file; do
+            grep -Fq "/nl/en-1090-software.html" "$file"
+            grep -Fq "/nl/lasinspectie-software.html" "$file"
+            grep -Fq "/nl/ce-dossier-software.html" "$file"
+          done
+      - name: Success
+        run: echo "CI validation passed."
