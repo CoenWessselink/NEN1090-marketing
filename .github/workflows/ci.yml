@@ -2,25 +2,65 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  ok:
+  validate:
+    name: Validate marketing repository
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Validate repository structure
+
+      - name: Show repository root
         run: |
-          test -f sitemap.xml
-          test -f robots.txt
-          test -d nl
-      - name: Validate sitemap has core URLs
+          pwd
+          ls -la
+
+      - name: Validate required files
         run: |
-          grep -q "https://weldinspectpro.com/" sitemap.xml
-          grep -q "weld-inspection-software.html" sitemap.xml
-          grep -q "inspection-reporting.html" sitemap.xml
-          grep -q "welding-compliance.html" sitemap.xml
+          test -f sitemap.xml || (echo "ERROR: sitemap.xml ontbreekt in repo root" && exit 1)
+          test -f robots.txt || (echo "ERROR: robots.txt ontbreekt in repo root" && exit 1)
+          test -d nl || (echo "ERROR: /nl/ map ontbreekt" && exit 1)
+          test -f nl/index.html || (echo "ERROR: /nl/index.html ontbreekt" && exit 1)
+
+      - name: Validate sitemap has required core URLs
+        run: |
+          echo "Sitemap inhoud:"
+          cat sitemap.xml
+          grep -Fq "https://weldinspectpro.com/" sitemap.xml || (echo "ERROR: root URL ontbreekt in sitemap.xml" && exit 1)
+          grep -Fq "https://weldinspectpro.com/nl/" sitemap.xml || (echo "ERROR: /nl/ URL ontbreekt in sitemap.xml" && exit 1)
+
+      - name: Validate Dutch SEO pages exist
+        run: |
+          test -f nl/lasinspectie-software.html || (echo "ERROR: nl/lasinspectie-software.html ontbreekt" && exit 1)
+          test -f nl/en-1090-software.html || (echo "ERROR: nl/en-1090-software.html ontbreekt" && exit 1)
+          test -f nl/ce-dossier-software.html || (echo "ERROR: nl/ce-dossier-software.html ontbreekt" && exit 1)
+
+      - name: Validate required internal links
+        run: |
+          find nl -name "*.html" -print0 | while IFS= read -r -d '' file; do
+            echo "Controle interne links: $file"
+            grep -Fq "/nl/en-1090-software.html" "$file" || (echo "ERROR: ontbrekende EN 1090 link in $file" && exit 1)
+            grep -Fq "/nl/lasinspectie-software.html" "$file" || (echo "ERROR: ontbrekende lasinspectie link in $file" && exit 1)
+            grep -Fq "/nl/ce-dossier-software.html" "$file" || (echo "ERROR: ontbrekende CE dossier link in $file" && exit 1)
+          done
+
+      - name: Validate no deprecated NL deployment patterns
+        run: |
+          if grep -R "nl.weldinspectpro.com\|weldinspectpro.nl" . --exclude-dir=.git; then
+            echo "ERROR: verboden NL subdomein of .nl domein gevonden"
+            exit 1
+          fi
+
       - name: Success
-        run: echo "CI OK"
+        run: echo "CI validation passed."
