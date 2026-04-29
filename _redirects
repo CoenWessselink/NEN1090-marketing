@@ -1,8 +1,4 @@
-/ce-dossier /reports.html 301
-/compliance /reports.html 301
-
-# Keep ONLY explicit html routes (no extensionless rewrites)
-
-/security /security.html 200
-/use-cases /use-cases.html 200
-/case-studies /case-studies.html 200
+/pricing /nl/prijzen.html 302
+/prijzen /nl/prijzen.html 302
+/checkout /nl/checkout.html 302
+/contact-sales /nl/contact-sales.html 302
