@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="WeldInspectPro">
+  <defs>
+    <linearGradient id="wipShield" x1="20" y1="8" x2="108" y2="120" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#38bdf8"/>
+      <stop offset="0.48" stop-color="#2563eb"/>
+      <stop offset="1" stop-color="#0f2f7a"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#000814" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+  <rect width="128" height="128" rx="24" fill="#020713"/>
+  <path filter="url(#shadow)" d="M64 8 108 26v52c0 19.5-13.6 29.9-44 42C33.6 107.9 20 97.5 20 78V26L64 8Z" fill="url(#wipShield)"/>
+  <path d="M38 44h14l7 36 9-36h12l9 36 7-36h14L96 90H81l-7-27-7 27H52L38 44Z" fill="#ffffff"/>
+</svg>

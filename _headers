@@ -3,6 +3,35 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Cache-Control: no-cache, must-revalidate
 
-/assets/*
-  Cache-Control: public, max-age=31536000, immutable
+/checkout.html
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-store, max-age=0
+
+/trial.html
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-store, max-age=0
+
+/demo.html
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-store, max-age=0
+
+/nl/demo.html
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: no-store, max-age=0
+
+/*.html
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/assets/js/*
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/assets/css/*
+  Cache-Control: no-cache, no-store, must-revalidate
+
+/assets/images/*
+  Cache-Control: public, max-age=86400
+
+/*.xml
+  Cache-Control: no-cache, must-revalidate

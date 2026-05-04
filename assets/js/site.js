@@ -1,118 +1,200 @@
 const APP_LOGIN_URL = 'https://app.weldinspectpro.com/login';
+const TRIAL_ENDPOINT = '/api/v1/onboarding/trial-signup';
 
-document.querySelectorAll('a[href="https://app.weldinspectapp.com/login"], a[href="https://app.weldinspectpro.com/login"], a[href="https://nen-1090-app.pages.dev/login"]').forEach((link) => {
-  link.setAttribute('href', APP_LOGIN_URL);
-});
-
-const menuButton = document.querySelector('.menu-button');
-const mobileMenu = document.querySelector('#mobileMenu');
-if (menuButton && mobileMenu) {
-  menuButton.addEventListener('click', () => {
-    const open = mobileMenu.classList.toggle('is-open');
-    menuButton.setAttribute('aria-expanded', String(open));
-  });
-  mobileMenu.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      mobileMenu.classList.remove('is-open');
-      menuButton.setAttribute('aria-expanded', 'false');
-    });
-  });
+function safeUuid() {
+  if (window.crypto && typeof window.crypto.randomUUID === 'function') return window.crypto.randomUUID();
+  return `visitor-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
 
-const LEAD_ENDPOINTS = {
-  trial: '/api/v1/onboarding/trial-signup',
-  demo: '/api/v1/demo-request'
-};
+function getVisitor() {
+  try {
+    let v = localStorage.getItem('wip_visitor');
+    if (!v) {
+      v = safeUuid();
+      localStorage.setItem('wip_visitor', v);
+    }
+    return v;
+  } catch {
+    return safeUuid();
+  }
+}
+
+function normalizeLoginLinks() {
+  document
+    .querySelectorAll('a[href*="nen-1090-app.pages.dev/login"], a[href*="app.weldinspectpro.com/login"]')
+    .forEach((link) => link.setAttribute('href', APP_LOGIN_URL));
+}
 
 function parseSeatCount(value) {
   const raw = String(value || '').trim();
   if (!raw) return 3;
   const firstNumber = raw.match(/\d+/);
-  return firstNumber ? Number(firstNumber[0]) : 3;
+  if (!firstNumber) return 3;
+  const parsed = Number(firstNumber[0]);
+  if (!Number.isFinite(parsed) || parsed < 1) return 3;
+  return parsed;
 }
 
-function formToPayload(form) {
+function buildTrialPayload(form) {
   const data = new FormData(form);
-  const firstName = String(data.get('firstName') || '').trim();
-  const lastName = String(data.get('lastName') || '').trim();
-  const company = String(data.get('company') || '').trim();
+  const firstName = String(data.get('firstName') || data.get('first_name') || '').trim();
+  const lastName = String(data.get('lastName') || data.get('last_name') || '').trim();
+  const contactName = String(data.get('contact_name') || `${firstName} ${lastName}`.trim() || data.get('name') || '').trim();
+  const companyName = String(data.get('company_name') || data.get('company') || data.get('organization') || '').trim();
   const email = String(data.get('email') || '').trim().toLowerCase();
-  const name = [firstName, lastName].filter(Boolean).join(' ');
-  const leadType = form.dataset.leadType || 'lead';
-
-  if (leadType === 'trial') {
-    return {
-      company_name: company,
-      contact_name: name || email,
-      email,
-      seat_count: parseSeatCount(data.get('teamSize')),
-      notes: [
-        String(data.get('message') || '').trim(),
-        String(data.get('standard') || '').trim() ? `Primary standard: ${String(data.get('standard')).trim()}` : '',
-        String(data.get('teamSize') || '').trim() ? `Team size: ${String(data.get('teamSize')).trim()}` : '',
-        'Source: weldinspect-marketing'
-      ].filter(Boolean).join('\n')
-    };
-  }
+  const standard = String(data.get('standard') || '').trim();
+  const message = String(data.get('message') || data.get('notes') || '').trim();
+  const teamSize = String(data.get('teamSize') || data.get('seat_count') || '').trim();
+  const notes = [standard ? `Primary standard: ${standard}` : '', teamSize ? `Team size: ${teamSize}` : '', message].filter(Boolean).join('\n');
 
   return {
-    source: 'weldinspect-marketing',
-    product: 'WeldInspect Pro',
-    type: leadType,
-    first_name: firstName,
-    last_name: lastName,
-    name,
+    company_name: companyName,
+    contact_name: contactName,
     email,
-    company,
-    company_name: company,
-    team_size: String(data.get('teamSize') || '').trim(),
-    primary_standard: String(data.get('standard') || '').trim(),
-    message: String(data.get('message') || '').trim(),
-    requested_at: new Date().toISOString()
+    seat_count: parseSeatCount(teamSize),
+    notes
   };
 }
 
-function extractErrorMessage(errorBody) {
-  if (!errorBody) return 'Request failed. Please try again.';
-  if (typeof errorBody === 'string') return errorBody;
-  if (Array.isArray(errorBody?.detail)) return errorBody.detail.map((item) => item?.msg || item?.message || String(item)).join(', ');
-  if (typeof errorBody?.detail === 'object' && errorBody.detail?.message) return errorBody.detail.message;
-  return errorBody?.error?.message || errorBody?.message || errorBody?.detail || 'Request failed. Please try again.';
-}
-
-async function submitLeadForm(form) {
-  const type = form.dataset.leadType || 'lead';
-  const endpoint = LEAD_ENDPOINTS[type] || form.getAttribute('action') || '/api/v1/lead';
+function showFormMessage(form, type, message) {
   const successBox = form.querySelector('.success-box');
   const errorBox = form.querySelector('.error-box');
-  const submitButton = form.querySelector('button[type="submit"]');
-  successBox?.classList.remove('is-visible');
-  if (errorBox) { errorBox.textContent = ''; errorBox.classList.remove('is-visible'); }
-  const originalLabel = submitButton ? submitButton.textContent : '';
-  if (submitButton) { submitButton.disabled = true; submitButton.textContent = 'Sending...'; }
-  try {
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(formToPayload(form))
+  if (successBox) successBox.style.display = type === 'success' ? 'block' : 'none';
+  if (errorBox) {
+    errorBox.style.display = type === 'error' ? 'block' : 'none';
+    errorBox.textContent = type === 'error' ? message : '';
+  }
+  if (successBox && type === 'success') successBox.textContent = message;
+}
+
+function getApiErrorText(payload, fallback) {
+  if (!payload || typeof payload !== 'object') return fallback;
+  return payload.message || payload.detail || payload.error?.message || payload.error || fallback;
+}
+
+function bindLeadForms() {
+  document.querySelectorAll('form.js-lead-form').forEach((form) => {
+    if (form.dataset.bound === 'true') return;
+    form.dataset.bound = 'true';
+    form.setAttribute('action', TRIAL_ENDPOINT);
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const submit = form.querySelector('button[type="submit"]');
+      const originalText = submit ? submit.textContent : '';
+      showFormMessage(form, 'idle', '');
+      if (submit) {
+        submit.disabled = true;
+        submit.textContent = 'Sending request...';
+      }
+      try {
+        const payload = buildTrialPayload(form);
+        if (!payload.company_name || !payload.contact_name || !payload.email) {
+          throw new Error('Enter company name, contact person and email address.');
+        }
+        const response = await fetch(TRIAL_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'x-wip-visitor': getVisitor()
+          },
+          body: JSON.stringify(payload)
+        });
+        let body = null;
+        try { body = await response.json(); } catch { body = null; }
+        if (!response.ok) throw new Error(getApiErrorText(body, `Trial request failed (${response.status}).`));
+        showFormMessage(form, 'success', 'Trial request sent. Check your inbox for the activation or follow-up email.');
+        form.reset();
+        track('trial_signup_submitted', { source: location.pathname, status: response.status });
+      } catch (error) {
+        showFormMessage(form, 'error', error && error.message ? error.message : 'Trial request failed. Try again or book a demo.');
+        track('trial_signup_failed', { source: location.pathname, message: String(error && error.message ? error.message : error) });
+      } finally {
+        if (submit) {
+          submit.disabled = false;
+          submit.textContent = originalText || 'Send';
+        }
+      }
     });
-    const contentType = response.headers.get('content-type') || '';
-    const body = contentType.includes('application/json') ? await response.json().catch(() => null) : await response.text().catch(() => '');
-    if (!response.ok) throw new Error(extractErrorMessage(body));
-    form.reset();
-    successBox?.classList.add('is-visible');
-  } catch (error) {
-    if (errorBox) { errorBox.textContent = error?.message || 'Request failed. Please try again.'; errorBox.classList.add('is-visible'); }
-  } finally {
-    if (submitButton) { submitButton.disabled = false; submitButton.textContent = originalLabel; }
+  });
+}
+
+async function fetchExperiment() {
+  try {
+    const res = await fetch('/api/v1/growth/experiments/pricing', {
+      headers: { 'x-wip-visitor': getVisitor(), 'Accept': 'application/json' }
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
   }
 }
 
-document.querySelectorAll('.js-lead-form').forEach((form) => {
-  form.addEventListener('submit', (event) => {
+async function track(event, metadata = {}) {
+  try {
+    await fetch('/api/v1/analytics/events', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-wip-visitor': getVisitor() },
+      body: JSON.stringify({ event_name: event, metadata })
+    });
+  } catch {}
+}
+
+function setMobileMenuState(button, menu, isOpen) {
+  button.setAttribute('aria-expanded', String(isOpen));
+  menu.classList.toggle('is-open', isOpen);
+  menu.classList.toggle('open', isOpen);
+  document.documentElement.classList.toggle('mobile-menu-open', isOpen);
+}
+
+function bindMobileMenu() {
+  const button = document.querySelector('.menu-button');
+  const menu = document.querySelector('#mobileMenu');
+  if (!button || !menu || button.dataset.bound === 'true') return;
+
+  button.dataset.bound = 'true';
+  button.setAttribute('aria-controls', menu.id || 'mobileMenu');
+  button.setAttribute('aria-expanded', 'false');
+
+  button.addEventListener('click', (event) => {
     event.preventDefault();
-    if (!form.checkValidity()) { form.reportValidity(); return; }
-    submitLeadForm(form);
+    event.stopPropagation();
+    const nextState = button.getAttribute('aria-expanded') !== 'true';
+    setMobileMenuState(button, menu, nextState);
+  });
+
+  menu.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => setMobileMenuState(button, menu, false));
+  });
+
+  document.addEventListener('click', (event) => {
+    if (button.getAttribute('aria-expanded') !== 'true') return;
+    const target = event.target;
+    if (button.contains(target) || menu.contains(target)) return;
+    setMobileMenuState(button, menu, false);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') setMobileMenuState(button, menu, false);
+  });
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 1180) setMobileMenuState(button, menu, false);
+  });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  normalizeLoginLinks();
+  bindMobileMenu();
+  bindLeadForms();
+});
+
+window.addEventListener('load', async () => {
+  track('page_view', { path: location.pathname });
+  const exp = await fetchExperiment();
+  if (!exp || !exp.config || !exp.monthly_cents) return;
+  document.querySelectorAll('.price-card.featured strong').forEach((el) => {
+    el.textContent = '€' + (exp.monthly_cents / 100);
   });
 });
