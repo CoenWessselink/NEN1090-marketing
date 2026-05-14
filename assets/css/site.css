@@ -176,3 +176,28 @@ h3{color:#0f172a}
 .popular{background:#2563eb;color:#fff}.price-card.featured{border-color:#2563eb;box-shadow:0 0 0 1px rgba(37,99,235,.12),0 22px 58px rgba(37,99,235,.12)}
 @media(max-width:1180px){.desktop-nav,.nav-actions{display:none}.menu-button{display:block}.hero-grid-visual{grid-template-columns:1fr}.hero-copy{max-width:680px}.hero-product-shot{justify-self:center}.dashboard-preview{min-height:auto}.feature-grid,.product-screen-grid,.cta-panel{grid-template-columns:1fr 1fr}.product-screen-card.trace-card{grid-column:1/-1}.footer-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:760px){.container{width:min(100% - 28px,1180px)}.nav-shell{height:66px}.marketing-hero{padding:34px 0 46px}h1{font-size:42px}.lead{font-size:16px}.hero-actions{display:grid;grid-template-columns:1fr;align-items:stretch}.btn-large{width:100%}.dashboard-preview{grid-template-columns:1fr}.dashboard-sidebar{display:none}.dashboard-main{padding:18px}.dashboard-metrics{grid-template-columns:1fr 1fr}.score-card{grid-column:1/-1}.dashboard-content,.feature-grid,.product-screen-grid,.stats-grid,.cta-panel,.footer-proof-grid,.footer-grid{grid-template-columns:1fr}.dashboard-table{overflow:auto}.feature-card{grid-template-columns:44px 1fr;padding:20px}.stats-bar{padding:28px 0}.cta-panel{padding:26px}.cta-panel h2{font-size:28px}.section{padding:46px 0}.product-screen-card dl{grid-template-columns:1fr}.product-screen-card dd{text-align:left}.hero-standards strong{flex:1 1 78px}.mobile-menu.is-open,.mobile-menu.open{inset:66px 0 auto 0}}
+
+/* Light-theme normalization for older standalone checkout, pricing and legal templates. */
+.footer-legal-links{display:flex;justify-content:center;gap:18px;flex-wrap:wrap;margin:18px auto 0;padding-top:18px;border-top:1px solid #e2e8f0;max-width:1180px}
+.footer-legal-links a{color:#64748b;font-weight:700;margin:0}
+.brandbar{background:rgba(255,255,255,.94)!important;border-bottom:1px solid #e2e8f0!important;box-shadow:0 1px 0 rgba(15,23,42,.03)!important;color:#0f172a!important}
+.brandbar .brand,.brandbar nav a{color:#0f172a!important}
+.brandbar nav a.login,.login{border-color:#e2e8f0!important;background:#fff!important;color:#2563eb!important}
+.mark,.brandbar .brand-mark{clip-path:none!important;border-radius:10px!important;background:linear-gradient(180deg,#3b82f6,#2563eb)!important;color:#fff!important;box-shadow:0 10px 26px rgba(37,99,235,.22)!important}
+.wrap{background:#fff!important;color:#1e293b!important}
+.card,.pay,.checkout-shell,.summary-card,.plan-option,.summary,.plan-tile,.sticky-summary,.payment-panel,.summary-mini{background:#fff!important;border-color:#e2e8f0!important;color:#1e293b!important;box-shadow:0 14px 44px rgba(15,23,42,.06)!important}
+.featured,.plan-option.active,.plan-option[data-plan="yearly"],.plan-tile.active{border-color:#2563eb!important;box-shadow:0 0 0 1px rgba(37,99,235,.12),0 22px 58px rgba(37,99,235,.10)!important}
+.tag.orange,.pill.orange,.badge{background:#2563eb!important;color:#fff!important;box-shadow:none!important}
+.tag.blue,.tag.green,.pill.green{background:#eff6ff!important;border-color:#bfdbfe!important;color:#2563eb!important}
+.pill,.step,.trust span{background:#fff!important;border-color:#e2e8f0!important;color:#1e293b!important}
+.cta,.cta.orange,.cta.blue,.btn.blue,.step.active{background:#2563eb!important;color:#fff!important;box-shadow:0 14px 28px rgba(37,99,235,.20)!important}
+.cta.dark,.btn.secondary,.btn-ghost{background:#fff!important;border:1px solid #e2e8f0!important;color:#1e293b!important;box-shadow:none!important}
+.card p,.pay p,.note,.foot,.secure-note,.section-title,.brandbar .brand small,.summary-line span,.muted,.footer-note,.muted-small{color:#64748b!important}
+.card h1,.card h2,.pay h2,.summary-title h2,.checkout-head h1,.section-title,.price strong,.summary-total strong,.summary-line strong{color:#0f172a!important}
+.summary-total strong,.summary-total span{color:#2563eb!important}
+.form-grid input,.form-grid select,.form-grid textarea,input,select,textarea{background:#fff!important;color:#1e293b!important;border-color:#e2e8f0!important}
+.form-grid input:focus,.form-grid select:focus,input:focus,select:focus,textarea:focus{border-color:#93c5fd!important;box-shadow:0 0 0 4px rgba(37,99,235,.10)!important}
+.price span,.checkout-step span,.checkbox-row{color:#64748b!important}
+.checkout-step strong,.summary strong,label,label.check,li{color:#1e293b!important}
+.express-note{background:#eff6ff!important;border-color:#bfdbfe!important;color:#1e293b!important}
+.error{background:#fef2f2!important;color:#991b1b!important}.success{background:#f0fdf4!important;color:#166534!important}
