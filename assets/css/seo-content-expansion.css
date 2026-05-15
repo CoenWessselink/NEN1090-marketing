@@ -1,7 +1,10 @@
 /* Additive SEO content only; no existing UI override */
-.seo-expansion{max-width:1120px;margin:56px auto;padding:0 24px}
-.seo-expansion__panel{border:1px solid rgba(148,163,184,.28);border-radius:24px;padding:clamp(22px,3vw,42px);background:rgba(255,255,255,.035)}
-.seo-expansion__links{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0}.seo-expansion__links a{display:inline-flex;border:1px solid rgba(59,130,246,.35);border-radius:999px;padding:9px 13px;text-decoration:none}
-.seo-expansion__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.seo-expansion__card{border:1px solid rgba(148,163,184,.25);border-radius:18px;padding:18px}
-.seo-expansion table{width:100%;border-collapse:collapse}.seo-expansion th,.seo-expansion td{border:1px solid rgba(148,163,184,.25);padding:12px;text-align:left;vertical-align:top}
-.seo-expansion details{border:1px solid rgba(148,163,184,.25);border-radius:14px;padding:12px;margin:10px 0}@media(max-width:850px){.seo-expansion__grid{grid-template-columns:1fr}}
+.seo-expansion{max-width:1120px;margin:56px auto;padding:0 24px;color:#1e293b}
+.seo-expansion__panel{border:1px solid #e2e8f0;border-radius:24px;padding:clamp(22px,3vw,42px);background:#fff;box-shadow:0 16px 48px rgba(15,23,42,.06)}
+.seo-expansion h2,.seo-expansion h3{color:#0f172a}
+.seo-expansion p,.seo-expansion td{color:#64748b;line-height:1.7}
+.seo-expansion a{color:#2563eb}
+.seo-expansion__links{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0}.seo-expansion__links a{display:inline-flex;border:1px solid #bfdbfe;border-radius:999px;padding:9px 13px;text-decoration:none;background:#eff6ff;color:#2563eb;font-weight:700}
+.seo-expansion__grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.seo-expansion__card{border:1px solid #e2e8f0;border-radius:18px;padding:18px;background:#f8fafc}
+.seo-expansion table{width:100%;border-collapse:collapse;background:#fff}.seo-expansion th,.seo-expansion td{border:1px solid #e2e8f0;padding:12px;text-align:left;vertical-align:top}.seo-expansion th{background:#eff6ff;color:#0f172a}
+.seo-expansion details{border:1px solid #e2e8f0;border-radius:14px;padding:12px;margin:10px 0;background:#fff}.seo-expansion summary{color:#0f172a;font-weight:700}@media(max-width:850px){.seo-expansion__grid{grid-template-columns:1fr}}
