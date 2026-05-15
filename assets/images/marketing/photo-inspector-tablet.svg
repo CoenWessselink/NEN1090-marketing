@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="920" viewBox="0 0 1400 920" role="img" aria-labelledby="title desc">
+  <title id="title">QA inspector reviewing weld evidence on tablet</title>
+  <desc id="desc">Photo-style custom visual of a QA inspector using a tablet beside a steel weld assembly, showing digital checklist and compliance evidence.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#f8fafc"/>
+      <stop offset=".5" stop-color="#eaf2ff"/>
+      <stop offset="1" stop-color="#ffffff"/>
+    </linearGradient>
+    <linearGradient id="jacket" x1="0" x2="1">
+      <stop stop-color="#111827"/>
+      <stop offset="1" stop-color="#334155"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="22" stdDeviation="30" flood-color="#0f172a" flood-opacity=".18"/>
+    </filter>
+  </defs>
+  <rect width="1400" height="920" rx="42" fill="url(#bg)"/>
+  <rect x="92" y="120" width="1216" height="660" rx="38" fill="#fff" stroke="#dbeafe" stroke-width="3"/>
+  <g opacity=".45" stroke="#cbd5e1" stroke-width="4">
+    <path d="M132 676h1140M180 214h270M930 220h248"/>
+  </g>
+  <rect x="160" y="616" width="760" height="76" rx="20" fill="#cbd5e1"/>
+  <rect x="238" y="540" width="520" height="96" rx="18" fill="#94a3b8"/>
+  <path d="M286 590h418" stroke="#475569" stroke-width="16" stroke-linecap="round"/>
+  <g transform="translate(342 210)">
+    <circle cx="170" cy="122" r="86" fill="#bfdbfe"/>
+    <path d="M58 344c28-98 94-150 196-150 98 0 166 52 196 150z" fill="url(#jacket)"/>
+    <path d="M66 94c34-92 124-126 204-80 60 36 80 102 58 170l-138-20c-20-54-64-76-124-70z" fill="#0f172a"/>
+    <path d="M60 346l-166 84" stroke="#1f2937" stroke-width="48" stroke-linecap="round"/>
+    <path d="M446 342l140 92" stroke="#1f2937" stroke-width="48" stroke-linecap="round"/>
+  </g>
+  <g transform="translate(790 158)" filter="url(#shadow)">
+    <rect width="330" height="520" rx="38" fill="#0f172a"/>
+    <rect x="26" y="34" width="278" height="452" rx="26" fill="#fff"/>
+    <rect x="54" y="66" width="222" height="58" rx="16" fill="#eff6ff"/>
+    <text x="78" y="103" font-family="Inter,Arial,sans-serif" font-size="22" font-weight="900" fill="#2563eb">INS-2024-156</text>
+    <g fill="#f8fafc" stroke="#e2e8f0" stroke-width="2">
+      <rect x="54" y="156" width="222" height="66" rx="16"/>
+      <rect x="54" y="250" width="222" height="66" rx="16"/>
+      <rect x="54" y="344" width="222" height="66" rx="16"/>
+    </g>
+    <g font-family="Inter,Arial,sans-serif" font-size="19" fill="#475569" font-weight="700">
+      <text x="78" y="196">WPS linked</text>
+      <text x="78" y="290">Photo evidence</text>
+      <text x="78" y="384">Compliance 92%</text>
+    </g>
+    <circle cx="246" cy="188" r="14" fill="#16a34a"/>
+    <circle cx="246" cy="282" r="14" fill="#16a34a"/>
+    <circle cx="246" cy="376" r="14" fill="#2563eb"/>
+  </g>
+  <g transform="translate(150 160)" filter="url(#shadow)">
+    <rect width="260" height="78" rx="22" fill="#fff"/>
+    <text x="30" y="49" font-family="Inter,Arial,sans-serif" font-size="26" font-weight="900" fill="#0f172a">QA/QC on site</text>
+  </g>
+</svg>
