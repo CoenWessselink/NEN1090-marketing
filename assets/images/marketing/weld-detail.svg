@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="640" viewBox="0 0 960 640" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
   <title id="title">Close-up weld seam inspection</title>
   <desc id="desc">A close-up illustration of a finished weld seam with inspection markers and compliance tags.</desc>
   <defs>
@@ -12,23 +12,23 @@
       <stop offset="1" stop-color="#334155"/>
     </linearGradient>
   </defs>
-  <rect width="960" height="640" rx="36" fill="#ffffff"/>
-  <rect x="98" y="124" width="764" height="390" rx="28" fill="url(#plate)" stroke="#e2e8f0" stroke-width="3"/>
-  <path d="M140 320h680" stroke="#94a3b8" stroke-width="3" stroke-dasharray="10 12"/>
-  <path d="M154 322c45-35 85-35 130 0s85 35 130 0 85-35 130 0 85 35 130 0 85-35 130 0" fill="none" stroke="url(#weld)" stroke-width="50" stroke-linecap="round"/>
-  <path d="M152 322c44-34 84-34 128 0s84 34 128 0 84-34 128 0 84 34 128 0 84-34 128 0" fill="none" stroke="#e2e8f0" stroke-width="6" stroke-linecap="round" opacity=".45"/>
-  <g fill="#eff6ff" stroke="#2563eb" stroke-width="3">
-    <rect x="166" y="182" width="132" height="62" rx="18"/>
-    <rect x="632" y="398" width="152" height="62" rx="18"/>
+  <rect width="1200" height="800" rx="44" fill="#ffffff"/>
+  <rect x="96" y="128" width="1008" height="510" rx="36" fill="url(#plate)" stroke="#e2e8f0" stroke-width="3"/>
+  <path d="M150 400h900" stroke="#94a3b8" stroke-width="4" stroke-dasharray="14 14"/>
+  <path d="M170 402c62-50 118-50 180 0s118 50 180 0 118-50 180 0 118 50 180 0 118-50 180 0" fill="none" stroke="url(#weld)" stroke-width="66" stroke-linecap="round"/>
+  <path d="M170 402c62-50 118-50 180 0s118 50 180 0 118-50 180 0 118 50 180 0 118-50 180 0" fill="none" stroke="#e2e8f0" stroke-width="8" stroke-linecap="round" opacity=".5"/>
+  <g fill="#eff6ff" stroke="#2563eb" stroke-width="4">
+    <rect x="176" y="210" width="166" height="74" rx="20"/>
+    <rect x="802" y="496" width="188" height="74" rx="20"/>
   </g>
-  <text x="190" y="219" font-family="Inter,Arial,sans-serif" font-size="20" font-weight="800" fill="#2563eb">VT OK</text>
-  <text x="660" y="435" font-family="Inter,Arial,sans-serif" font-size="20" font-weight="800" fill="#2563eb">W-1056</text>
-  <path d="M298 214l116 72M632 428l-116-68" stroke="#2563eb" stroke-width="3"/>
-  <circle cx="416" cy="286" r="9" fill="#2563eb"/>
-  <circle cx="516" cy="360" r="9" fill="#2563eb"/>
-  <g transform="translate(372 500)">
-    <rect width="216" height="58" rx="18" fill="#f8fafc" stroke="#e2e8f0"/>
-    <circle cx="38" cy="29" r="11" fill="#16a34a"/>
-    <text x="60" y="35" font-family="Inter,Arial,sans-serif" font-size="18" font-weight="800" fill="#1e293b">Audit-ready evidence</text>
+  <text x="214" y="256" font-family="Inter,Arial,sans-serif" font-size="25" font-weight="900" fill="#2563eb">VT OK</text>
+  <text x="840" y="542" font-family="Inter,Arial,sans-serif" font-size="25" font-weight="900" fill="#2563eb">W-1056</text>
+  <path d="M342 246l154 98M802 534l-154-98" stroke="#2563eb" stroke-width="4"/>
+  <circle cx="500" cy="346" r="12" fill="#2563eb"/>
+  <circle cx="648" cy="436" r="12" fill="#2563eb"/>
+  <g transform="translate(432 644)">
+    <rect width="336" height="72" rx="22" fill="#f8fafc" stroke="#e2e8f0"/>
+    <circle cx="42" cy="36" r="13" fill="#16a34a"/>
+    <text x="68" y="43" font-family="Inter,Arial,sans-serif" font-size="22" font-weight="900" fill="#1e293b">Audit-ready weld evidence</text>
   </g>
 </svg>

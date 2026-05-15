@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="960" height="640" viewBox="0 0 960 640" role="img" aria-labelledby="title desc">
-  <title id="title">Welder creating an arc weld</title>
-  <desc id="desc">A light-theme industrial illustration of a welder working on a steel weld with a bright blue arc.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800" role="img" aria-labelledby="title desc">
+  <title id="title">Welder creating an arc weld in a fabrication shop</title>
+  <desc id="desc">A detailed custom industrial illustration of a welder in PPE working on a steel assembly with a blue welding arc, clamps, tools and workshop context.</desc>
   <defs>
     <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
       <stop stop-color="#eff6ff"/>
@@ -15,26 +15,38 @@
       <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
   </defs>
-  <rect width="960" height="640" rx="36" fill="url(#bg)"/>
-  <path d="M96 476h768" stroke="#dbeafe" stroke-width="2"/>
-  <rect x="178" y="414" width="610" height="56" rx="16" fill="url(#steel)"/>
-  <rect x="248" y="381" width="360" height="44" rx="10" fill="#94a3b8"/>
-  <path d="M278 405h305" stroke="#475569" stroke-width="8" stroke-linecap="round"/>
-  <path d="M587 402c28 16 58 16 89 0" stroke="#2563eb" stroke-width="10" stroke-linecap="round" filter="url(#glow)"/>
-  <circle cx="619" cy="402" r="34" fill="#bfdbfe" opacity=".7" filter="url(#glow)"/>
-  <path d="M625 389l88-84" stroke="#1e293b" stroke-width="16" stroke-linecap="round"/>
-  <path d="M692 300l44-42" stroke="#2563eb" stroke-width="22" stroke-linecap="round"/>
-  <path d="M320 322c20-80 76-128 150-128 96 0 160 74 151 175l-130 5c8-53-11-89-50-100-45-12-77 15-92 64z" fill="#1e293b"/>
-  <path d="M355 300c22-45 61-66 106-55 38 9 62 37 68 79l-137 4z" fill="#2563eb"/>
-  <rect x="350" y="316" width="186" height="68" rx="16" fill="#0f172a"/>
-  <rect x="402" y="335" width="82" height="26" rx="8" fill="#93c5fd"/>
-  <path d="M349 382c-48 34-82 77-101 128" stroke="#334155" stroke-width="34" stroke-linecap="round"/>
-  <path d="M523 376c42 19 74 55 97 108" stroke="#334155" stroke-width="34" stroke-linecap="round"/>
-  <path d="M244 506h132M610 505h126" stroke="#1e293b" stroke-width="36" stroke-linecap="round"/>
-  <g fill="#2563eb" opacity=".9">
-    <path d="M604 331l-30-52 52 30z"/>
-    <path d="M660 362l58-18-40 46z"/>
-    <path d="M582 435l-52 30 30-52z"/>
-    <path d="M691 433l54 28-59 4z"/>
+  <rect width="1200" height="800" rx="44" fill="url(#bg)"/>
+  <rect x="84" y="92" width="1032" height="604" rx="34" fill="#f8fafc" stroke="#dbeafe" stroke-width="3"/>
+  <path d="M120 620h960" stroke="#dbeafe" stroke-width="3"/>
+  <g opacity=".65" stroke="#cbd5e1" stroke-width="3">
+    <path d="M164 168h208M852 164h184M142 216h132M910 218h126"/>
+  </g>
+  <rect x="176" y="546" width="820" height="74" rx="18" fill="url(#steel)"/>
+  <rect x="252" y="498" width="520" height="64" rx="12" fill="#94a3b8"/>
+  <path d="M286 532h448" stroke="#475569" stroke-width="12" stroke-linecap="round"/>
+  <rect x="210" y="482" width="86" height="34" rx="8" fill="#94a3b8"/>
+  <rect x="226" y="492" width="48" height="8" rx="4" fill="#64748b"/>
+  <path d="M728 528c46 25 96 25 142 0" stroke="#2563eb" stroke-width="14" stroke-linecap="round" filter="url(#glow)"/>
+  <circle cx="775" cy="528" r="52" fill="#bfdbfe" opacity=".72" filter="url(#glow)"/>
+  <path d="M789 506l130-124" stroke="#1e293b" stroke-width="20" stroke-linecap="round"/>
+  <path d="M900 382l58-55" stroke="#2563eb" stroke-width="28" stroke-linecap="round"/>
+  <path d="M382 432c28-118 110-188 218-188 139 0 232 108 220 256l-190 6c12-78-16-130-74-146-66-18-114 22-136 94z" fill="#1e293b"/>
+  <path d="M432 400c33-66 90-96 156-80 56 13 91 54 100 116l-202 6z" fill="#2563eb"/>
+  <rect x="424" y="424" width="276" height="96" rx="22" fill="#0f172a"/>
+  <rect x="502" y="452" width="116" height="34" rx="9" fill="#93c5fd"/>
+  <path d="M424 520c-78 54-129 118-158 195" stroke="#334155" stroke-width="42" stroke-linecap="round"/>
+  <path d="M676 516c68 34 118 88 151 166" stroke="#334155" stroke-width="42" stroke-linecap="round"/>
+  <path d="M254 716h186M810 696h176" stroke="#1e293b" stroke-width="42" stroke-linecap="round"/>
+  <path d="M340 310l-58-74M738 264l86-70" stroke="#cbd5e1" stroke-width="10" stroke-linecap="round"/>
+  <g fill="#2563eb" opacity=".95">
+    <path d="M746 430l-48-82 82 48z"/>
+    <path d="M830 482l88-28-60 70z"/>
+    <path d="M714 574l-82 48 48-82z"/>
+    <path d="M882 574l82 42-92 8z"/>
+  </g>
+  <g font-family="Inter,Arial,sans-serif" font-weight="800">
+    <rect x="812" y="128" width="174" height="58" rx="18" fill="#fff" stroke="#dbeafe"/>
+    <circle cx="842" cy="157" r="10" fill="#16a34a"/>
+    <text x="862" y="164" font-size="17" fill="#1e293b">VT evidence OK</text>
   </g>
 </svg>
