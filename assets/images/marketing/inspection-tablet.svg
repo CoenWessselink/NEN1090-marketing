@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="640" viewBox="0 0 960 640" role="img" aria-labelledby="title desc">
+  <title id="title">Inspector reviewing weld evidence on a tablet</title>
+  <desc id="desc">A QA inspector uses a tablet to review weld status, photos, WPS and compliance evidence.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#eff6ff"/>
+    </linearGradient>
+  </defs>
+  <rect width="960" height="640" rx="36" fill="url(#bg)"/>
+  <rect x="118" y="412" width="724" height="54" rx="16" fill="#cbd5e1"/>
+  <rect x="174" y="360" width="408" height="66" rx="14" fill="#94a3b8"/>
+  <path d="M214 393h330" stroke="#475569" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="352" cy="236" r="58" fill="#bfdbfe"/>
+  <path d="M296 360c14-62 52-94 112-94s100 32 118 94z" fill="#1e293b"/>
+  <path d="M308 222c18-52 70-72 116-45 35 20 46 57 34 95l-78-10c-11-32-35-43-72-40z" fill="#0f172a"/>
+  <rect x="596" y="168" width="218" height="316" rx="28" fill="#0f172a"/>
+  <rect x="614" y="192" width="182" height="268" rx="18" fill="#ffffff"/>
+  <rect x="632" y="214" width="146" height="36" rx="10" fill="#eff6ff"/>
+  <text x="650" y="238" font-family="Inter,Arial,sans-serif" font-size="14" font-weight="800" fill="#2563eb">INS-2024-156</text>
+  <g fill="#f8fafc" stroke="#e2e8f0">
+    <rect x="632" y="270" width="146" height="42" rx="10"/>
+    <rect x="632" y="326" width="146" height="42" rx="10"/>
+    <rect x="632" y="382" width="146" height="42" rx="10"/>
+  </g>
+  <g font-family="Inter,Arial,sans-serif" font-size="13" fill="#64748b">
+    <text x="650" y="296">WPS linked</text>
+    <text x="650" y="352">Photo evidence</text>
+    <text x="650" y="408">Compliance 92%</text>
+  </g>
+  <circle cx="758" cy="292" r="10" fill="#16a34a"/>
+  <circle cx="758" cy="348" r="10" fill="#16a34a"/>
+  <circle cx="758" cy="404" r="10" fill="#2563eb"/>
+  <path d="M526 360l96 42" stroke="#334155" stroke-width="28" stroke-linecap="round"/>
+  <path d="M300 361l-108 54" stroke="#334155" stroke-width="28" stroke-linecap="round"/>
+</svg>
