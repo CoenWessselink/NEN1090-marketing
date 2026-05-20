@@ -25,7 +25,7 @@ Dat stond alle inline scripts toe. De marketing HTML bevat een vaste inline Goog
 `script-src 'unsafe-inline'` is verwijderd en vervangen door een exacte SHA-256 hash van de bestaande inline Google Analytics bootstrap:
 
 ```txt
-'sha256-zZWxRMs5taVUYDE28c5FoBq5cxWAp7sh+7SsYVvjs='
+'sha256-zZWxRMs5taVUYDE28c5FoBuFq5cxWAp7sh+7SsYVvjs='
 ```
 
 Daarnaast zijn aanvullende Google Analytics connect endpoints toegestaan:
