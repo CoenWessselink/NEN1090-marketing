@@ -3,7 +3,7 @@
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://weldinspectpro.com https://app.weldinspectpro.com https://www.google-analytics.com
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data: https:; font-src 'self' data: https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'sha256-zZWxRMs5taVUYDE28c5FoBuFq5cxWAp7sh+7SsYVvjs=' https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://weldinspectpro.com https://app.weldinspectpro.com https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com
   Cache-Control: no-cache, must-revalidate
 
 /checkout.html
