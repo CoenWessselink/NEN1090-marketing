@@ -1,7 +1,6 @@
-const API_BASE_URL = 'https://nen1090-api-prod-f5ddagedbrftb4ew.westeurope-01.azurewebsites.net';
-
 function apiBase(env = {}) {
-  return String(env.API_BASE_URL || env.VITE_API_BASE_URL || env.WELDINSPECT_API_BASE_URL || API_BASE_URL).replace(/\/+$/, '');
+  const configured = String(env.API_BASE_URL || env.VITE_API_BASE_URL || env.WELDINSPECT_API_BASE_URL || '').trim().replace(/\/+$/, '');
+  return configured;
 }
 
 function routePath(paramsPath) {
@@ -28,7 +27,7 @@ function jsonResponse(request, status, payload) {
       ...cors(request),
       'Content-Type': 'application/json; charset=utf-8',
       'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0',
-      'X-WIP-Proxy-Version': '2026-04-30-hard-buffered'
+      'X-WIP-Proxy-Version': '2026-05-20-env-required'
     }
   });
 }
@@ -62,8 +61,20 @@ export async function onRequest(context) {
     return new Response(null, { status: 204, headers: cors(request) });
   }
 
+  const baseUrl = apiBase(env);
+  if (!baseUrl) {
+    return jsonResponse(request, 500, {
+      ok: false,
+      success: false,
+      error: {
+        code: 'API_BASE_URL_NOT_CONFIGURED',
+        message: 'Cloudflare API proxy is niet geconfigureerd. Zet API_BASE_URL of WELDINSPECT_API_BASE_URL in de Pages environment variables.'
+      }
+    });
+  }
+
   const url = new URL(request.url);
-  const targetUrl = `${apiBase(env)}/${routePath(params.path || [])}${url.search}`;
+  const targetUrl = `${baseUrl}/${routePath(params.path || [])}${url.search}`;
 
   let upstream;
   try {
@@ -107,8 +118,8 @@ export async function onRequest(context) {
   for (const [key, value] of Object.entries(cors(request))) headers.set(key, value);
   headers.set('Content-Type', upstream.headers.get('Content-Type') || 'application/json; charset=utf-8');
   headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
-  headers.set('X-WIP-Proxy-Target', apiBase(env));
-  headers.set('X-WIP-Proxy-Version', '2026-04-30-hard-buffered');
+  headers.set('X-WIP-Proxy-Target', baseUrl);
+  headers.set('X-WIP-Proxy-Version', '2026-05-20-env-required');
   headers.set('X-WIP-Proxy-Buffered', '1');
 
   return new Response(body, { status: upstream.status, statusText: upstream.statusText, headers });
