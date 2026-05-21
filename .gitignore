@@ -1,2 +1,13 @@
 node_modules/
 .wrangler/
+
+# Local/generated marketing build notes and self-check reports.
+# Archive needed notes under docs/archive/root-notes/.
+FASE*.md
+PHASE*.txt
+README-FASE*.md
+README-FULL-*.md
+README_FASE*.md
+STATIC_*_SELF_CHECK.txt
+ZELFCONTROLE-*.md
+CONTENT_EXPANSION_SELF_CHECK.txt
