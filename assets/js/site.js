@@ -25,6 +25,44 @@ function normalizeLoginLinks() {
     .forEach((link) => link.setAttribute('href', APP_LOGIN_URL));
 }
 
+function ensureLoginActions() {
+  const header = document.querySelector('.site-header');
+  if (!header) return;
+
+  const isDutch = String(document.documentElement.lang || '').toLowerCase().startsWith('nl');
+  const label = isDutch ? 'Inloggen' : 'Login';
+  const containers = [header.querySelector('.nav-actions'), header.querySelector('#mobileMenu')];
+
+  containers.forEach((container) => {
+    if (!container || container.querySelector(`a[href="${APP_LOGIN_URL}"]`)) return;
+    const login = document.createElement('a');
+    login.className = 'btn btn-ghost';
+    login.href = APP_LOGIN_URL;
+    login.textContent = label;
+    const primary = container.querySelector('.btn-primary');
+    if (primary) container.insertBefore(login, primary);
+    else container.appendChild(login);
+  });
+}
+
+function setGlobalPricingSubscriptionLinks() {
+  const path = window.location.pathname.replace(/\/+$/, '');
+  if (path !== '/pricing.html') return;
+
+  const plans = document.querySelectorAll('.price-grid .price-box');
+  const monthly = plans[0] && plans[0].querySelector('a.btn');
+  const yearly = plans[1] && plans[1].querySelector('a.btn');
+
+  if (monthly) {
+    monthly.setAttribute('href', '/nl/checkout.html?cycle=monthly');
+    monthly.textContent = 'Continue to payment';
+  }
+  if (yearly) {
+    yearly.setAttribute('href', '/nl/checkout.html?cycle=yearly');
+    yearly.textContent = 'Continue to payment';
+  }
+}
+
 function parseSeatCount(value) {
   const raw = String(value || '').trim();
   if (!raw) return 3;
@@ -186,6 +224,8 @@ function bindMobileMenu() {
 
 window.addEventListener('DOMContentLoaded', () => {
   normalizeLoginLinks();
+  ensureLoginActions();
+  setGlobalPricingSubscriptionLinks();
   bindMobileMenu();
   bindLeadForms();
 });
