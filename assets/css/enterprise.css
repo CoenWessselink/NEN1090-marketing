@@ -1,5 +1,5 @@
-/* ============================================================
-   WELDINSPECT PRO — Enterprise Design System
+﻿/* ============================================================
+   WELDINSPECT PRO â€” Enterprise Design System
    Premium industrial SaaS visual language
    ============================================================ */
 
@@ -471,7 +471,7 @@ p { color: var(--muted); line-height: 1.7; }
 }
 
 /* ============================================================
-   V2 — ENTERPRISE PREMIUM UPGRADES
+   V2 â€” ENTERPRISE PREMIUM UPGRADES
    Deeper depth, parallax, mega menu, richer cards
    ============================================================ */
 
@@ -601,7 +601,7 @@ p { color: var(--muted); line-height: 1.7; }
 .plan-features li {
   display: flex; gap: 10px; font-size: 14px; font-weight: 600; color: var(--slate);
 }
-.plan-features li::before { content: '✓'; color: var(--brand); font-weight: 900; }
+.plan-features li::before { content: 'âœ“'; color: var(--brand); font-weight: 900; }
 .price-card-ent .btn { margin-top: auto; width: 100%; justify-content: center; }
 
 /* Enterprise plan extras */
@@ -666,6 +666,106 @@ p { color: var(--muted); line-height: 1.7; }
 .knowledge-card h3 { font-size: 18px; margin-bottom: 8px; }
 .knowledge-card p { font-size: 14px; color: var(--muted); line-height: 1.6; }
 
+/*
+  =============================================
+  Cinematic Hero Section
+  A premium filmic hero for the Dutch landing page and other marketing pages.
+  Uses a dark overlay on top of a background image to ensure text contrast.
+  Adjust responsive typography and spacing for mobile.
+*/
+.cinematic-hero {
+  position: relative;
+  padding: 120px 0 100px;
+  background: url('../images/marketing/hero-welder-action.jpg') center/cover no-repeat;
+  color: #fff;
+  overflow: hidden;
+}
+.cinematic-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15,23,42,0.75) 0%, rgba(15,23,42,0.9) 100%);
+  z-index: 0;
+}
+.cinematic-hero .container {
+  position: relative;
+  z-index: 1;
+}
+.cinematic-hero .eyebrow {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  color: rgba(255,255,255,0.85);
+}
+.cinematic-hero h1 {
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  color: #fff;
+}
+.cinematic-hero .lead {
+  font-size: 18px;
+  line-height: 1.7;
+  max-width: 620px;
+  margin-bottom: 32px;
+  color: rgba(255,255,255,0.9);
+}
+.cinematic-hero .hero-actions {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.cinematic-hero .trust-row {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.85);
+  flex-wrap: wrap;
+}
+
+/* override hero-grid for cinematic hero to prevent empty second column */
+.cinematic-hero .hero-grid {
+  display: block;
+}
+.cinematic-hero .btn-primary {
+  background: var(--blue);
+  color: #fff;
+}
+.cinematic-hero .btn-primary:hover {
+  background: var(--blue-dark);
+  box-shadow: 0 4px 12px rgba(37,99,235,0.5);
+  transform: translateY(-2px);
+}
+.cinematic-hero .btn-outline {
+  border: 1.5px solid rgba(255,255,255,0.6);
+  color: #fff;
+  background: transparent;
+}
+.cinematic-hero .btn-outline:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: #fff;
+}
+@media (max-width: 760px) {
+  .cinematic-hero {
+    padding: 100px 0 80px;
+  }
+  .cinematic-hero h1 {
+    font-size: 36px;
+  }
+  .cinematic-hero .lead {
+    font-size: 16px;
+  }
+  .cinematic-hero .hero-actions {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
 /* ====== V2 RESPONSIVE ====== */
 @media (max-width: 1180px) {
   .mega-menu { display: none; }
@@ -679,3 +779,4 @@ p { color: var(--muted); line-height: 1.7; }
   .ent-testimonial { padding: 28px; }
   .ent-testimonial blockquote { font-size: 17px; }
 }
+
