@@ -1,0 +1,19 @@
+/* WeldInspect Pro — premium completion compatibility and claim-safety layer */
+.premium-hero .dash-nav{position:static;top:auto;bottom:auto;width:auto;display:grid;align-content:start;gap:8px;padding:18px 11px;background:#0f1f37;border:0;overflow:visible}
+.premium-hero .dash-nav span{padding:9px;border-radius:8px;color:#9fb0c9;font-size:11px;font-weight:700}
+.premium-hero .dash-nav span.active{background:#2563eb;color:#fff}
+.premium-hero .dash-content{margin-left:0;padding:22px;background:#fff}
+.premium-hero .dash-title{margin-left:0;font-size:initial}
+.premium-hero .hero-actions{margin-bottom:0}
+.premium-hero .trust-pills{margin-bottom:0}
+.pricing-hero{padding:88px 0 56px;text-align:center;background:linear-gradient(180deg,#fff,#f8fafc)}
+.pricing-grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.price-card-ent{display:flex;flex-direction:column;padding:30px;border:1px solid #e2e8f0;border-radius:22px;background:#fff}
+.price-card-ent.featured{border:2px solid #2563eb;box-shadow:0 10px 34px rgba(15,23,42,.08)}
+.plan-name{font-weight:800;color:#081426;margin-bottom:15px}.plan-price{font-size:38px;font-weight:850;letter-spacing:-.04em;color:#081426}.plan-price small{font-size:14px;color:#64748b;font-weight:600}.plan-period,.plan-desc{font-size:13px;color:#64748b;margin:8px 0 20px}
+.plan-features{display:grid;gap:10px;list-style:none;margin-bottom:28px;flex:1}.plan-features li{display:flex;gap:10px;color:#334155;font-size:14px}.plan-features li::before{content:"✓";font-weight:900;color:#16a34a}.plan-extras{display:flex;flex-wrap:wrap;gap:7px;margin-top:20px;padding-top:18px;border-top:1px solid #e2e8f0}.plan-extras h4{width:100%;margin-bottom:4px}.plan-extras span{font-size:11px;font-weight:700;padding:5px 8px;background:#eff6ff;color:#2563eb;border-radius:999px}
+.ent-cta,.cta-section{padding:78px 0;background:#071426}.ent-cta-grid,.cta-box{display:grid;grid-template-columns:1.2fr .8fr;gap:30px;align-items:center}.ent-cta h2,.cta-content h2{color:#fff;margin-bottom:13px}.ent-cta p,.cta-content p{color:#cbd5e1;margin-bottom:25px}.ent-cta-buttons,.cta-buttons{display:flex;flex-wrap:wrap;gap:12px}.ent-cta-benefits,.cta-benefits{display:grid;gap:11px}.ent-cta-benefit,.cta-benefits span{padding:13px 15px;border:1px solid rgba(148,163,184,.23);border-radius:12px;color:#e2e8f0;font-weight:650;background:rgba(255,255,255,.05)}
+/* Customer-proof and logo strips stay hidden until verifiable publication rights exist. */
+.clients-section,.ent-clients{display:none!important}
+@media(max-width:900px){.pricing-grid-3,.ent-cta-grid,.cta-box{grid-template-columns:1fr}}
+@media(max-width:760px){.premium-hero .dash-nav{display:flex;overflow:hidden;padding:11px}.premium-hero .dash-content{padding:14px}}

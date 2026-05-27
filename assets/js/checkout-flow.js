@@ -16,8 +16,12 @@
   const form = document.querySelector('[data-checkout-form]') || document.getElementById('checkoutForm');
   if (!form) return;
 
-  let cycle = form.querySelector('[name="billing_cycle"]')?.value || 'yearly';
-  let seats = Number(form.querySelector('[name="seats"]')?.value || 1);
+  const params = new URLSearchParams(location.search);
+  const requestedCycle = params.get('cycle');
+  let cycle = requestedCycle === 'monthly' || requestedCycle === 'yearly'
+    ? requestedCycle
+    : (form.querySelector('[name="billing_cycle"]')?.value || 'yearly');
+  let seats = Number(params.get('seats') || form.querySelector('[name="seats"]')?.value || 1);
   let prices = { ...DEFAULT_PRICES };
   let experiment = null;
 
