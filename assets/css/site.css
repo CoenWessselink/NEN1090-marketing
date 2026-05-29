@@ -771,3 +771,40 @@ html[lang="nl"] .workflow-grid article:after{display:none}
 /* Responsive for new sections */
 @media(max-width:1180px){.trust-bar-grid{grid-template-columns:repeat(3,1fr)}.feature-grid-4{grid-template-columns:repeat(2,1fr)!important}.analytics-grid{grid-template-columns:1fr}.analytics-metrics{grid-template-columns:1fr 1fr}.mobile-grid{grid-template-columns:1fr}.cta-box{grid-template-columns:1fr}.clients-grid{grid-template-columns:repeat(4,1fr)}}
 @media(max-width:760px){.trust-bar-grid{grid-template-columns:1fr 1fr}.feature-grid-4{grid-template-columns:1fr!important}.photo-strip-grid{grid-template-columns:1fr}.photo-card img{height:240px}.analytics-metrics{grid-template-columns:1fr}.mobile-grid{grid-template-columns:1fr}.device-frame{width:180px}.cta-section{padding:46px 0}.cta-content h2{font-size:28px}.cta-buttons{flex-direction:column}.clients-grid{grid-template-columns:repeat(2,1fr)}.trace-visual{min-height:240px}}
+
+/* Final brand and checkout consistency pass */
+.brand,.brandbar .brand,.site-header .brand,.navbar .brand{display:inline-flex!important;align-items:center!important;gap:12px!important;text-decoration:none!important;color:#0f172a!important}
+.brand .brand-mark,.brandbar .brand .brand-mark,.site-header .brand .brand-mark{width:40px!important;height:40px!important;border-radius:12px!important;clip-path:none!important;background:linear-gradient(145deg,#60a5fa,#2563eb 56%,#1d4ed8)!important;color:#fff!important;display:grid!important;place-items:center!important;font-size:18px!important;font-weight:900!important;line-height:1!important;box-shadow:0 14px 30px rgba(37,99,235,.25),inset 0 1px 0 rgba(255,255,255,.3)!important}
+.brand strong,.brand-title,.logo-name{display:block!important;color:#0f172a!important;font-size:15px!important;line-height:1.05!important;font-weight:900!important;letter-spacing:.03em!important;text-transform:uppercase!important}
+.brand em,.brand b,.brand-title b,.logo-name strong{font-style:normal!important;color:#2563eb!important}
+.brand small,.brand-sub,.logo-sub{display:block!important;color:#64748b!important;font-size:8px!important;letter-spacing:.16em!important;text-transform:uppercase!important;font-weight:800!important;margin-top:3px!important}
+
+.checkout-hero .checkout-shell,.checkout-hero .summary-card{background:#fff!important;color:#0f172a!important;border:1px solid #dbeafe!important;box-shadow:0 24px 70px rgba(15,23,42,.08)!important}
+.checkout-hero .checkout-head p,.checkout-hero .note,.checkout-hero .secure-note,.checkout-hero .pay-help,.checkout-hero .price-sub{color:#64748b!important}
+.checkout-hero .trust,.checkout-hero .plan-option,.checkout-hero .summary-mini,.checkout-hero .payment-panel{background:#fff!important;color:#0f172a!important;border:1px solid #e2e8f0!important}
+.checkout-hero .trust span,.checkout-hero .plan-option,.checkout-hero .summary-line,.checkout-hero .summary-line strong,.checkout-hero .payment-panel h3{color:#0f172a!important}
+.checkout-hero .trust span:before,.checkout-hero .btn:before,.checkout-hero .btn:after,.checkout-hero .pay-help:before{display:none!important}
+.checkout-hero .plan-option.active{border-color:#2563eb!important;background:linear-gradient(180deg,#fff,#eff6ff)!important;box-shadow:0 18px 42px rgba(37,99,235,.12)!important}
+.checkout-hero .plan-option:not(.active):before{background:#fff!important}
+.checkout-hero .plan-option.active:before{content:""!important;background:#0ea5e9!important;border-color:#0ea5e9!important}
+.checkout-hero .form-grid input,.checkout-hero .form-grid select{background:#fff!important;color:#0f172a!important;border-color:#cbd5e1!important;padding-left:13px!important}
+.checkout-hero .field span{display:none!important}
+.checkout-hero .pill.green{background:#eff6ff!important;color:#2563eb!important;border-color:#bfdbfe!important}
+.checkout-hero .pill.orange{background:#2563eb!important;color:#fff!important;box-shadow:none!important}
+.checkout-hero .seat-button,.checkout-hero .seat-count,.checkout-hero .seat-quick{background:#fff!important;color:#0f172a!important;border-color:#bfdbfe!important}
+.checkout-hero .summary-icon,.checkout-hero .summary-title .doc{font-size:0!important}
+.checkout-hero .pay-logo.apple{font-size:0!important}
+.checkout-hero .pay-logo.apple:before{content:"Apple Pay";font-size:16px}
+.checkout-hero .summary-total strong{color:#2563eb!important}
+.checkout-hero .btn{color:#fff!important;box-shadow:0 18px 34px rgba(37,99,235,.22)!important}
+.brandbar nav a{color:#0f172a!important}
+.brandbar nav a.login{background:#fff!important;color:#2563eb!important;border-color:#dbeafe!important}
+@media(max-width:760px){
+  .page-hero .container,.contact-layout{width:min(100% - 78px,312px)!important}
+  .page-hero h1{font-size:28px!important;line-height:1.12!important;max-width:100%!important}
+  .page-hero .lead{font-size:15px!important;line-height:1.65!important;max-width:100%!important}
+  .page-hero h1,.page-hero .lead,.contact-card h2,.contact-card p,.contact-option strong,.contact-option span{overflow-wrap:anywhere!important;word-break:break-word!important}
+  .contact-email{font-size:18px!important;word-break:normal!important;overflow-wrap:normal!important}
+  .contact-layout,.contact-card,.option-stack,.contact-option{min-width:0;max-width:100%}
+  .contact-option{display:grid!important;grid-template-columns:1fr;align-items:start!important}
+}

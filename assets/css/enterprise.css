@@ -56,3 +56,13 @@
 @media(max-width:760px){.pricing-hero .container{width:min(280px,calc(100% - 30px))}.pricing-hero h1{font-size:38px;line-height:1.06}.pricing-summary-card p,.summary-list span{overflow-wrap:anywhere}.pricing-hero .hero-actions{width:100%}.pricing-summary-card strong{font-size:44px}.pricing-hero-grid{gap:28px}}
 @media(max-width:420px){.trustbar-grid,.footer-grid{grid-template-columns:1fr}.brand small{display:none}.module-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation:none!important;transition-duration:.01ms!important}}
+
+@media(max-width:760px){
+  .page-hero .container,.contact-layout{width:min(100% - 78px,312px)!important}
+  .page-hero h1{font-size:28px!important;line-height:1.12!important;max-width:100%!important}
+  .page-hero .lead{font-size:15px!important;line-height:1.65!important;max-width:100%!important}
+  .page-hero h1,.page-hero .lead,.contact-card h2,.contact-card p,.contact-option strong,.contact-option span{overflow-wrap:anywhere!important;word-break:break-word!important}
+  .contact-email{font-size:18px!important;word-break:normal!important;overflow-wrap:normal!important}
+  .contact-layout,.contact-card,.option-stack,.contact-option{min-width:0;max-width:100%}
+  .contact-option{display:grid!important;grid-template-columns:1fr;align-items:start!important}
+}
