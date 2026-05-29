@@ -25,6 +25,16 @@ function normalizeLoginLinks() {
     .forEach((link) => link.setAttribute('href', APP_LOGIN_URL));
 }
 
+function normalizeBranding() {
+  const canonicalBrand = '<span class="brand-mark" aria-hidden="true">W</span><span><strong>WELDINSPECT <em>PRO</em></strong><small>Weld inspection &amp; documentation</small></span>';
+  document.querySelectorAll('.brand').forEach((brand) => {
+    brand.innerHTML = canonicalBrand;
+    if (!brand.getAttribute('aria-label')) {
+      brand.setAttribute('aria-label', brand.tagName === 'A' ? 'WeldInspect Pro home' : 'WeldInspect Pro');
+    }
+  });
+}
+
 function ensureLoginActions() {
   const header = document.querySelector('.site-header');
   if (!header) return;
@@ -223,6 +233,7 @@ function bindMobileMenu() {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
+  normalizeBranding();
   normalizeLoginLinks();
   ensureLoginActions();
   setGlobalPricingSubscriptionLinks();

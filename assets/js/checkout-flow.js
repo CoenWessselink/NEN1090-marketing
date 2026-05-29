@@ -1,7 +1,8 @@
 (() => {
   const API_BASE = window.WELDINSPECT_API_BASE || '';
-  const DEFAULT_PRICES = { monthly: 5900, yearly: 49000 };
   const VAT_RATE = 0.21;
+  const DEFAULT_PRICES = { monthly: 4876, yearly: 49000 };
+  const PUBLISHED_GROSS_PRICES = { monthly: 5900, yearly: 59290 };
   const MIN_SEATS = 1;
   const MAX_SEATS = 100;
   const euro = (cents) => new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR' }).format((Number(cents) || 0) / 100);
@@ -67,9 +68,15 @@
       const plans = body.plans || [];
       const monthly = plans.find((p) => p.billing_cycle === 'monthly' || p.code === 'monthly');
       const yearly = plans.find((p) => p.billing_cycle === 'yearly' || p.code === 'yearly');
-      if (monthly?.price_per_seat_cents) prices.monthly = Number(monthly.price_per_seat_cents);
-      if (yearly?.price_per_seat_cents) prices.yearly = Number(yearly.price_per_seat_cents);
+      if (monthly?.price_per_seat_cents) prices.monthly = normalizeNetPrice(Number(monthly.price_per_seat_cents), 'monthly');
+      if (yearly?.price_per_seat_cents) prices.yearly = normalizeNetPrice(Number(yearly.price_per_seat_cents), 'yearly');
     } catch (_) {}
+  }
+
+  function normalizeNetPrice(cents, planCycle) {
+    if (!Number.isFinite(cents) || cents <= 0) return prices[planCycle] || DEFAULT_PRICES[planCycle];
+    if (cents === PUBLISHED_GROSS_PRICES[planCycle]) return Math.round(cents / (1 + VAT_RATE));
+    return cents;
   }
 
   function calc() {
@@ -100,7 +107,7 @@
     text('[data-price-subtotal]', euro(c.subtotal));
     text('[data-price-vat]', euro(c.vat));
     text('[data-price-total]', euro(c.total));
-    const yearlySave = Math.max(0, (prices.monthly * 12 - prices.yearly) * seats);
+    const yearlySave = Math.max(0, Math.round((prices.monthly * 12 - prices.yearly) * (1 + VAT_RATE)) * seats);
     text('[data-price-saving]', yearlySave ? `${euro(yearlySave)} voordeel per jaar` : 'Flexibel maandelijks');
   }
 
