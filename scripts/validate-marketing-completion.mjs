@@ -54,6 +54,46 @@ for (const file of ['nl/demo.html', 'nl/contact.html']) {
   if (!html.includes('privacy.html') || !html.includes('terms.html')) fail.push(`${file}: missing legal links`);
 }
 
+for (const file of ['contact.html', 'nl/contact.html']) {
+  const html = read(file);
+  if (!html.includes('mailto:info@weldinspectpro.com')) fail.push(`${file}: missing visible mailto contact route`);
+  if (!html.includes('info@weldinspectpro.com')) fail.push(`${file}: missing visible contact email`);
+}
+
+for (const file of [
+  'index.html',
+  'contact.html',
+  'pricing.html',
+  'demo.html',
+  'platform.html',
+  'inspections.html',
+  'reports.html',
+  'security.html',
+  'resources.html',
+  'standards.html',
+  'trial.html',
+]) {
+  const html = read(file);
+  for (const term of [
+    'GLOBAL WELDING COMPLIANCE',
+    'Enterprise Welding Compliance',
+    'Trusted by leading companies',
+    'audit-ready',
+    'guaranteed compliance',
+    'tenant isolation',
+    'Azure Blob Storage',
+    'AWS D1.1',
+    'ASME IX',
+    'API 1104',
+    'SSO/SAML',
+    'Enterprise SLA',
+    'API webhooks',
+  ]) {
+    if (html.toLowerCase().includes(term.toLowerCase())) fail.push(`${file}: unsafe or legacy public claim "${term}"`);
+  }
+  if (file !== 'pricing.html' && html.includes('Normen')) fail.push(`${file}: mixed Dutch navigation/content on English route`);
+}
+
 const forbiddenVisible = ['Hoofdkeyword', 'Secundaire keywords', 'Secundair:', 'Interne SEO-silo', 'SEO cluster'];
 for (const file of walk(root)) {
   const html = read(file);
