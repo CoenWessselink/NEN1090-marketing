@@ -44,6 +44,8 @@ function ensureVisualPremiumStyles() {
   document.head.appendChild(link);
 }
 
+ensureVisualPremiumStyles();
+
 function ensureLoginActions() {
   const header = document.querySelector('.site-header');
   if (!header) return;
