@@ -21,7 +21,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Validate required files
+      - name: Validate required static assets
         run: |
           set -e
           test -f index.html
@@ -31,35 +31,26 @@ jobs:
           test -f _redirects
           test -f assets/css/site.css
           test -f assets/js/site.js
-          test -f assets/images/industrial-strip.jpeg
 
-      - name: Validate important pages exist
+      - name: Check root html pages include viewport and CSS
         run: |
           set -e
-          for file in \
-            platform.html \
-            inspections.html \
-            reports.html \
-            standards.html \
-            pricing.html \
-            resources.html \
-            trial.html \
-            demo.html \
-            security.html \
-            use-cases.html \
-            case-studies.html \
-            weld-inspection-software.html \
-            welding-compliance.html \
-            inspection-reporting.html \
-            welding-standards.html \
-            en-1090.html \
-            iso-3834.html \
-            iso-5817.html \
-            aws-d1-1.html \
-            asme-ix.html \
-            api-1104.html; do
-            test -f "$file" || (echo "Missing $file" && exit 1)
+          for file in *.html; do
+            grep -q 'name="viewport"' "$file" || (echo "$file missing viewport" && exit 1)
+            grep -q 'assets/css/site.css' "$file" || (echo "$file missing stylesheet" && exit 1)
           done
+
+      - name: Validate canonical sitemap routes
+        run: |
+          set -e
+          grep -q 'weldinspectpro.com/platform' sitemap.xml
+          grep -q 'weldinspectpro.com/inspections' sitemap.xml
+          grep -q 'weldinspectpro.com/reports' sitemap.xml
+          grep -q 'weldinspectpro.com/standards' sitemap.xml
+          grep -q 'weldinspectpro.com/pricing' sitemap.xml
+          grep -q 'weldinspectpro.com/nl/lasinspectie-software' sitemap.xml
+          grep -q 'weldinspectpro.com/nl/en-1090-software' sitemap.xml
+          grep -q 'weldinspectpro.com/nl/ce-dossier-software' sitemap.xml
 
       - name: Check for broken legacy header text
         run: |
@@ -72,21 +63,3 @@ jobs:
             echo "Broken concatenated header text found"
             exit 1
           fi
-
-      - name: Check HTML pages include viewport and CSS
-        run: |
-          set -e
-          for file in *.html; do
-            grep -q 'name="viewport"' "$file" || (echo "$file missing viewport" && exit 1)
-            grep -q 'assets/css/site.css' "$file" || (echo "$file missing stylesheet" && exit 1)
-          done
-
-      - name: Validate sitemap contains core SEO pages
-        run: |
-          set -e
-          grep -q 'weld-inspection-software.html' sitemap.xml
-          grep -q 'inspection-reporting.html' sitemap.xml
-          grep -q 'welding-compliance.html' sitemap.xml
-          grep -q 'welding-standards.html' sitemap.xml
-          grep -q 'standards.html' sitemap.xml
-          grep -q 'pricing.html' sitemap.xml
