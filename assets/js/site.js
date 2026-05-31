@@ -35,6 +35,15 @@ function normalizeBranding() {
   });
 }
 
+function ensureVisualPremiumStyles() {
+  const href = '/assets/css/visual-premium.css?v=20260531';
+  if (document.querySelector(`link[href="${href}"]`) || document.querySelector('link[href^="/assets/css/visual-premium.css"]')) return;
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = href;
+  document.head.appendChild(link);
+}
+
 function ensureLoginActions() {
   const header = document.querySelector('.site-header');
   if (!header) return;
@@ -233,6 +242,7 @@ function bindMobileMenu() {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
+  ensureVisualPremiumStyles();
   normalizeBranding();
   normalizeLoginLinks();
   ensureLoginActions();
