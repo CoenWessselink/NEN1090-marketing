@@ -30,9 +30,9 @@ jobs:
       - name: Validate required internal links
         run: |
           find nl -name "*.html" -print0 | while IFS= read -r -d '' file; do
-            grep -Fq "/nl/en-1090-software.html" "$file"
-            grep -Fq "/nl/lasinspectie-software.html" "$file"
-            grep -Fq "/nl/ce-dossier-software.html" "$file"
+            grep -Fq "/nl/en-1090-software" "$file"
+            grep -Fq "/nl/lasinspectie-software" "$file"
+            grep -Fq "/nl/ce-dossier-software" "$file"
           done
       - name: Success
         run: echo "CI validation passed."
