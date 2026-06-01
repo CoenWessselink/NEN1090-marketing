@@ -3,6 +3,31 @@
 /checkout /nl/checkout 302
 /contact-sales /nl/contact 302
 
+/platform /platform.html 200
+/inspections /inspections.html 200
+/reports /reports.html 200
+/pricing /pricing.html 200
+/demo /demo.html 200
+/security /security.html 200
+/standards /standards.html 200
+/resources /resources.html 200
+/contact /contact.html 200
+/trial /trial.html 200
+/use-cases /use-cases.html 200
+/case-studies /case-studies.html 200
+/privacy /privacy.html 200
+/terms /terms.html 200
+/legal /legal.html 200
+/dpa /dpa.html 200
+
+/nl/lasinspectie-software /nl/lasinspectie-software.html 200
+/nl/en-1090-software /nl/en-1090-software.html 200
+/nl/ce-dossier-software /nl/ce-dossier-software.html 200
+/nl/prijzen /nl/prijzen.html 200
+/nl/demo /nl/demo.html 200
+/nl/contact /nl/contact.html 200
+/nl/trial /nl/trial.html 200
+
 /platform.html /platform 301
 /inspections.html /inspections 301
 /reports.html /reports 301
