@@ -112,7 +112,7 @@ for (const file of textFiles) {
 
 for (const file of htmlFiles) {
   const text = readFileSync(join(root, file), 'utf8');
-  if (!text.includes('assets/css/site.css')) violations.push(`${file}: missing stylesheet`);
+  if (!text.includes('assets/css/site.css') && !text.includes('assets/css/home-performance.css')) violations.push(`${file}: missing stylesheet`);
   if (!text.includes('assets/js/site.js')) violations.push(`${file}: missing script`);
   if (!/<title>[^<]{8,}<\/title>/i.test(text)) violations.push(`${file}: missing useful <title>`);
   if (!/<meta\s+name="description"\s+content="[^\"]{40,}"/i.test(text)) violations.push(`${file}: missing useful meta description`);

@@ -95,7 +95,7 @@ function normalizeHead(html, meta) {
     `<meta property="og:title" content="${esc(meta.title)}">`,
     `<meta property="og:description" content="${esc(meta.description)}">`,
     `<meta property="og:url" content="https://weldinspectpro.com${meta.route}">`,
-    `<meta property="og:image" content="https://weldinspectpro.com/assets/images/marketing/hero-welder-action.jpg">`,
+    `<meta property="og:image" content="https://weldinspectpro.com/assets/images/marketing/optimized/hero-welder-action.jpg">`,
     `<meta name="twitter:card" content="summary_large_image">`,
   ].join('\n');
 

@@ -8,7 +8,7 @@ function esc(value) {
   return String(value).replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 }
 
-function head({ title, description, canonical, image = '/assets/images/marketing/hero-welder-action.jpg', schema = [] }) {
+function head({ title, description, canonical, image = '/assets/images/marketing/optimized/hero-welder-action.jpg', schema = [] }) {
   const jsonLd = [
     {
       '@context': 'https://schema.org',
@@ -98,7 +98,7 @@ function standardPage(data) {
   }, `<section class="route-hero"><div class="container route-hero-grid"><div><p class="kicker">${data.kicker}</p><h1>${data.h1}</h1><p class="lead">${data.lead}</p><div class="hero-actions"><a class="btn btn-primary btn-large" href="/trial">Start free trial</a><a class="btn btn-outline btn-large" href="/demo">Book a demo</a></div></div><div class="route-hero-media"><img src="${data.image}" alt="${data.imageAlt}"><div class="media-card">${productMockup}</div></div></div></section>
 <section class="section"><div class="container standards-panel"><div><span class="eyebrow">Safe standards positioning</span><h2>${data.safeH2}</h2><p>WeldInspect Pro supports documentation workflows around relevant standards. Official standard texts, certification and formal conformity decisions remain leading. The software helps teams organise records, evidence and review status; it does not certify projects or replace competent engineering judgement.</p></div><div class="standard-tags">${data.tags.map(([label, href]) => `<a href="${href}">${label}</a>`).join('')}</div></div></section>
 <section class="section section-alt"><div class="container"><div class="section-head"><span class="kicker">Search intent</span><h2>${data.intentH2}</h2><p>${data.intentIntro}</p></div><div class="visual-card-grid">${data.intentCards.map(([h, p], i) => `<article class="visual-card"><span>${String(i + 1).padStart(2, '0')}</span><h3>${h}</h3><p>${p}</p></article>`).join('')}</div></div></section>
-<section class="section"><div class="container visual-split"><div><span class="kicker">Workflow detail</span><h2>${data.workflowH2}</h2><p>${data.workflowIntro}</p><ul class="check-list">${data.workflowBullets.map((item) => `<li>${item}</li>`).join('')}</ul></div><img src="/assets/images/marketing/report-preview.jpg" alt="Structured WeldInspect Pro documentation report preview"></div></section>
+<section class="section"><div class="container visual-split"><div><span class="kicker">Workflow detail</span><h2>${data.workflowH2}</h2><p>${data.workflowIntro}</p><ul class="check-list">${data.workflowBullets.map((item) => `<li>${item}</li>`).join('')}</ul></div><img src="/assets/images/marketing/optimized/report-preview.jpg" alt="Structured WeldInspect Pro documentation report preview"></div></section>
 <section class="section section-alt"><div class="container"><div class="section-head"><span class="kicker">What teams document</span><h2>${data.recordsH2}</h2></div><div class="workflow-grid">${data.records.map(([h, p], i) => `<article class="workflow-step"><div class="step-number">${i + 1}</div><h3>${h}</h3><p>${p}</p></article>`).join('')}</div></div></section>
 <section class="section"><div class="container"><div class="section-head"><span class="kicker">Internal links</span><h2>Related WeldInspect Pro workflows</h2><p>Use these pages to connect ${data.shortName} context with inspection, reporting, traceability and product workflows.</p></div><div class="seo-link-grid">${data.related.map(([label, text, href]) => `<a href="${href}">${label}<small>${text}</small></a>`).join('')}</div></div></section>
 <section class="section section-alt"><div class="container"><div class="section-head"><span class="kicker">FAQ</span><h2>Common questions about ${data.shortName} documentation workflows</h2></div><div class="route-panel">${faq.map(([q, a]) => `<article class="route-card"><h3>${q}</h3><p>${a}</p></article>`).join('')}</div></div></section>${finalCta()}`);
@@ -120,7 +120,7 @@ const standardPages = [
     workflowH2: 'From project setup to CE dossier handover',
     workflowIntro: 'WeldInspect Pro keeps EN 1090 project information connected while the work is active, so documentation does not have to be reconstructed at the end of the project.',
     recordsH2: 'Core EN 1090 records that stay connected',
-    image: '/assets/images/marketing/hero-welder-action.jpg',
+    image: '/assets/images/marketing/optimized/hero-welder-action.jpg',
     imageAlt: 'Welder working in a steel construction workshop',
     tags: [['EN 1090', '/en-1090'], ['ISO 3834', '/iso-3834'], ['ISO 5817', '/iso-5817'], ['WPS', '/iso-15609'], ['WPQ', '/iso-9606-1'], ['Material certificates', '/en-10204']],
     intentCards: [
@@ -148,7 +148,7 @@ const standardPages = [
     workflowH2: 'Bring welding quality records into one controlled workflow',
     workflowIntro: 'Instead of splitting quality evidence across folders and spreadsheets, WeldInspect Pro keeps welding documentation close to the project and weld records it belongs to.',
     recordsH2: 'Typical ISO 3834 workflow records',
-    image: '/assets/images/marketing/photo-inspector-tablet.jpg',
+    image: '/assets/images/marketing/optimized/photo-inspector-tablet.jpg',
     imageAlt: 'Inspector reviewing welding quality documentation on a tablet',
     tags: [['ISO 3834', '/iso-3834'], ['EN 1090', '/en-1090'], ['WPS', '/iso-15609'], ['WPQ', '/iso-9606-1'], ['Inspections', '/inspections'], ['Reports', '/reports']],
     intentCards: [
@@ -176,7 +176,7 @@ const standardPages = [
     workflowH2: 'Keep weld quality findings connected to the record they belong to',
     workflowIntro: 'Inspection evidence is easier to review when each finding, photo, comment and status is attached to a weld record rather than stored in separate folders.',
     recordsH2: 'Typical ISO 5817 inspection workflow records',
-    image: '/assets/images/marketing/photo-weld-closeup.jpg',
+    image: '/assets/images/marketing/optimized/photo-weld-closeup.jpg',
     imageAlt: 'Close-up of a weld prepared for visual inspection',
     tags: [['ISO 5817', '/iso-5817'], ['Inspections', '/inspections'], ['EN 1090', '/en-1090'], ['Reports', '/reports'], ['WPS', '/iso-15609'], ['Traceability', '/en-10204']],
     intentCards: [
@@ -204,7 +204,7 @@ const standardPages = [
     workflowH2: 'Connect procedure references to everyday project execution',
     workflowIntro: 'WeldInspect Pro keeps procedure context close to the weld register and inspection workflow so teams can see which documentation belongs where.',
     recordsH2: 'Typical WPS workflow records',
-    image: '/assets/images/marketing/report-preview.jpg',
+    image: '/assets/images/marketing/optimized/report-preview.jpg',
     imageAlt: 'WPS and project documentation preview',
     tags: [['WPS', '/iso-15609'], ['WPQ', '/iso-9606-1'], ['ISO 3834', '/iso-3834'], ['EN 1090', '/en-1090'], ['Inspections', '/inspections'], ['Reports', '/reports']],
     intentCards: [
@@ -232,7 +232,7 @@ const standardPages = [
     workflowH2: 'Keep qualification context visible during execution',
     workflowIntro: 'Instead of checking qualification context at the end, teams can keep references available where weld and inspection work is planned and reviewed.',
     recordsH2: 'Typical WPQ workflow records',
-    image: '/assets/images/marketing/inspectors-onsite.jpg',
+    image: '/assets/images/marketing/optimized/inspectors-onsite.jpg',
     imageAlt: 'QA/QC team reviewing welder qualification and project documentation',
     tags: [['WPQ', '/iso-9606-1'], ['WPS', '/iso-15609'], ['ISO 3834', '/iso-3834'], ['Inspections', '/inspections'], ['EN 1090', '/en-1090'], ['Reports', '/reports']],
     intentCards: [
@@ -260,7 +260,7 @@ const standardPages = [
     workflowH2: 'Connect certificates and heat numbers to project evidence',
     workflowIntro: 'Material evidence is easier to review when it is attached to the project and weld context instead of stored as separate PDFs without workflow status.',
     recordsH2: 'Typical material traceability workflow records',
-    image: '/assets/images/marketing/mobile-inspection.jpg',
+    image: '/assets/images/marketing/optimized/mobile-inspection.jpg',
     imageAlt: 'Inspector reviewing material traceability evidence on a tablet',
     tags: [['EN 10204', '/en-10204'], ['EN 1090', '/en-1090'], ['ISO 3834', '/iso-3834'], ['Inspections', '/inspections'], ['Reports', '/reports'], ['Platform', '/platform']],
     intentCards: [
@@ -285,9 +285,9 @@ function pricingPage() {
     title: 'WeldInspect Pro Pricing | Weld Inspection Software Plans and Demo',
     description: 'Review WeldInspect Pro pricing routes for weld inspection software, EN 1090 documentation, CE dossier workflows, WPS/WPQ context, traceability and reporting.',
     canonical: '/pricing',
-    image: '/assets/images/marketing/report-preview.jpg',
+    image: '/assets/images/marketing/optimized/report-preview.jpg',
     schema: [faqSchema(faq)],
-  }, `<section class="route-hero"><div class="container route-hero-grid"><div><p class="kicker">Pricing</p><h1>Pricing for weld inspection software, documentation and traceability workflows.</h1><p class="lead">Choose the evaluation route that fits your team: trial access for hands-on review, a product demo for workflow mapping, or a sales conversation for multi-team documentation needs.</p><div class="hero-actions"><a class="btn btn-primary btn-large" href="/trial">Start free trial</a><a class="btn btn-outline btn-large" href="/demo">Book a demo</a></div></div><div class="route-hero-media"><img src="/assets/images/marketing/report-preview.jpg" alt="WeldInspect Pro pricing and reporting workflow"><div class="media-card">${productMockup}</div></div></div></section>
+  }, `<section class="route-hero"><div class="container route-hero-grid"><div><p class="kicker">Pricing</p><h1>Pricing for weld inspection software, documentation and traceability workflows.</h1><p class="lead">Choose the evaluation route that fits your team: trial access for hands-on review, a product demo for workflow mapping, or a sales conversation for multi-team documentation needs.</p><div class="hero-actions"><a class="btn btn-primary btn-large" href="/trial">Start free trial</a><a class="btn btn-outline btn-large" href="/demo">Book a demo</a></div></div><div class="route-hero-media"><img src="/assets/images/marketing/optimized/report-preview.jpg" alt="WeldInspect Pro pricing and reporting workflow"><div class="media-card">${productMockup}</div></div></div></section>
 <section class="section"><div class="container"><div class="section-head"><span class="kicker">Plans</span><h2>Simple routes for different welding documentation teams</h2><p>Pricing should be easy to understand, but welding documentation workflows are not always identical. These routes help teams choose the right next step without hiding the practical implementation conversation.</p></div><div class="pricing-cards"><article class="pricing-card"><span>Starter</span><h3>Trial evaluation</h3><p>For small teams reviewing digital weld inspection, photo evidence and basic documentation workflows.</p><ul class="check-list"><li>Project and weld workflow review</li><li>Inspection and evidence capture</li><li>Trial access request route</li></ul><a class="btn btn-outline" href="/trial">Start Free Trial</a></article><article class="pricing-card featured"><span>Professional</span><h3>Demo-led setup</h3><p>For QA/QC teams that want to map EN 1090, ISO 3834, WPS/WPQ and dossier workflows before rollout.</p><ul class="check-list"><li>Workflow demo for projects and welds</li><li>WPS/WPQ and document context</li><li>Reporting and handover discussion</li></ul><a class="btn btn-primary" href="/demo">Book a Demo</a></article><article class="pricing-card"><span>Enterprise</span><h3>Custom conversation</h3><p>For larger organisations with multiple teams, project documentation roles or broader traceability requirements.</p><ul class="check-list"><li>Multi-team workflow review</li><li>Security and access discussion</li><li>Implementation scope alignment</li></ul><a class="btn btn-outline" href="/contact">Contact Sales</a></article></div></div></section>
 <section class="section section-alt"><div class="container"><div class="section-head"><span class="kicker">What affects scope</span><h2>What to consider before choosing a plan</h2></div><div class="visual-card-grid"><article class="visual-card"><span>01</span><h3>Number of projects</h3><p>Teams running many parallel steel projects may need stronger project templates, role separation and reporting routines.</p></article><article class="visual-card"><span>02</span><h3>Inspection workflow depth</h3><p>Visual checks, findings, photo evidence, open actions and review status can be phased in based on team maturity.</p></article><article class="visual-card"><span>03</span><h3>Documentation scope</h3><p>EN 1090, ISO 3834, WPS/WPQ, material traceability and CE dossier needs affect the best rollout path.</p></article><article class="visual-card"><span>04</span><h3>Handover expectations</h3><p>Teams that need structured reports and dossier readiness benefit from mapping output requirements early.</p></article></div></div></section>
 <section class="section"><div class="container"><div class="section-head"><span class="kicker">FAQ</span><h2>Pricing questions</h2></div><div class="route-panel">${faq.map(([q, a]) => `<article class="route-card"><h3>${q}</h3><p>${a}</p></article>`).join('')}</div></div></section>${finalCta()}`);
@@ -307,7 +307,7 @@ function corePage(data) {
     schema: [faqSchema(faq)],
   }, `<section class="route-hero"><div class="container route-hero-grid"><div><p class="kicker">${data.kicker}</p><h1>${data.h1}</h1><p class="lead">${data.lead}</p><div class="hero-actions"><a class="btn btn-primary btn-large" href="/trial">Start free trial</a><a class="btn btn-outline btn-large" href="/demo">Book a demo</a></div></div><div class="route-hero-media"><img src="${data.image}" alt="${data.imageAlt}"><div class="media-card">${productMockup}</div></div></div></section>
 <section class="section"><div class="container"><div class="section-head"><span class="kicker">SEO workflow overview</span><h2>${data.overviewH2}</h2><p>${data.overview}</p></div><div class="visual-card-grid">${data.cards.map(([h, p], i) => `<article class="visual-card"><span>${String(i + 1).padStart(2, '0')}</span><h3>${h}</h3><p>${p}</p></article>`).join('')}</div></div></section>
-<section class="section section-alt"><div class="container visual-split"><div><span class="kicker">Product detail</span><h2>${data.detailH2}</h2><p>${data.detail}</p><ul class="check-list">${data.bullets.map((item) => `<li>${item}</li>`).join('')}</ul></div><img src="/assets/images/marketing/mobile-inspection.jpg" alt="WeldInspect Pro workflow on a tablet"></div></section>
+<section class="section section-alt"><div class="container visual-split"><div><span class="kicker">Product detail</span><h2>${data.detailH2}</h2><p>${data.detail}</p><ul class="check-list">${data.bullets.map((item) => `<li>${item}</li>`).join('')}</ul></div><img src="/assets/images/marketing/optimized/mobile-inspection.jpg" alt="WeldInspect Pro workflow on a tablet"></div></section>
 <section class="section"><div class="container"><div class="section-head"><span class="kicker">Related pages</span><h2>Continue through the connected WeldInspect Pro workflow</h2></div><div class="seo-link-grid">${data.related.map(([label, text, href]) => `<a href="${href}">${label}<small>${text}</small></a>`).join('')}</div></div></section>
 <section class="section section-alt"><div class="container"><div class="section-head"><span class="kicker">FAQ</span><h2>${data.shortName} questions</h2></div><div class="route-panel">${faq.map(([q, a]) => `<article class="route-card"><h3>${q}</h3><p>${a}</p></article>`).join('')}</div></div></section>${finalCta()}`);
 }
@@ -345,7 +345,7 @@ const corePages = [
     overview: 'The platform page targets teams searching for a central system to replace disconnected spreadsheets, folders, photos and manual dossier preparation.',
     detailH2: 'Connect the shop floor, QA/QC and documentation team',
     detail: 'Every module is designed around a practical project workflow: plan the project, register welds, inspect work, attach evidence, review open actions and prepare handover output.',
-    image: '/assets/images/marketing/photo-inspector-tablet.jpg',
+    image: '/assets/images/marketing/optimized/photo-inspector-tablet.jpg',
     imageAlt: 'Inspector using WeldInspect Pro for project documentation',
     cards: [['Projects', 'Organise project scope, roles, documents and review context.'], ['Weld register', 'Use weld records as the anchor for status, evidence and traceability.'], ['Inspections', 'Capture visual checks, findings, photos and follow-up.'], ['Documents', 'Link certificates, drawings, reports and evidence to the right project.']],
     bullets: ['Project, weld and inspection records stay visible together.', 'WPS/WPQ and material certificates can support the same project context.', 'Open actions and report readiness are easier to review.', 'Handover output is built from connected records.'],
@@ -366,7 +366,7 @@ const corePages = [
     overview: 'Inspection teams need fast capture, clear status and evidence that remains connected to project documentation. This page targets that practical search intent.',
     detailH2: 'Record inspection work where the evidence belongs',
     detail: 'WeldInspect Pro keeps visual inspection results, photos, comments and open actions tied to the project, weld and documentation context.',
-    image: '/assets/images/marketing/mobile-inspection.jpg',
+    image: '/assets/images/marketing/optimized/mobile-inspection.jpg',
     imageAlt: 'Weld inspection evidence captured on a tablet',
     cards: [['Visual inspection', 'Record result states, comments and findings.'], ['Photo evidence', 'Attach photos to the relevant weld or finding.'], ['Open actions', 'Track follow-up from issue to review.'], ['Reporting', 'Use inspection data in handover output.']],
     bullets: ['Evidence is linked to weld records.', 'Inspection status stays visible to QA/QC teams.', 'Findings can be followed up before delivery.', 'Reports can be prepared from structured records.'],
@@ -387,7 +387,7 @@ const corePages = [
     overview: 'Teams searching for welding reports or CE dossier software usually want less manual copy-paste and fewer missing documents at the end of the project.',
     detailH2: 'Prepare handover before delivery pressure peaks',
     detail: 'WeldInspect Pro helps teams review report readiness, evidence completeness and document context during execution rather than after fabrication is finished.',
-    image: '/assets/images/marketing/report-preview.jpg',
+    image: '/assets/images/marketing/optimized/report-preview.jpg',
     imageAlt: 'WeldInspect Pro report preview for project handover',
     cards: [['Report readiness', 'See what evidence is available and what still needs attention.'], ['CE dossier context', 'Keep documents and evidence connected to project records.'], ['Traceability', 'Include material and certificate references where needed.'], ['Review output', 'Support clearer internal and external review conversations.']],
     bullets: ['Reports use structured project and inspection data.', 'Photos, documents and certificates stay attached to context.', 'Open points can be handled before handover.', 'Official decisions remain outside the software.'],
@@ -408,7 +408,7 @@ const corePages = [
     overview: 'Instead of thin link lists, the resources page now provides a clearer information architecture for standards, inspection evidence, reporting and traceability topics.',
     detailH2: 'Connect guidance to product workflows',
     detail: 'Every resource category links back to a product workflow so visitors can move from learning to evaluation without getting lost.',
-    image: '/assets/images/marketing/inspectors-onsite.jpg',
+    image: '/assets/images/marketing/optimized/inspectors-onsite.jpg',
     imageAlt: 'QA/QC team reviewing weld inspection resources',
     cards: [['Standards', 'EN 1090, ISO 3834, ISO 5817 and related documentation context.'], ['Inspection evidence', 'Guidance for findings, photos and follow-up.'], ['Traceability', 'Material certificates and heat number context.'], ['Dossier handover', 'Reporting and CE dossier preparation workflows.']],
     bullets: ['Clear categories for visitors and search engines.', 'Visible internal links to core product pages.', 'Safe standards language without unsupported claims.', 'FAQ and structured content for richer snippets.'],
@@ -429,7 +429,7 @@ const corePages = [
     overview: 'Search visitors often want to know whether the software fits their role. This page maps practical responsibilities to product workflows.',
     detailH2: 'From production records to project handover',
     detail: 'Each role can work with the same project context while focusing on the information they need most.',
-    image: '/assets/images/marketing/inspectors-onsite.jpg',
+    image: '/assets/images/marketing/optimized/inspectors-onsite.jpg',
     imageAlt: 'Team reviewing weld inspection use cases',
     cards: [['Steel fabricator', 'Keep production and documentation work aligned.'], ['QA/QC manager', 'See quality status, evidence and open actions.'], ['Welding coordinator', 'Manage WPS/WPQ and procedure context.'], ['Documentation team', 'Prepare dossier and handover output.']],
     bullets: ['Shared project records reduce duplicate work.', 'Inspection evidence remains linked to welds.', 'Document status is easier to review.', 'Handover preparation starts earlier.'],
@@ -450,7 +450,7 @@ const corePages = [
     overview: 'This page supports search intent around examples and case studies while staying honest: scenarios are workflow examples, not fabricated customer stories.',
     detailH2: 'Use scenarios to understand where the platform helps',
     detail: 'Each scenario shows how records connect across project setup, weld inspection, WPS/WPQ context, traceability and reporting.',
-    image: '/assets/images/marketing/photo-weld-closeup.jpg',
+    image: '/assets/images/marketing/optimized/photo-weld-closeup.jpg',
     imageAlt: 'Weld inspection workflow scenario',
     cards: [['Scattered evidence', 'Photos, notes and documents are brought into one project context.'], ['Open actions', 'Findings are tracked through review and completion.'], ['Dossier pressure', 'Handover output is prepared during execution.'], ['Traceability review', 'Certificates and heat numbers remain connected to project records.']],
     bullets: ['No fake testimonials or logos are used.', 'Examples stay focused on realistic workflows.', 'Internal links guide visitors to product pages.', 'Safe standards wording is maintained.'],

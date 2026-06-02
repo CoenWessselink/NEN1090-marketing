@@ -38,6 +38,7 @@ function normalizeBranding() {
 }
 
 function ensureVisualPremiumStyles() {
+  if (document.querySelector('link[href^="/assets/css/home-performance.css"]')) return;
   const href = '/assets/css/visual-premium.css?v=20260531';
   if (document.querySelector(`link[href="${href}"]`) || document.querySelector('link[href^="/assets/css/visual-premium.css"]')) return;
   const link = document.createElement('link');
@@ -45,8 +46,6 @@ function ensureVisualPremiumStyles() {
   link.href = href;
   document.head.appendChild(link);
 }
-
-ensureVisualPremiumStyles();
 
 function ensureLoginActions() {
   const header = document.querySelector('.site-header');
@@ -181,6 +180,8 @@ function bindLeadForms() {
 }
 
 async function fetchExperiment() {
+  const path = window.location.pathname.replace(/\/+$/, '');
+  if (!['/pricing', '/pricing.html', '/nl/prijzen', '/nl/prijzen.html'].includes(path)) return null;
   try {
     const res = await fetch('/api/v1/growth/experiments/pricing', {
       headers: { 'x-wip-visitor': getVisitor(), 'Accept': 'application/json' }
@@ -193,13 +194,24 @@ async function fetchExperiment() {
 }
 
 async function track(event, metadata = {}) {
-  try {
-    await fetch('/api/v1/analytics/events', {
+  const payload = JSON.stringify({ event_name: event, metadata });
+  const send = () => {
+    if (navigator.sendBeacon) {
+      const blob = new Blob([payload], { type: 'application/json' });
+      if (navigator.sendBeacon('/api/v1/analytics/events', blob)) return Promise.resolve();
+    }
+    return fetch('/api/v1/analytics/events', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'x-wip-visitor': getVisitor() },
-      body: JSON.stringify({ event_name: event, metadata })
-    });
-  } catch {}
+      body: payload,
+      keepalive: true
+    }).catch(() => {});
+  };
+  if (document.visibilityState === 'hidden') return send();
+  const schedule = window.requestIdleCallback || ((callback) => window.setTimeout(callback, 1800));
+  return new Promise((resolve) => {
+    schedule(() => send().finally(resolve), { timeout: 3500 });
+  });
 }
 
 function setMobileMenuState(button, menu, isOpen) {
@@ -257,9 +269,13 @@ window.addEventListener('DOMContentLoaded', () => {
 
 window.addEventListener('load', async () => {
   track('page_view', { path: location.pathname });
-  const exp = await fetchExperiment();
-  if (!exp || !exp.config || !exp.monthly_cents) return;
-  document.querySelectorAll('.price-card.featured strong').forEach((el) => {
-    el.textContent = '€' + (exp.monthly_cents / 100);
-  });
+  const runExperiment = async () => {
+    const exp = await fetchExperiment();
+    if (!exp || !exp.config || !exp.monthly_cents) return;
+    document.querySelectorAll('.price-card.featured strong').forEach((el) => {
+      el.textContent = '€' + (exp.monthly_cents / 100);
+    });
+  };
+  const schedule = window.requestIdleCallback || ((callback) => window.setTimeout(callback, 2200));
+  schedule(runExperiment, { timeout: 4500 });
 });
