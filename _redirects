@@ -28,22 +28,3 @@
 /nl/contact /nl/contact.html 200
 /nl/trial /nl/trial.html 200
 
-/platform.html /platform 301
-/inspections.html /inspections 301
-/reports.html /reports 301
-/pricing.html /pricing 301
-/demo.html /demo 301
-/security.html /security 301
-/standards.html /standards 301
-/resources.html /resources 301
-/contact.html /contact 301
-/trial.html /trial 301
-
-/nl/index.html /nl/ 301
-/nl/lasinspectie-software.html /nl/lasinspectie-software 301
-/nl/en-1090-software.html /nl/en-1090-software 301
-/nl/ce-dossier-software.html /nl/ce-dossier-software 301
-/nl/prijzen.html /nl/prijzen 301
-/nl/demo.html /nl/demo 301
-/nl/contact.html /nl/contact 301
-/nl/trial.html /nl/trial 301
