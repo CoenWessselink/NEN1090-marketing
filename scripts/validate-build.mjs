@@ -55,9 +55,35 @@ const requiredLegalLinks = [
   'dpa.html',
 ];
 
+const requiredCleanRouteIndexes = [
+  'platform/index.html',
+  'inspections/index.html',
+  'reports/index.html',
+  'pricing/index.html',
+  'demo/index.html',
+  'standards/index.html',
+  'resources/index.html',
+  'contact/index.html',
+  'trial/index.html',
+  'privacy/index.html',
+  'terms/index.html',
+  'legal/index.html',
+  'dpa/index.html',
+  'nl/lasinspectie-software/index.html',
+  'nl/en-1090-software/index.html',
+  'nl/ce-dossier-software/index.html',
+  'nl/prijzen/index.html',
+  'nl/demo/index.html',
+  'nl/contact/index.html',
+  'nl/trial/index.html',
+];
+
 const missing = required.filter((file) => !existsSync(join(root, file)));
 const violations = [];
 if (missing.length) violations.push(`Missing required files:\n${missing.join('\n')}`);
+
+const missingRouteIndexes = requiredCleanRouteIndexes.filter((file) => !existsSync(join(root, file)));
+if (missingRouteIndexes.length) violations.push(`Missing clean-route index files:\n${missingRouteIndexes.join('\n')}`);
 
 function listFiles(dir) {
   const entries = readdirSync(dir);
