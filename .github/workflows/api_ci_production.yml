@@ -37,7 +37,7 @@ jobs:
           set -e
           for file in *.html; do
             grep -q 'name="viewport"' "$file" || (echo "$file missing viewport" && exit 1)
-            grep -q 'assets/css/site.css' "$file" || (echo "$file missing stylesheet" && exit 1)
+            grep -Eq 'assets/css/(site|home-performance)\.css' "$file" || (echo "$file missing stylesheet" && exit 1)
           done
 
       - name: Validate canonical sitemap routes

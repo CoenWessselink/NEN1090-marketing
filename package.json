@@ -1,1 +1,1 @@
-{"name":"weldinspect-marketing","version":"1.0.0","private":true,"scripts":{"build":"node scripts/validate-build.mjs","validate":"node scripts/validate-build.mjs","test":"node scripts/validate-marketing-completion.mjs"},"devDependencies":{}}
+{"name":"weldinspect-marketing","version":"1.0.0","private":true,"scripts":{"build":"node scripts/validate-build.mjs","validate":"node scripts/validate-build.mjs","test":"node scripts/validate-marketing-completion.mjs"},"devDependencies":{"sharp":"^0.34.5"}}
