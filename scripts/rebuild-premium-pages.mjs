@@ -13,14 +13,12 @@ function head({ lang = 'en', title, description, canonical, nl, en, image = '/as
   return `<!doctype html>
 <html lang="${lang}">
 <head>
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-76WG0RRTNN"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-76WG0RRTNN');</script>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>${title}</title>
   <meta name="description" content="${description}">
   <link rel="canonical" href="https://weldinspectpro.com${canonical}">${alternates}
   <meta property="og:type" content="website"><meta property="og:title" content="${title}"><meta property="og:description" content="${description}"><meta property="og:url" content="https://weldinspectpro.com${canonical}"><meta property="og:image" content="https://weldinspectpro.com${image}">
   <meta name="theme-color" content="#071426"><link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="${css}"><link rel="stylesheet" href="${enterprise}"><link rel="stylesheet" href="${premium}">
 </head>`;
 }
