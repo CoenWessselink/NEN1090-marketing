@@ -26,7 +26,9 @@ function normalizeLoginLinks() {
 }
 
 function normalizeBranding() {
-  const canonicalBrand = '<span class="brand-mark" aria-hidden="true">W</span><span><strong>WELDINSPECT <em>PRO</em></strong><small>Weld inspection &amp; documentation</small></span>';
+  const isDutch = String(document.documentElement.lang || '').toLowerCase().startsWith('nl');
+  const tagline = isDutch ? 'Digitale lasinspectie &amp; dossieropbouw' : 'Weld inspection &amp; documentation';
+  const canonicalBrand = `<span class="brand-mark" aria-hidden="true">W</span><span><strong>WELDINSPECT <em>PRO</em></strong><small>${tagline}</small></span>`;
   document.querySelectorAll('.brand').forEach((brand) => {
     brand.innerHTML = canonicalBrand;
     if (!brand.getAttribute('aria-label')) {
