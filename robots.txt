@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 Sitemap: https://weldinspectpro.com/sitemap.xml
+Sitemap: https://weldinspectpro.com/sitemap-nl.xml
 Sitemap: https://weldinspectpro.com/legal-sitemap.xml

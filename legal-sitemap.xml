@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://weldinspectpro.com/legal.html</loc><lastmod>2026-05-02</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://weldinspectpro.com/terms.html</loc><lastmod>2026-05-02</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://weldinspectpro.com/privacy.html</loc><lastmod>2026-05-02</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://weldinspectpro.com/dpa.html</loc><lastmod>2026-05-02</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://weldinspectpro.com/acceptable-use.html</loc><lastmod>2026-05-02</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://weldinspectpro.com/billing-refund-policy.html</loc><lastmod>2026-05-02</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
-  <url><loc>https://weldinspectpro.com/service-availability.html</loc><lastmod>2026-05-02</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://weldinspectpro.com/acceptable-use.html</loc><lastmod>2026-06-03</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://weldinspectpro.com/billing-refund-policy.html</loc><lastmod>2026-06-03</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://weldinspectpro.com/dpa.html</loc><lastmod>2026-06-03</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://weldinspectpro.com/legal.html</loc><lastmod>2026-06-03</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://weldinspectpro.com/privacy.html</loc><lastmod>2026-06-03</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://weldinspectpro.com/service-availability.html</loc><lastmod>2026-06-03</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://weldinspectpro.com/terms.html</loc><lastmod>2026-06-03</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
 </urlset>
