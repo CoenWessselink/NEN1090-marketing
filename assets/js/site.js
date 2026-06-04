@@ -267,7 +267,12 @@ function ensureMobileMenuFallback() {
   fallback.className = 'mobile-fixed-menu-button';
   fallback.setAttribute('aria-label', sourceButton.getAttribute('aria-label') || 'Open menu');
   fallback.innerHTML = '<span></span><span></span><span></span>';
-  fallback.addEventListener('click', () => sourceButton.click());
+  fallback.addEventListener('click', (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const nextState = sourceButton.getAttribute('aria-expanded') !== 'true';
+    setMobileMenuState(sourceButton, menu, nextState);
+  });
   document.body.appendChild(fallback);
 }
 
