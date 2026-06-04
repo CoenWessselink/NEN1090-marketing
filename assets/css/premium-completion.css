@@ -59,3 +59,22 @@
 a:focus-visible,.product-shot-card:focus-visible,.knowledge-card:focus-visible,.showcase-feature:focus-visible,.showcase-mini:focus-visible{outline:3px solid #93c5fd;outline-offset:4px}
 @media(max-width:980px){.completion-grid,.completion-grid.reverse,.showcase-grid{grid-template-columns:1fr}.product-visual-gallery{grid-template-columns:repeat(2,1fr)}.process-lane,.conversion-steps,.pricing-depth .completion-faq{grid-template-columns:repeat(2,1fr)}.knowledge-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:620px){.completion-band{padding:52px 0}.product-visual-gallery,.process-lane,.conversion-steps,.knowledge-grid,.completion-faq,.pricing-depth .completion-faq{grid-template-columns:1fr}.completion-grid{gap:24px}.shot-caption{display:block}.completion-band h2{font-size:34px}.showcase-mini{grid-template-columns:1fr}.showcase-mini img{height:auto}.showcase-mini span{border-left:0;border-top:1px solid #e6eefc}.claim-safe-strip{font-size:13px}.product-shot-card{border-radius:16px}}
+.menu-button{flex:0 0 46px}
+.menu-button span{display:block!important;width:20px!important;height:2px!important;margin:5px auto!important;border-radius:999px!important;background:#0f172a!important}
+@media(max-width:620px){
+  .container{width:min(100% - 32px,1220px)}
+  .nav-shell,.brand{min-width:0}
+  .brand span:last-child{min-width:0}
+  .brand strong{font-size:13px;white-space:nowrap}
+  .brand small{display:none}
+  .menu-button{position:relative}
+  .menu-button::before{content:"";position:absolute;left:13px;right:13px;top:14px;height:2px;border-radius:999px;background:#0f172a;box-shadow:0 8px 0 #0f172a,0 16px 0 #0f172a}
+  .menu-button span{display:none!important}
+  .route-hero{overflow:hidden}
+  .route-hero h1{max-width:310px;font-size:32px;overflow-wrap:anywhere;hyphens:auto;text-wrap:balance}
+  .route-hero .lead{max-width:310px;font-size:16px;overflow-wrap:anywhere}
+  .route-hero .hero-actions{display:grid;grid-template-columns:1fr;width:100%;max-width:310px}
+  .route-hero .hero-actions .btn{width:100%;min-width:0}
+  .section-head{max-width:310px}
+  .section-head h2{font-size:29px;overflow-wrap:anywhere;text-wrap:balance}
+}
