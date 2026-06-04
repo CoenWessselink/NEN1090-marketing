@@ -96,7 +96,25 @@ for (const file of [
   if (file !== 'pricing.html' && html.includes('Normen')) fail.push(`${file}: mixed Dutch navigation/content on English route`);
 }
 
-const forbiddenVisible = ['Hoofdkeyword', 'Secundaire keywords', 'Secundair:', 'Interne SEO-silo', 'SEO cluster'];
+const forbiddenVisible = [
+  'Hoofdkeyword',
+  'Secundaire keywords',
+  'Secundair:',
+  'Interne SEO-silo',
+  'SEO cluster',
+  'SEO workflow overview',
+  'real search intent',
+  'Dedicated story and visual',
+  'Concrete product moments',
+  'generic SaaS copy',
+  'recycled product cards',
+  'No recycled product cards',
+  'Distinct product views:',
+  'Digitale werkprocess voor',
+  'CE-dossieropbouwen',
+  'complianceclaims',
+  'audit-ready output',
+];
 for (const file of walk(root)) {
   const html = read(file);
   for (const term of forbiddenVisible) {

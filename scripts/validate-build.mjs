@@ -46,6 +46,16 @@ const forbidden = [
   'placeholder',
   'Placeholder',
   'app.weldinspectapp.com',
+  'SEO workflow overview',
+  'real search intent',
+  'Dedicated story and visual',
+  'Concrete product moments',
+  'generic SaaS copy',
+  'recycled product cards',
+  'No recycled product cards',
+  'Digitale werkprocess voor',
+  'CE-dossieropbouwen',
+  'complianceclaims',
 ];
 
 const requiredLegalLinks = [

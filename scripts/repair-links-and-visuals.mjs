@@ -123,7 +123,7 @@ function productShowcase(lang = 'en') {
     eyebrow: nl ? 'Productervaring' : 'Product experience',
     title: nl
       ? 'Duidelijke schermen voor iedere stap van lasdocumentatie.'
-      : 'Concrete product views for every weld documentation step.',
+      : 'Different views for each stage of the documentation workflow.',
     text: nl
       ? 'Geen herhaalde dummykaarten: elk scherm laat een ander werkmoment zien, van lasregister en veldinspectie tot bewijs, CE-dossier en rapportage.'
       : 'No repeated dummy cards: every view shows a different work moment, from weld register and field inspection to evidence, CE dossier and reporting.',

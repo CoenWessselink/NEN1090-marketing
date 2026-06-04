@@ -97,7 +97,7 @@ function standardPage(data) {
     schema,
   }, `<section class="route-hero"><div class="container route-hero-grid"><div><p class="kicker">${data.kicker}</p><h1>${data.h1}</h1><p class="lead">${data.lead}</p><div class="hero-actions"><a class="btn btn-primary btn-large" href="/trial">Start free trial</a><a class="btn btn-outline btn-large" href="/demo">Book a demo</a></div></div><div class="route-hero-media"><img src="${data.image}" alt="${data.imageAlt}"><div class="media-card">${productMockup}</div></div></div></section>
 <section class="section"><div class="container standards-panel"><div><span class="eyebrow">Safe standards positioning</span><h2>${data.safeH2}</h2><p>WeldInspect Pro supports documentation workflows around relevant standards. Official standard texts, certification and formal conformity decisions remain leading. The software helps teams organise records, evidence and review status; it does not certify projects or replace competent engineering judgement.</p></div><div class="standard-tags">${data.tags.map(([label, href]) => `<a href="${href}">${label}</a>`).join('')}</div></div></section>
-<section class="section section-alt"><div class="container"><div class="section-head"><span class="kicker">Search intent</span><h2>${data.intentH2}</h2><p>${data.intentIntro}</p></div><div class="visual-card-grid">${data.intentCards.map(([h, p], i) => `<article class="visual-card"><span>${String(i + 1).padStart(2, '0')}</span><h3>${h}</h3><p>${p}</p></article>`).join('')}</div></div></section>
+<section class="section section-alt"><div class="container"><div class="section-head"><span class="kicker">workflow questions</span><h2>${data.intentH2}</h2><p>${data.intentIntro}</p></div><div class="visual-card-grid">${data.intentCards.map(([h, p], i) => `<article class="visual-card"><span>${String(i + 1).padStart(2, '0')}</span><h3>${h}</h3><p>${p}</p></article>`).join('')}</div></div></section>
 <section class="section"><div class="container visual-split"><div><span class="kicker">Workflow detail</span><h2>${data.workflowH2}</h2><p>${data.workflowIntro}</p><ul class="check-list">${data.workflowBullets.map((item) => `<li>${item}</li>`).join('')}</ul></div><img src="/assets/images/marketing/optimized/report-preview.jpg" alt="Structured WeldInspect Pro documentation report preview"></div></section>
 <section class="section section-alt"><div class="container"><div class="section-head"><span class="kicker">What teams document</span><h2>${data.recordsH2}</h2></div><div class="workflow-grid">${data.records.map(([h, p], i) => `<article class="workflow-step"><div class="step-number">${i + 1}</div><h3>${h}</h3><p>${p}</p></article>`).join('')}</div></div></section>
 <section class="section"><div class="container"><div class="section-head"><span class="kicker">Internal links</span><h2>Related WeldInspect Pro workflows</h2><p>Use these pages to connect ${data.shortName} context with inspection, reporting, traceability and product workflows.</p></div><div class="seo-link-grid">${data.related.map(([label, text, href]) => `<a href="${href}">${label}<small>${text}</small></a>`).join('')}</div></div></section>
@@ -306,7 +306,7 @@ function corePage(data) {
     image: data.image,
     schema: [faqSchema(faq)],
   }, `<section class="route-hero"><div class="container route-hero-grid"><div><p class="kicker">${data.kicker}</p><h1>${data.h1}</h1><p class="lead">${data.lead}</p><div class="hero-actions"><a class="btn btn-primary btn-large" href="/trial">Start free trial</a><a class="btn btn-outline btn-large" href="/demo">Book a demo</a></div></div><div class="route-hero-media"><img src="${data.image}" alt="${data.imageAlt}"><div class="media-card">${productMockup}</div></div></div></section>
-<section class="section"><div class="container"><div class="section-head"><span class="kicker">SEO workflow overview</span><h2>${data.overviewH2}</h2><p>${data.overview}</p></div><div class="visual-card-grid">${data.cards.map(([h, p], i) => `<article class="visual-card"><span>${String(i + 1).padStart(2, '0')}</span><h3>${h}</h3><p>${p}</p></article>`).join('')}</div></div></section>
+<section class="section"><div class="container"><div class="section-head"><span class="kicker">Knowledge centre structure</span><h2>${data.overviewH2}</h2><p>${data.overview}</p></div><div class="visual-card-grid">${data.cards.map(([h, p], i) => `<article class="visual-card"><span>${String(i + 1).padStart(2, '0')}</span><h3>${h}</h3><p>${p}</p></article>`).join('')}</div></div></section>
 <section class="section section-alt"><div class="container visual-split"><div><span class="kicker">Product detail</span><h2>${data.detailH2}</h2><p>${data.detail}</p><ul class="check-list">${data.bullets.map((item) => `<li>${item}</li>`).join('')}</ul></div><img src="/assets/images/marketing/optimized/mobile-inspection.jpg" alt="WeldInspect Pro workflow on a tablet"></div></section>
 <section class="section"><div class="container"><div class="section-head"><span class="kicker">Related pages</span><h2>Continue through the connected WeldInspect Pro workflow</h2></div><div class="seo-link-grid">${data.related.map(([label, text, href]) => `<a href="${href}">${label}<small>${text}</small></a>`).join('')}</div></div></section>
 <section class="section section-alt"><div class="container"><div class="section-head"><span class="kicker">FAQ</span><h2>${data.shortName} questions</h2></div><div class="route-panel">${faq.map(([q, a]) => `<article class="route-card"><h3>${q}</h3><p>${a}</p></article>`).join('')}</div></div></section>${finalCta()}`);
@@ -363,7 +363,7 @@ const corePages = [
     h1: 'Weld inspection software for findings, photo evidence and QA/QC follow-up.',
     lead: 'Capture inspection results, evidence, comments and open actions against the right weld record instead of losing context in paper forms, folders and chat messages.',
     overviewH2: 'Structured inspection records instead of scattered notes',
-    overview: 'Inspection teams need fast capture, clear status and evidence that remains connected to project documentation. This page targets that practical search intent.',
+    overview: 'Inspection teams need fast capture, clear status and evidence that remains connected to project documentation. This page targets that practical workflow questions.',
     detailH2: 'Record inspection work where the evidence belongs',
     detail: 'WeldInspect Pro keeps visual inspection results, photos, comments and open actions tied to the project, weld and documentation context.',
     image: '/assets/images/marketing/optimized/mobile-inspection.jpg',
@@ -404,7 +404,7 @@ const corePages = [
     kicker: 'Knowledge hub',
     h1: 'Weld inspection resources for standards, evidence, traceability and dossier workflows.',
     lead: 'Use the resources hub to navigate practical guidance around weld inspection, EN 1090 documentation, ISO 3834 quality workflows, WPS/WPQ context and CE dossier preparation.',
-    overviewH2: 'A knowledge hub built around real search intent',
+    overviewH2: 'Practical guidance for weld inspection and documentation teams',
     overview: 'Instead of thin link lists, the resources page now provides a clearer information architecture for standards, inspection evidence, reporting and traceability topics.',
     detailH2: 'Connect guidance to product workflows',
     detail: 'Every resource category links back to a product workflow so visitors can move from learning to evaluation without getting lost.',
@@ -447,7 +447,7 @@ const corePages = [
     h1: 'Weld inspection workflow scenarios without fictional customer claims.',
     lead: 'Explore practical project situations around inspection evidence, dossier preparation and handover without fake customer logos, fake testimonials or unsupported claims.',
     overviewH2: 'Practical scenarios explain the product without pretending to be customer proof',
-    overview: 'This page supports search intent around examples and case studies while staying honest: scenarios are workflow examples, not fabricated customer stories.',
+    overview: 'This page supports workflow questions around examples and case studies while staying honest: scenarios are workflow examples, not fabricated customer stories.',
     detailH2: 'Use scenarios to understand where the platform helps',
     detail: 'Each scenario shows how records connect across project setup, weld inspection, WPS/WPQ context, traceability and reporting.',
     image: '/assets/images/marketing/optimized/photo-weld-closeup.jpg',

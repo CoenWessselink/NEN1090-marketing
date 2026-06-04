@@ -78,10 +78,10 @@ function removeAuditNoise(html) {
     .replace(/SEO-structuur/gi, 'kennisstructuur')
     .replace(/\bSEO\b/g, 'vindbaarheid')
     .replace(/zoekintentie/gi, 'praktische informatiebehoefte')
-    .replace(/real search intent/gi, 'practical workflow questions')
-    .replace(/search intent/gi, 'workflow questions')
+    .replace(/practical workflow questions/gi, 'practical workflow questions')
+    .replace(/workflow questions/gi, 'workflow questions')
     .replace(/workflow questions/gi, 'workflow needs')
-    .replace(/No recycled product cards:/gi, 'Distinct product views:')
+    .replace(/Different workflow views:/gi, 'Distinct product views:')
     .replace(/\brecycled\b/gi, 'repeated')
     .replace(/dummy cards/gi, 'repeated cards')
     .replace(/dummy/gi, 'example')
@@ -147,8 +147,8 @@ function removeAuditNoise(html) {
 
 function nlHardPolish(html) {
   return html
-    .replace(/Digitale werkprocess voor lasinspectie, rapportage en CE-dossier opbouw\./gi, 'Digitale werkprocessen voor lasinspectie, rapportage en CE-dossieropbouw.')
-    .replace(/Digitale werkprocess voor/gi, 'Digitale werkprocessen voor')
+    .replace(/Digitale werkprocessen voor lasinspectie, rapportage en CE-dossier opbouw\./gi, 'Digitale werkprocessen voor lasinspectie, rapportage en CE-dossieropbouw.')
+    .replace(/Digitale werkprocessen voor/gi, 'Digitale werkprocessen voor')
     .replace(/Digitale werkprocessen voor lasinspectie, rapportage en CE-dossieropbouw\./gi, 'Gestructureerde werkprocessen voor lasinspectie, rapportage en CE-dossieropbouw.')
     .replace(/CE-dossier opbouw/gi, 'CE-dossieropbouw')
     .replace(/CE dossier opbouw/gi, 'CE-dossieropbouw')
