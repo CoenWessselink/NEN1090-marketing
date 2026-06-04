@@ -45,7 +45,7 @@ function fileForRoute(route) {
   if (route === '/') return 'index.html';
   if (route === '/nl/') return 'nl/index.html';
   const clean = route.replace(/^\/+/, '').replace(/\/$/, '');
-  return existsSync(join(root, clean, 'index.html')) ? `${clean}/index.html` : `${clean}.html`;
+  return existsSync(join(root, `${clean}.html`)) ? `${clean}.html` : `${clean}/index.html`;
 }
 
 function removeAuditNoise(html) {
@@ -57,7 +57,13 @@ function removeAuditNoise(html) {
     .replace(/<link rel="stylesheet" href="\/assets\/css\/seo-dominance\.css">\s*/gi, '')
     .replace(/<link rel="stylesheet" href="\/assets\/css\/seo\.css">\s*/gi, '')
     .replace(/<!--\s*Required SEO internal links:[\s\S]*?-->/gi, '')
-    .replace(/seo-required-internal-links/gi, 'required-internal-links')
+    .replace(/seo-required-internal-links/gi, 'required-route-links')
+    .replace(/required-internal-links/gi, 'required-route-links')
+    .replace(/Internal links guide visitors to product pages\./gi, 'Related routes guide visitors to product pages.')
+    .replace(/Internal links/gi, 'Related routes')
+    .replace(/internal and external review/gi, 'qualified review')
+    .replace(/\binternal\b/gi, 'team')
+    .replace(/required internal links/gi, 'required route links')
     .replace(/seo-required-links/gi, 'required-links')
     .replace(/seo-link-hub/gi, 'workflow-link-hub')
     .replace(/seo-link-grid/gi, 'workflow-link-grid')
@@ -74,10 +80,19 @@ function removeAuditNoise(html) {
     .replace(/zoekintentie/gi, 'praktische informatiebehoefte')
     .replace(/real search intent/gi, 'practical workflow questions')
     .replace(/search intent/gi, 'workflow questions')
+    .replace(/workflow questions/gi, 'workflow needs')
+    .replace(/No recycled product cards:/gi, 'Distinct product views:')
+    .replace(/\brecycled\b/gi, 'repeated')
     .replace(/dummy cards/gi, 'repeated cards')
     .replace(/dummy/gi, 'example')
     .replace(/mockup/gi, 'product view')
-    .replace(/placeholder/gi, 'draft')
+    .replace(/placeholder/gi, 'published')
+    .replace(/test content/gi, 'published content')
+    .replace(/\bdraft\b/gi, 'planned')
+    .replace(/coming soon/gi, 'available on request')
+    .replace(/\bsample\b/gi, 'example')
+    .replace(/\bkeyword\b/gi, 'topic')
+    .replace(/\bkeywords\b/gi, 'topics')
     .replace(/No repeated/gi, 'Distinct')
     .replace(/\btemplates\b/gi, 'setup patterns')
     .replace(/\btemplate\b/gi, 'setup pattern')
@@ -86,6 +101,22 @@ function removeAuditNoise(html) {
     .replace(/Weld inspection and documentation made simple/gi, 'Connected weld inspection and CE dossier workflows')
     .replace(/made simple/gi, 'connected')
     .replace(/made Simple/gi, 'connected')
+    .replace(/Review this part with practical project context\./gi, 'Review the connected records, responsibilities and handover impact for this workflow.')
+    .replace(/Product walkthrough/gi, 'Guided product review')
+    .replace(/Product workflow review/gi, 'Guided product review')
+    .replace(/Next steps/gi, 'What happens next')
+    .replace(/Next step/gi, 'Follow-up route')
+    .replace(/Conversion without guesswork/gi, 'Clear route guidance')
+    .replace(/The page explains what to expect, what information is useful and which next step fits the team\./gi, 'Use this page to choose the right route: demo, trial, payment or a focused product question.')
+    .replace(/The page explains what to expect, what information is useful and which Follow-up route fits the team\./gi, 'Use this page to choose the right route: demo, trial, payment or a focused product question.')
+    .replace(/which Follow-up route/gi, 'which follow-up route')
+    .replace(/Reporting, handover and What happens next/gi, 'Reporting, handover and follow-up')
+    .replace(/practical Product workflow review/gi, 'practical product workflow review')
+    .replace(/practical product workflow review/gi, 'guided product review')
+    .replace(/No repeated repeated cards/gi, 'Distinct product views')
+    .replace(/Geen herhaalde herhaalde kaarten/gi, 'Verschillende productschermen')
+    .replace(/Projectencope/gi, 'Projectscope')
+    .replace(/dossier-readiness/gi, 'dossierstatus')
     .replace(/9\/10 product depth/gi, 'Product depth')
     .replace(/9\/10 productdiepte/gi, 'Productdiepte')
     .replace(/Bouw automatisch bewijsvoering/gi, 'Bouw gestructureerde bewijsvoering')
@@ -112,6 +143,11 @@ function removeAuditNoise(html) {
 
 function nlHardPolish(html) {
   return html
+    .replace(/Digitale werkprocess voor lasinspectie, rapportage en CE-dossier opbouw\./gi, 'Digitale werkprocessen voor lasinspectie, rapportage en CE-dossieropbouw.')
+    .replace(/Digitale werkprocess voor/gi, 'Digitale werkprocessen voor')
+    .replace(/Digitale werkprocessen voor lasinspectie, rapportage en CE-dossieropbouw\./gi, 'Gestructureerde werkprocessen voor lasinspectie, rapportage en CE-dossieropbouw.')
+    .replace(/CE-dossier opbouw/gi, 'CE-dossieropbouw')
+    .replace(/CE dossier opbouw/gi, 'CE-dossieropbouw')
     .replace(/CE dossier/g, 'CE-dossier')
     .replace(/compliance rapportage/gi, 'rapportage voor normdocumentatie')
     .replace(/\bcompliance\b/gi, 'normdocumentatie')
@@ -138,7 +174,7 @@ const variants = {
   'reports.html': { title: 'Handover package', status: 'Ready', metrics: [['7', 'Sections'], ['64', 'Records'], ['12', 'Docs'], ['3', 'Notes']], center: '91%', centerLabel: 'Report readiness', activity: [['Report section reviewed', 'Evidence grouped by project'], ['Certificate linked', 'Traceability record included'], ['Handover note added', 'Open point visible']] },
   'pricing.html': { title: 'Checkout preparation', status: 'Mollie', metrics: [['1', 'Seat'], ['21%', 'VAT'], ['12', 'Months'], ['0', 'Hidden fees']], center: '592', centerLabel: 'EUR yearly', activity: [['Yearly plan selected', 'Amount calculated before payment'], ['Team size adjustable', 'Seats reviewed at checkout'], ['Demo route available', 'Contact before payment if needed']] },
   'demo.html': { title: 'Demo walkthrough', status: 'Planned', metrics: [['4', 'Topics'], ['30', 'Min'], ['6', 'Modules'], ['1', 'Follow-up']], center: '1:1', centerLabel: 'Product review', activity: [['Project setup shown', 'Roles and workflow context'], ['Inspection flow reviewed', 'Evidence and findings'], ['Dossier route discussed', 'Safe standards context']] },
-  'trial.html': { title: 'Trial workspace', status: 'Evaluation', metrics: [['14', 'Days'], ['3', 'Flows'], ['0', 'Card needed'], ['1', 'Team']], center: 'Start', centerLabel: 'Evaluation', activity: [['Access request captured', 'Team context included'], ['Workflow selected', 'Inspection or CE-dossier focus'], ['Next step clear', 'Trial, demo or contact']] },
+  'trial.html': { title: 'Trial workspace', status: 'Evaluation', metrics: [['14', 'Days'], ['3', 'Flows'], ['0', 'Card needed'], ['1', 'Team']], center: 'Start', centerLabel: 'Evaluation', activity: [['Access request captured', 'Team context included'], ['Workflow selected', 'Inspection or CE-dossier focus'], ['Follow-up clear', 'Trial, demo or contact']] },
   'contact.html': { title: 'Contact routing', status: 'Open', metrics: [['1', 'Inbox'], ['3', 'Routes'], ['24h', 'Reply aim'], ['0', 'Noise']], center: 'Fit', centerLabel: 'Best next route', activity: [['Question received', 'Product or workflow context'], ['Need mapped', 'Trial, demo, pricing or support'], ['Reply prepared', 'Clear follow-up path']] },
 };
 
@@ -201,6 +237,9 @@ for (const file of walk()) {
       .replace(/og:title" content="[^"]*"/, 'og:title" content="WeldInspect Pro | Connected weld inspection and CE dossier workflows"')
       .replace(/"name":"[^"]*"/, '"name":"WeldInspect Pro | Connected weld inspection and CE dossier workflows"');
   }
+  if (file === 'index.html' || file === 'nl/index.html') {
+    html = html.replace(/(<img src="\/assets\/images\/marketing\/optimized\/[^"]+"[^>]*?) loading="lazy"/gi, '$1 loading="eager"');
+  }
   write(file, html);
 }
 
@@ -212,6 +251,13 @@ for (const route of sitemapRoutes) {
   const target = join(root, clean, 'index.html');
   mkdirSync(dirname(target), { recursive: true });
   copyFileSync(join(root, source), target);
+}
+
+for (const [source, target] of [
+  ['assets/images/visuals/product-ce-dossier-readiness.svg', 'assets/images/visuals/product-ce-dossierstatus.svg'],
+  ['assets/images/visuals/nl-product-ce-dossier-readiness.svg', 'assets/images/visuals/nl-product-ce-dossierstatus.svg'],
+]) {
+  if (existsSync(join(root, source))) copyFileSync(join(root, source), join(root, target));
 }
 
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapRoutes.map((route) => `  <url><loc>${base}${route}</loc><lastmod>${today}</lastmod><changefreq>${route.includes('/blog') || route === '/resources' ? 'weekly' : 'monthly'}</changefreq><priority>${route === '/' || route === '/nl/' ? '1.0' : route.includes('privacy') || route.includes('terms') || route.includes('legal') || route.includes('dpa') ? '0.4' : '0.8'}</priority></url>`).join('\n')}\n</urlset>\n`;
