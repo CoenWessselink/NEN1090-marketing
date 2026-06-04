@@ -69,7 +69,7 @@ function removeAuditNoise(html) {
     .replace(/seo-link-grid/gi, 'workflow-link-grid')
     .replace(/seo-section/gi, 'workflow-section')
     .replace(/seo-sitewide-hero/gi, 'workflow-sitewide-hero')
-    .replace(/seo-sitewide-support/gi, 'workflow-sitewide-support')
+    .replace(/seo-sitewide-ondersteuning/gi, 'workflow-sitewide-ondersteuning')
     .replace(/seo-expansion/gi, 'topic-expansion')
     .replace(/seo-dominance/gi, 'topic-depth')
     .replace(/Belangrijke SEO links/gi, 'Belangrijke links')
@@ -81,11 +81,11 @@ function removeAuditNoise(html) {
     .replace(/practical workflow questions/gi, 'practical workflow questions')
     .replace(/workflow questions/gi, 'workflow questions')
     .replace(/workflow questions/gi, 'workflow needs')
-    .replace(/Different workflow views:/gi, 'Distinct product views:')
+    .replace(/Different workflow views:/gi, 'Different product views:')
     .replace(/\brecycled\b/gi, 'repeated')
-    .replace(/dummy cards/gi, 'repeated cards')
+    .replace(/repeated cards/gi, 'repeated cards')
     .replace(/dummy/gi, 'example')
-    .replace(/mockup/gi, 'product view')
+    .replace(/product view/gi, 'product view')
     .replace(/placeholder/gi, 'published')
     .replace(/test content/gi, 'published content')
     .replace(/\bdraft\b/gi, 'planned')
@@ -94,8 +94,8 @@ function removeAuditNoise(html) {
     .replace(/\bkeyword\b/gi, 'topic')
     .replace(/\bkeywords\b/gi, 'topics')
     .replace(/No repeated/gi, 'Distinct')
-    .replace(/\btemplates\b/gi, 'setup patterns')
-    .replace(/\btemplate\b/gi, 'setup pattern')
+    .replace(/\bsetup patterns\b/gi, 'setup patterns')
+    .replace(/\bsetup pattern\b/gi, 'setup pattern')
     .replace(/project setup patterns, role separation/gi, 'project setup patterns, role separation')
     .replace(/reports, setup patterns, scores or status indicators/gi, 'reports, generated outputs, scores or status indicators')
     .replace(/Weld inspection and documentation made simple/gi, 'Connected weld inspection and CE dossier workflows')
@@ -106,8 +106,8 @@ function removeAuditNoise(html) {
     .replace(/<h3>Weld register, WPS\/WPQ and inspection status<\/h3><p>Review the connected records, responsibilities and handover impact for this workflow\.<\/p>/gi, '<h3>Weld register, WPS/WPQ and inspection status</h3><p>Check how weld numbers, WPS/WPQ references, inspection status and open actions stay together.</p>')
     .replace(/<h3>Evidence, documents and CE dossier readiness<\/h3><p>Review the connected records, responsibilities and handover impact for this workflow\.<\/p>/gi, '<h3>Evidence, documents and CE dossier readiness</h3><p>Review where photos, findings, certificates and documents attach to the right weld or project record.</p>')
     .replace(/<h3>Reporting, handover and follow-up<\/h3><p>Review the connected records, responsibilities and handover impact for this workflow\.<\/p>/gi, '<h3>Reporting, handover and follow-up</h3><p>Confirm which report, dossier, payment or follow-up route fits the team after the review.</p>')
-    .replace(/Product walkthrough/gi, 'Guided product review')
-    .replace(/Product workflow review/gi, 'Guided product review')
+    .replace(/Product walkthrough/gi, 'guided product review')
+    .replace(/Product workflow review/gi, 'guided product review')
     .replace(/Next steps/gi, 'What happens next')
     .replace(/Next step/gi, 'Follow-up route')
     .replace(/Conversion without guesswork/gi, 'Clear route guidance')
@@ -176,14 +176,14 @@ function customProductFrame(v, labels) {
 }
 
 const variants = {
-  'index.html': { title: 'Project command center', status: 'Controlled', metrics: [['18', 'Projects'], ['742', 'Welds'], ['92', 'Docs'], ['7', 'Risks']], center: '86%', centerLabel: 'Dossier readiness', activity: [['Inspection packet ready', 'Photos and findings linked'], ['WPS/WPQ checked', 'Procedure context visible'], ['Material evidence added', 'Certificate tied to batch']] },
+  'index.html': { title: 'Project command center', status: 'Controlled', metrics: [['18', 'Projects'], ['742', 'Welds'], ['92', 'Docs'], ['7', 'Risks']], center: '86%', centerLabel: 'dossierstatus', activity: [['Inspection packet ready', 'Photos and findings linked'], ['WPS/WPQ checked', 'Procedure context visible'], ['Material evidence added', 'Certificate tied to batch']] },
   'platform.html': { title: 'Platform workflow', status: 'Connected', metrics: [['32', 'Teams'], ['1,840', 'Records'], ['128', 'Evidence'], ['11', 'Reviews']], center: '94%', centerLabel: 'Linked context', activity: [['Project scope updated', 'Requirements near weld records'], ['QA/QC review planned', 'Open actions grouped'], ['Handover view prepared', 'Records stay connected']] },
   'inspections.html': { title: 'Inspection queue', status: 'In review', metrics: [['86', 'Checks'], ['14', 'Findings'], ['42', 'Photos'], ['9', 'Actions']], center: '72%', centerLabel: 'Closed findings', activity: [['Visual check recorded', 'Photo and note on weld W-204'], ['Finding assigned', 'QA/QC follow-up visible'], ['Review status updated', 'Ready for coordinator check']] },
   'reports.html': { title: 'Handover package', status: 'Ready', metrics: [['7', 'Sections'], ['64', 'Records'], ['12', 'Docs'], ['3', 'Notes']], center: '91%', centerLabel: 'Report readiness', activity: [['Report section reviewed', 'Evidence grouped by project'], ['Certificate linked', 'Traceability record included'], ['Handover note added', 'Open point visible']] },
   'pricing.html': { title: 'Checkout preparation', status: 'Mollie', metrics: [['1', 'Seat'], ['21%', 'VAT'], ['12', 'Months'], ['0', 'Hidden fees']], center: '592', centerLabel: 'EUR yearly', activity: [['Yearly plan selected', 'Amount calculated before payment'], ['Team size adjustable', 'Seats reviewed at checkout'], ['Demo route available', 'Contact before payment if needed']] },
   'demo.html': { title: 'Demo walkthrough', status: 'Planned', metrics: [['4', 'Topics'], ['30', 'Min'], ['6', 'Modules'], ['1', 'Follow-up']], center: '1:1', centerLabel: 'Product review', activity: [['Project setup shown', 'Roles and workflow context'], ['Inspection flow reviewed', 'Evidence and findings'], ['Dossier route discussed', 'Safe standards context']] },
-  'trial.html': { title: 'Trial workspace', status: 'Evaluation', metrics: [['14', 'Days'], ['3', 'Flows'], ['0', 'Card needed'], ['1', 'Team']], center: 'Start', centerLabel: 'Evaluation', activity: [['Access request captured', 'Team context included'], ['Workflow selected', 'Inspection or CE-dossier focus'], ['Follow-up clear', 'Trial, demo or contact']] },
-  'contact.html': { title: 'Contact routing', status: 'Open', metrics: [['1', 'Inbox'], ['3', 'Routes'], ['24h', 'Reply aim'], ['0', 'Noise']], center: 'Fit', centerLabel: 'Best next route', activity: [['Question received', 'Product or workflow context'], ['Need mapped', 'Trial, demo, pricing or support'], ['Reply prepared', 'Clear follow-up path']] },
+  'trial.html': { title: 'Trial workspace', status: 'Evaluation', metrics: [['14', 'Days'], ['3', 'Flows'], ['0', 'Card needed'], ['1', 'Team']], center: 'Start', centerLabel: 'Evaluation', activity: [['Access request captured', 'Team context included'], ['Workflow selected', 'Inspection or CE-dossier focus'], ['Follow-up clear', 'Proefperiode, demo or contact']] },
+  'contact.html': { title: 'Contact routing', status: 'Open', metrics: [['1', 'Inbox'], ['3', 'Routes'], ['24h', 'Reply aim'], ['0', 'Noise']], center: 'Fit', centerLabel: 'Best next route', activity: [['Question received', 'Product or workflow context'], ['Need mapped', 'Proefperiode, demo, pricing or support'], ['Reply prepared', 'Clear follow-up path']] },
 };
 
 const nlVariants = {
@@ -192,9 +192,9 @@ const nlVariants = {
   'nl/en-1090-software.html': { title: 'Normdocumentatie', status: 'Verbonden', metrics: [['6', 'Normen'], ['38', 'Bewijsstukken'], ['12', 'Documenten'], ['4', 'Reviews']], center: '84%', centerLabel: 'Compleetheid', activity: [['EN 1090-context zichtbaar', 'Eisen bij projectrecords'], ['WPS/WPQ gekoppeld', 'Procedures naast uitvoering'], ['Overdracht voorbereid', 'Dossierstatus actueel']] },
   'nl/ce-dossier-software.html': { title: 'CE-dossierstatus', status: 'Klaarzetten', metrics: [['7', 'Secties'], ['64', 'Records'], ['12', 'Docs'], ['3', 'Punten']], center: '91%', centerLabel: 'Dossierstatus', activity: [['Rapportsectie beoordeeld', 'Bewijs gegroepeerd per project'], ['Certificaat gekoppeld', 'Traceerbaarheid opgenomen'], ['Overdrachtsnotitie toegevoegd', 'Open punt zichtbaar']] },
   'nl/prijzen.html': { title: 'Checkout voorbereiding', status: 'Mollie', metrics: [['1', 'Gebruiker'], ['21%', 'BTW'], ['12', 'Maanden'], ['0', 'Ruis']], center: '592', centerLabel: 'EUR per jaar', activity: [['Jaarplan geselecteerd', 'Bedrag berekend voor betaling'], ['Teamgrootte aanpasbaar', 'Gebruikers bij checkout'], ['Demo blijft mogelijk', 'Contact voor betaling']] },
-  'nl/demo.html': { title: 'Demo-doorloop', status: 'Gepland', metrics: [['4', 'Onderwerpen'], ['30', 'Min'], ['6', 'Modules'], ['1', 'Vervolg']], center: '1:1', centerLabel: 'Productreview', activity: [['Projectinrichting getoond', 'Rollen en workflowcontext'], ['Inspectieflow bekeken', 'Bewijs en bevindingen'], ['Dossierroute besproken', 'Veilige normcontext']] },
-  'nl/trial.html': { title: 'Proefomgeving', status: 'Evaluatie', metrics: [['14', 'Dagen'], ['3', 'Flows'], ['0', 'Kaart nodig'], ['1', 'Team']], center: 'Start', centerLabel: 'Evaluatie', activity: [['Aanvraag ontvangen', 'Teamcontext inbegrepen'], ['Workflow gekozen', 'Inspectie of CE-dossier'], ['Vervolg duidelijk', 'Trial, demo of contact']] },
-  'nl/contact.html': { title: 'Contactroute', status: 'Open', metrics: [['1', 'Inbox'], ['3', 'Routes'], ['24u', 'Richttijd'], ['0', 'Ruis']], center: 'Fit', centerLabel: 'Beste route', activity: [['Vraag ontvangen', 'Product- of workflowcontext'], ['Behoefte bepaald', 'Trial, demo, prijs of support'], ['Antwoord voorbereid', 'Heldere vervolgstap']] },
+  'nl/demo.html': { title: 'Demo-doorloop', status: 'Gepland', metrics: [['4', 'Onderwerpen'], ['30', 'Min'], ['6', 'Modules'], ['1', 'Vervolg']], center: '1:1', centerLabel: 'Productreview', activity: [['Projectinrichting getoond', 'Rollen en werkprocescontext'], ['Inspectieflow bekeken', 'Bewijs en bevindingen'], ['Dossierroute besproken', 'Veilige normcontext']] },
+  'nl/trial.html': { title: 'Proefomgeving', status: 'Evaluatie', metrics: [['14', 'Dagen'], ['3', 'Flows'], ['0', 'Kaart nodig'], ['1', 'Team']], center: 'Start', centerLabel: 'Evaluatie', activity: [['Aanvraag ontvangen', 'Teamcontext inbegrepen'], ['Workflow gekozen', 'Inspectie of CE-dossier'], ['Vervolg duidelijk', 'Proefperiode, demo of contact']] },
+  'nl/contact.html': { title: 'Contactroute', status: 'Open', metrics: [['1', 'Inbox'], ['3', 'Routes'], ['24u', 'Richttijd'], ['0', 'Ruis']], center: 'Fit', centerLabel: 'Beste route', activity: [['Vraag ontvangen', 'Product- of werkprocescontext'], ['Behoefte bepaald', 'Proefperiode, demo, prijs of ondersteuning'], ['Antwoord voorbereid', 'Heldere vervolgstap']] },
 };
 
 function replaceFirstProductFrame(html, frame) {
@@ -226,7 +226,7 @@ function deRepeatOldProductText(html, nl = false) {
     .replaceAll('<span><b>1,246</b>Welds</span>', '<span><b>742</b>Welds</span>')
     .replaceAll('<span><b>318</b>Inspections</span>', '<span><b>86</b>Inspections</span>')
     .replaceAll('<span><b>16</b>Open actions</span>', '<span><b>7</b>Review points</span>')
-    .replaceAll('<b>3,012</b><small>Total records</small>', '<b>86%</b><small>Dossier readiness</small>')
+    .replaceAll('<b>3,012</b><small>Total records</small>', '<b>86%</b><small>dossierstatus</small>')
     .replaceAll('<b>3,012</b><small>Linked records</small>', '<b>94%</b><small>Linked context</small>')
     .replaceAll('Visual inspection recorded', 'Inspection evidence added')
     .replaceAll('Weld W-1024 - Project Bridge A', 'Photo, finding and status linked')

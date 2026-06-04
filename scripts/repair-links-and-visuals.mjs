@@ -125,10 +125,10 @@ function productShowcase(lang = 'en') {
       ? 'Duidelijke schermen voor iedere stap van lasdocumentatie.'
       : 'Different views for each stage of the documentation workflow.',
     text: nl
-      ? 'Geen herhaalde dummykaarten: elk scherm laat een ander werkmoment zien, van lasregister en veldinspectie tot bewijs, CE-dossier en rapportage.'
-      : 'No repeated dummy cards: every view shows a different work moment, from weld register and field inspection to evidence, CE dossier and reporting.',
+      ? 'Geen herhaalde herhaalde kaarten: elk scherm laat een ander werkmoment zien, van lasregister en veldinspectie tot bewijs, CE-dossier en rapportage.'
+      : 'No repeated repeated cards: every view shows a different work moment, from weld register and field inspection to evidence, CE dossier and reporting.',
     featured: nl ? 'Van project naar dossier' : 'From project to dossier',
-    featuredText: nl ? 'Projectscope, lasstatus, inspecties en dossier-readiness in een flow.' : 'Project scope, weld status, inspections and dossier readiness in one flow.',
+    featuredText: nl ? 'Projectscope, lasstatus, inspecties en dossier-readiness in een flow.' : 'Project scope, weld status, inspections and dossierstatus in one flow.',
   };
   const prefix = nl ? 'nl-' : '';
   const cards = nl

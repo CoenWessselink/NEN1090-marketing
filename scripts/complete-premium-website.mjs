@@ -140,7 +140,7 @@ function productStory(lang = 'en') {
 }
 
 function platformSection() {
-  return `<!-- completion:start:platform-depth --><section class="completion-band" data-completion="platform-depth"><div class="container completion-grid"><div><span class="completion-eyebrow">Connected platform</span><h2>One connected record from project setup to dossier handover.</h2><p>The platform page now explains the whole product, not only individual modules. WeldInspect Pro keeps the project, weld register, inspection status, WPS/WPQ references, material traceability, evidence and documents in one record that project teams can review while work is still moving.</p><ul class="completion-list"><li>Project teams see scope, roles and handover context.</li><li>QA/QC can review inspection status and open actions.</li><li>Documentation teams can prepare dossier readiness earlier.</li></ul></div><div class="product-visual-stack">${shot('hero-weldinspect-product-composite.svg','Project to dossier','Connected workflow')}${shot('product-weld-register.svg','Weld register','Structured weld status')}</div></div></section><!-- completion:end:platform-depth -->`;
+  return `<!-- completion:start:platform-depth --><section class="completion-band" data-completion="platform-depth"><div class="container completion-grid"><div><span class="completion-eyebrow">Connected platform</span><h2>One connected record from project setup to dossier handover.</h2><p>The platform page now explains the whole product, not only individual modules. WeldInspect Pro keeps the project, weld register, inspection status, WPS/WPQ references, material traceability, evidence and documents in one record that project teams can review while work is still moving.</p><ul class="completion-list"><li>Project teams see scope, roles and handover context.</li><li>QA/QC can review inspection status and open actions.</li><li>Documentation teams can prepare dossierstatus earlier.</li></ul></div><div class="product-visual-stack">${shot('hero-weldinspect-product-composite.svg','Project to dossier','Connected workflow')}${shot('product-weld-register.svg','Weld register','Structured weld status')}</div></div></section><!-- completion:end:platform-depth -->`;
 }
 
 function inspectionsSection(lang = 'en') {
@@ -158,7 +158,7 @@ function conversionSection(lang = 'en', type = 'demo') {
   const demo = type === 'demo';
   const trial = type === 'trial';
   const title = demo ? (nl ? 'Wat u in de demo kunt doorlopen.' : 'What we can walk through in the demo.') : trial ? (nl ? 'Wat u tijdens de proefperiode kunt testen.' : 'What you can test during the trial.') : (nl ? 'Waarvoor u contact kunt opnemen.' : 'Reasons teams contact WeldInspect Pro.');
-  const lead = demo ? (nl ? 'We kunnen samen projectinrichting, lasregister, inspectierecords, WPS/WPQ-context, bewijs, CE-dossier readiness en rapportage bekijken.' : 'We can walk through project setup, weld register, inspection records, WPS/WPQ context, evidence, CE dossier readiness and reporting.') : trial ? (nl ? 'Gebruik de proefperiode om echte workflowvragen te toetsen voordat u een betaald traject kiest.' : 'Use the trial to evaluate real workflow questions before choosing a paid route.') : (nl ? 'Gebruik contact voor productvragen, implementatie, norm- en documentatieworkflows, prijzen of support.' : 'Use contact for product questions, implementation, standards/documentation workflow, pricing or support.');
+  const lead = demo ? (nl ? 'We kunnen samen projectinrichting, lasregister, inspectierecords, WPS/WPQ-context, bewijs, CE-dossierstatus en rapportage bekijken.' : 'We can walk through project setup, weld register, inspection records, WPS/WPQ context, evidence, CE dossier readiness and reporting.') : trial ? (nl ? 'Gebruik de proefperiode om echte werkprocesvragen te toetsen voordat u een betaald traject kiest.' : 'Use the trial to evaluate real workflow questions before choosing a paid route.') : (nl ? 'Gebruik contact voor productvragen, implementatie, norm- en documentatiewerkprocessen, prijzen of ondersteuning.' : 'Use contact for product questions, implementation, standards/documentation workflow, pricing or support.');
   return `<!-- completion:start:conversion-depth --><section class="completion-band alt" data-completion="conversion-depth"><div class="container"><div class="section-head"><span class="kicker">${nl ? 'Vervolgstappen' : 'Next steps'}</span><h2>${title}</h2><p>${lead}</p></div><div class="conversion-steps"><article><b>01</b><h3>${nl ? 'Aanvraag' : 'Request'}</h3><p>${nl ? 'Vertel kort welk project- of inspectieproces u wilt bekijken.' : 'Share the project or inspection workflow you want to review.'}</p></article><article><b>02</b><h3>${nl ? 'Kwalificatie' : 'Qualification'}</h3><p>${nl ? 'We stemmen af welke modules en vragen relevant zijn.' : 'We align the relevant modules and questions.'}</p></article><article><b>03</b><h3>${nl ? 'Productdoorloop' : 'Product walkthrough'}</h3><p>${nl ? 'Bekijk projecten, lassen, inspecties, bewijs en dossiercontext.' : 'Review projects, welds, inspections, evidence and dossier context.'}</p></article><article><b>04</b><h3>${nl ? 'Volgende stap' : 'Next step'}</h3><p>${nl ? 'Kies proefperiode, betaling, demo-vervolg of contact.' : 'Choose trial, payment, follow-up demo or contact.'}</p></article></div></div></section><!-- completion:end:conversion-depth -->`;
 }
 
@@ -176,7 +176,7 @@ function pricingFaq(lang = 'en') {
     ['Do I need a credit card?','Use the payment route only when you want to pay directly. Trial and demo can be requested separately.'],
     ['Can we add more users later?','Yes, team size and implementation scope can be discussed later.'],
     ['What happens after payment?','The checkout shows amount, VAT and billing cycle before the Mollie payment is created.'],
-    ['Is implementation support available?','Larger teams can discuss implementation context through contact or demo.'],
+    ['Is implementation ondersteuning available?','Larger teams can discuss implementation context through contact or demo.'],
     ['Can we request a demo first?','Yes. Demo is useful when you want to review workflow, modules and dossier context first.']
   ];
   return `<!-- completion:start:pricing-faq --><section class="completion-band" data-completion="pricing-faq"><div class="container"><div class="section-head"><span class="kicker">FAQ</span><h2>${nl ? 'Veelgestelde vragen over prijzen en starten.' : 'Common questions about pricing and getting started.'}</h2></div><div class="completion-faq">${faqs.map(([q,a]) => `<article><h3>${q}</h3><p>${a}</p></article>`).join('')}</div></div></section><!-- completion:end:pricing-faq -->`;
@@ -186,7 +186,7 @@ function standardsDepth(lang = 'en') {
   const nl = lang === 'nl';
   const cards = nl ? [
     ['EN 1090','Projectuitvoering en CE-documentatiecontext.','/nl/en-1090-software'],
-    ['ISO 3834','Documentatieworkflows rond laskwaliteit.','/iso-3834'],
+    ['ISO 3834','documentatiewerkprocessen rond laskwaliteit.','/iso-3834'],
     ['ISO 5817','Bevindingen en kwaliteitsniveau-context rond lascontrole.','/iso-5817'],
     ['ISO 9606-1','Lasserkwalificaties zichtbaar bij projectrecords.','/iso-9606-1'],
     ['WPS/WPQR','Procedureverwijzingen verbonden met laswerk.','/iso-15609'],
@@ -204,7 +204,7 @@ function standardsDepth(lang = 'en') {
   const disclaimer = nl
     ? 'WeldInspect Pro ondersteunt werkprocessen en documentatie rondom relevante normen. Offici&euml;le normteksten, certificering, beoordeling door bevoegde personen en formele conformiteitsbesluiten blijven leidend.'
     : 'WeldInspect Pro supports documentation workflows around relevant standards. Official standard texts, certification, qualified review and formal conformity decisions remain leading.';
-  return `<!-- completion:start:standards-depth --><section class="completion-band alt" data-completion="standards-depth"><div class="container"><div class="standards-disclaimer">${disclaimer}</div><div class="section-head"><span class="kicker">${nl ? 'Normcontext' : 'Standards context'}</span><h2>${nl ? 'Hoe normcontext aansluit op documentatieworkflows.' : 'How standards context connects to documentation workflows.'}</h2><p>${nl ? 'Deze kaarten zijn workflowuitleg. Ze kopieren geen officiele normtekst en vervangen geen beoordeling door bevoegde personen.' : 'These cards are workflow explanations. They do not reproduce official standard text or replace qualified review.'}</p></div><div class="knowledge-grid">${cards.map(([t,p,u]) => `<a class="knowledge-card" href="${u}"><span>${t}</span><h3>${t}</h3><p>${p}</p></a>`).join('')}</div><div class="standards-disclaimer">${disclaimer}</div></div></section><!-- completion:end:standards-depth -->`;
+  return `<!-- completion:start:standards-depth --><section class="completion-band alt" data-completion="standards-depth"><div class="container"><div class="standards-disclaimer">${disclaimer}</div><div class="section-head"><span class="kicker">${nl ? 'Normcontext' : 'Standards context'}</span><h2>${nl ? 'Hoe normcontext aansluit op documentatiewerkprocessen.' : 'How standards context connects to documentation workflows.'}</h2><p>${nl ? 'Deze kaarten zijn werkprocesuitleg. Ze kopieren geen officiele normtekst en vervangen geen beoordeling door bevoegde personen.' : 'These cards are workflow explanations. They do not reproduce official standard text or replace qualified review.'}</p></div><div class="knowledge-grid">${cards.map(([t,p,u]) => `<a class="knowledge-card" href="${u}"><span>${t}</span><h3>${t}</h3><p>${p}</p></a>`).join('')}</div><div class="standards-disclaimer">${disclaimer}</div></div></section><!-- completion:end:standards-depth -->`;
 }
 
 function resourcesDepth(lang = 'en') {
@@ -231,7 +231,7 @@ function normalizeDutch(html) {
   const replacements = [
     ['Projects','Projecten'], ['Welds','Lassen'], ['Inspections','Inspecties'], ['Documents','Documenten'],
     ['Evidence','Bewijs'], ['Reporting','Rapportage'], ['Traceability','Traceerbaarheid'], ['Handover','Overdracht'],
-    ['Open actions','Open acties'], ['Project overview','Projectoverzicht'], ['Documentation workflow','Documentatieworkflow'],
+    ['Open actions','Open acties'], ['Project overview','Projectoverzicht'], ['Documentation workflow','documentatiewerkproces'],
     ['Connected','Verbonden'], ['Controlled','Gecontroleerd'], ['Total records','Totaal aantal records'], ['Linked records','Gekoppelde records'],
     ['Visual inspection recorded','Visuele inspectie vastgelegd'], ['Procedure context linked','Procedurecontext gekoppeld'],
     ['Material batch linked','Materiaalbatch gekoppeld'], ['Inspection evidence linked','Inspectiebewijs gekoppeld'],
@@ -246,7 +246,7 @@ function normalizeDutch(html) {
     ['Keep procedure and qualification references visible alongside weld and project records.','Houd procedure- en kwalificatieverwijzingen zichtbaar naast las- en projectrecords.'],
     ['Link drawings, certificates, reports and evidence to the right project context.','Koppel tekeningen, certificaten, rapporten en bewijs aan de juiste projectcontext.'],
     ['Prepare a clear dossier overview while the project is active, not at the end.','Bereid een duidelijk dossieroverzicht voor terwijl het project loopt, niet pas aan het einde.'],
-    ['Connect material context, heat numbers, welds, certificates and supporting records.','Verbind materiaalcontext, heatnummers, lassen, certificaten en ondersteunende records.'],
+    ['Connect material context, heat numbers, welds, certificates and ondersteuninging records.','Verbind materiaalcontext, heatnummers, lassen, certificaten en ondersteunende records.'],
     ['Turn structured inspection records into clearer review and handover conversations.','Gebruik gestructureerde inspectierecords voor duidelijkere review en overdracht.'],
     ['WPS approved','WPS goedgekeurd'],
     ['Traceerbaarheid evidence attached','Traceerbaarheidsbewijs gekoppeld'],
@@ -352,7 +352,7 @@ write('nl/prijzen.html', beforeFinal(read('nl/prijzen.html'), 'pricing-faq', pri
 writeFileSync(join(root, 'assets/images/visuals/README.md'), `# WeldInspect Pro product visuals
 
 Generated product-focused SVG visuals for the marketing website premium completion build.
-They are illustrative interface mockups, not customer data and not screenshots from the app codebase.
+They are illustrative product views, not customer data and not screenshots from the app codebase.
 `, 'utf8');
 
 console.log(`Premium completion applied to ${keyPages.length} core routes and ${Object.keys(visuals).length} product visuals.`);
