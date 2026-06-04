@@ -102,6 +102,10 @@ function removeAuditNoise(html) {
     .replace(/made simple/gi, 'connected')
     .replace(/made Simple/gi, 'connected')
     .replace(/Review this part with practical project context\./gi, 'Review the connected records, responsibilities and handover impact for this workflow.')
+    .replace(/<h3>Project setup and roles<\/h3><p>Review the connected records, responsibilities and handover impact for this workflow\.<\/p>/gi, '<h3>Project setup and roles</h3><p>Map projects, team roles, inspection moments and handover expectations before the walkthrough starts.</p>')
+    .replace(/<h3>Weld register, WPS\/WPQ and inspection status<\/h3><p>Review the connected records, responsibilities and handover impact for this workflow\.<\/p>/gi, '<h3>Weld register, WPS/WPQ and inspection status</h3><p>Check how weld numbers, WPS/WPQ references, inspection status and open actions stay together.</p>')
+    .replace(/<h3>Evidence, documents and CE dossier readiness<\/h3><p>Review the connected records, responsibilities and handover impact for this workflow\.<\/p>/gi, '<h3>Evidence, documents and CE dossier readiness</h3><p>Review where photos, findings, certificates and documents attach to the right weld or project record.</p>')
+    .replace(/<h3>Reporting, handover and follow-up<\/h3><p>Review the connected records, responsibilities and handover impact for this workflow\.<\/p>/gi, '<h3>Reporting, handover and follow-up</h3><p>Confirm which report, dossier, payment or follow-up route fits the team after the review.</p>')
     .replace(/Product walkthrough/gi, 'Guided product review')
     .replace(/Product workflow review/gi, 'Guided product review')
     .replace(/Next steps/gi, 'What happens next')
@@ -167,6 +171,10 @@ function productFrame(v, nl = false) {
   return `<div class="product-frame product-dashboard"><div class="product-sidebar"><strong>W</strong>${labels.map((label) => `<span>${label}</span>`).join('')}</div><div class="product-main"><div class="product-top"><b>${v.title}</b><em>${v.status}</em></div><div class="metric-row">${v.metrics.map(([n, l]) => `<span><b>${n}</b>${l}</span>`).join('')}</div><div class="product-grid"><div class="donut"><b>${v.center}</b><small>${v.centerLabel}</small></div><div class="activity">${v.activity.map(([h, p]) => `<p><strong>${h}</strong><small>${p}</small></p>`).join('')}</div></div></div></div>`;
 }
 
+function customProductFrame(v, labels) {
+  return `<div class="product-frame product-dashboard"><div class="product-sidebar"><strong>W</strong>${labels.map((label) => `<span>${label}</span>`).join('')}</div><div class="product-main"><div class="product-top"><b>${v.title}</b><em>${v.status}</em></div><div class="metric-row">${v.metrics.map(([n, l]) => `<span><b>${n}</b>${l}</span>`).join('')}</div><div class="product-grid"><div class="donut"><b>${v.center}</b><small>${v.centerLabel}</small></div><div class="activity">${v.activity.map(([h, p]) => `<p><strong>${h}</strong><small>${p}</small></p>`).join('')}</div></div></div></div>`;
+}
+
 const variants = {
   'index.html': { title: 'Project command center', status: 'Controlled', metrics: [['18', 'Projects'], ['742', 'Welds'], ['92', 'Docs'], ['7', 'Risks']], center: '86%', centerLabel: 'Dossier readiness', activity: [['Inspection packet ready', 'Photos and findings linked'], ['WPS/WPQ checked', 'Procedure context visible'], ['Material evidence added', 'Certificate tied to batch']] },
   'platform.html': { title: 'Platform workflow', status: 'Connected', metrics: [['32', 'Teams'], ['1,840', 'Records'], ['128', 'Evidence'], ['11', 'Reviews']], center: '94%', centerLabel: 'Linked context', activity: [['Project scope updated', 'Requirements near weld records'], ['QA/QC review planned', 'Open actions grouped'], ['Handover view prepared', 'Records stay connected']] },
@@ -191,6 +199,10 @@ const nlVariants = {
 
 function replaceFirstProductFrame(html, frame) {
   return html.replace(/<div class="product-frame product-dashboard">[\s\S]*?<\/div><\/div><\/div>(?=<\/div><\/div><\/div><\/section>|<div class="floating-product-card")/, frame);
+}
+
+function replaceProductSectionFrame(html, frame) {
+  return html.replace(/(<section class="section product-section">[\s\S]*?<div class="tabs-row">[\s\S]*?<\/div>)<div class="product-frame product-dashboard">[\s\S]*?<\/div><\/div><\/div>(<\/section>)/, `$1${frame}$2`);
 }
 
 function deRepeatOldProductText(html, nl = false) {
@@ -236,6 +248,24 @@ for (const file of walk()) {
       .replace(/<title>[^<]*<\/title>/, '<title>WeldInspect Pro | Connected weld inspection and CE dossier workflows</title>')
       .replace(/og:title" content="[^"]*"/, 'og:title" content="WeldInspect Pro | Connected weld inspection and CE dossier workflows"')
       .replace(/"name":"[^"]*"/, '"name":"WeldInspect Pro | Connected weld inspection and CE dossier workflows"');
+    html = replaceProductSectionFrame(html, customProductFrame({
+      title: 'Weld register review',
+      status: 'Inspection live',
+      metrics: [['742', 'Weld IDs'], ['128', 'WPS refs'], ['42', 'Photos'], ['11', 'Findings']],
+      center: '42',
+      centerLabel: 'Open actions',
+      activity: [['Weld W-1024 selected', 'Status, procedure and inspector visible together'], ['Photo evidence attached', 'Image, finding and note stay on the weld record'], ['Coordinator review queued', 'Open item ready for QA/QC follow-up']]
+    }, ['Register', 'Status', 'Photos', 'Findings', 'Evidence', 'Handover']));
+  }
+  if (file === 'nl/index.html') {
+    html = replaceProductSectionFrame(html, customProductFrame({
+      title: 'Lasregister review',
+      status: 'Inspectie actief',
+      metrics: [['742', 'Lasnummers'], ['128', 'WPS refs'], ['42', 'Foto’s'], ['11', 'Punten']],
+      center: '42',
+      centerLabel: 'Open acties',
+      activity: [['Las W-1024 geselecteerd', 'Status, procedure en inspecteur staan samen zichtbaar'], ['Fotobewijs gekoppeld', 'Foto, bevinding en notitie blijven bij de las'], ['Review ingepland', 'Open punt klaar voor QA/QC-opvolging']]
+    }, ['Register', 'Status', 'Foto’s', 'Bevindingen', 'Bewijs', 'Overdracht']));
   }
   if (file === 'index.html' || file === 'nl/index.html') {
     html = html.replace(/(<img src="\/assets\/images\/marketing\/optimized\/[^"]+"[^>]*?) loading="lazy"/gi, '$1 loading="eager"');
