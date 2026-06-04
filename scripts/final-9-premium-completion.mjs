@@ -54,14 +54,14 @@ function write(file, html) {
 
 function removeVisibleSeoSections(html) {
   return html
-    .replace(/<section[^>]*class="[^"]*seo-sitewide-support[^"]*"[^>]*>[\s\S]*?<\/section>/gi, '')
+    .replace(/<section[^>]*class="[^"]*seo-sitewide-ondersteuning[^"]*"[^>]*>[\s\S]*?<\/section>/gi, '')
     .replace(/<section[^>]*>\s*<div class="container">\s*<div class="section-head">\s*<span class="kicker">Knowledge centre structure<\/span>[\s\S]*?<\/section>/gi, '')
     .replace(/<span class="kicker">SEO context<\/span>/gi, '<span class="kicker">Workflow context</span>')
     .replace(/Knowledge centre structure/gi, 'Workflow overview')
     .replace(/practical workflow questions/gi, 'practical workflow questions')
     .replace(/workflow questions/gi, 'workflow questions')
-    .replace(/dummy cards/gi, 'repeated cards')
-    .replace(/dummykaarten/gi, 'herhaalde kaarten')
+    .replace(/repeated cards/gi, 'repeated cards')
+    .replace(/herhaalde kaarten/gi, 'herhaalde kaarten')
     .replace(/No repeated repeated cards/gi, 'Different workflow views')
     .replace(/repeated repeated cards/gi, 'relevant workflow views')
     .replace(/placeholder/gi, 'draft')
@@ -136,7 +136,7 @@ ${nav.map((n, i) => `<rect x="76" y="${136 + i * 58}" width="132" height="38" rx
 <text x="270" y="124" fill="#64748b" font-size="16" font-weight="700">${subtitle}</text>
 <rect x="270" y="160" width="178" height="92" rx="18" fill="#fff" stroke="#dbe7fb"/><text x="292" y="203" fill="#071426" font-size="30" font-weight="950">24</text><text x="292" y="228" fill="#64748b" font-size="13" font-weight="800">${lang === 'nl' ? 'Projecten' : 'Projects'}</text>
 <rect x="470" y="160" width="178" height="92" rx="18" fill="#fff" stroke="#dbe7fb"/><text x="492" y="203" fill="#071426" font-size="30" font-weight="950">318</text><text x="492" y="228" fill="#64748b" font-size="13" font-weight="800">${lang === 'nl' ? 'Inspecties' : 'Inspections'}</text>
-<rect x="670" y="160" width="228" height="92" rx="18" fill="#eff6ff" stroke="#bfdbfe"/><text x="692" y="203" fill="${accent}" font-size="30" font-weight="950">86%</text><text x="692" y="228" fill="#1e3a8a" font-size="13" font-weight="800">${lang === 'nl' ? 'Dossierstatus' : 'Dossier readiness'}</text>
+<rect x="670" y="160" width="228" height="92" rx="18" fill="#eff6ff" stroke="#bfdbfe"/><text x="692" y="203" fill="${accent}" font-size="30" font-weight="950">86%</text><text x="692" y="228" fill="#1e3a8a" font-size="13" font-weight="800">${lang === 'nl' ? 'Dossierstatus' : 'dossierstatus'}</text>
 ${rows.map((r, i) => `<rect x="270" y="${296 + i * 72}" width="628" height="54" rx="16" fill="#fff" stroke="#e6eefc"/><circle cx="296" cy="${323 + i * 72}" r="9" fill="${accent}"/><text x="318" y="${318 + i * 72}" fill="#071426" font-size="15" font-weight="900">${r[0]}</text><text x="318" y="${338 + i * 72}" fill="#64748b" font-size="13" font-weight="700">${r[1]}</text>`).join('')}
 </svg>`;
   writeFileSync(join(dir, file), svg, 'utf8');
@@ -188,7 +188,7 @@ function conversionDepth(lang = 'en', kind = 'demo') {
   const faq = nl
     ? [['Hoe snel krijg ik reactie?', 'Een aanvraag bevat genoeg context om gericht terug te koppelen over demo, proefperiode of contact.'], ['Vervangt dit formele beoordeling?', 'Nee. Bevoegde personen en offici&euml;le normteksten blijven leidend.'], ['Kan ik eerst de workflow zien?', 'Ja, de demo is bedoeld om de relevante productflow rustig te bekijken.']]
     : [['How quickly do we get a reply?', 'The request captures enough context for a focused follow-up about demo, trial or contact.'], ['Does this replace formal review?', 'No. Qualified personnel and official standard texts remain leading.'], ['Can we review the workflow first?', 'Yes, the demo route is meant for a practical product walkthrough.']];
-  return section(`conversion-${kind}`, `<section class="completion-band alt conversion-premium"><div class="container"><div class="section-head"><span class="kicker">${nl ? 'Conversie zonder ruis' : 'Conversion without guesswork'}</span><h2>${titles[kind]}</h2><p>${nl ? 'De pagina legt duidelijk uit wat iemand kan verwachten, welke informatie nuttig is en welke vervolgstap logisch is.' : 'The page explains what to expect, what information is useful and which next step fits the team.'}</p></div><div class="conversion-steps">${items.map((item, i) => `<article><b>${String(i + 1).padStart(2, '0')}</b><h3>${item}</h3><p>${nl ? 'Bespreek dit onderdeel met concrete projectcontext.' : 'Review this part with practical project context.'}</p></article>`).join('')}</div><div class="completion-faq">${faq.map(([q, a]) => `<article><h3>${q}</h3><p>${a}</p></article>`).join('')}</div></div></section>`);
+  return section(`conversion-${kind}`, `<section class="completion-band alt conversion-premium"><div class="container"><div class="section-head"><span class="kicker">${nl ? 'Heldere vervolgstap' : 'Conversion without guesswork'}</span><h2>${titles[kind]}</h2><p>${nl ? 'De pagina maakt duidelijk welke werkprocessen u kunt beoordelen en welke vervolgstap past bij uw team.' : 'The page explains what to expect, what information is useful and which next step fits the team.'}</p></div><div class="conversion-steps">${items.map((item, i) => `<article><b>${String(i + 1).padStart(2, '0')}</b><h3>${item}</h3><p>${nl ? 'Bespreek dit onderdeel met concrete projectcontext.' : 'Review this part with practical project context.'}</p></article>`).join('')}</div><div class="completion-faq">${faq.map(([q, a]) => `<article><h3>${q}</h3><p>${a}</p></article>`).join('')}</div></div></section>`);
 }
 
 function resourcesHub(lang = 'en') {
@@ -203,8 +203,8 @@ function pricingDepth(lang = 'en') {
   const nl = lang === 'nl';
   const faqs = nl
     ? ['Kan ik starten met een proefperiode?', 'Heb ik een creditcard nodig?', 'Kunnen we later gebruikers toevoegen?', 'Wat gebeurt er na betaling?', 'Is implementatieondersteuning mogelijk?', 'Kunnen we eerst een demo aanvragen?', 'Wat als ons team een afwijkende inrichting nodig heeft?']
-    : ['Can I start with a trial?', 'Do I need a credit card?', 'Can we add more users later?', 'What happens after payment?', 'Is implementation support available?', 'Can we request a demo first?', 'What if our team needs a custom setup?'];
-  return section(`pricing-${lang}`, `<section class="completion-band pricing-depth"><div class="container"><div class="section-head"><span class="kicker">${nl ? 'Prijzen met context' : 'Pricing with context'}</span><h2>${nl ? 'Kies tussen proefperiode, demo, betaling of maatwerk.' : 'Choose trial, demo, payment or custom setup with clear expectations.'}</h2><p>${nl ? 'De pagina maakt duidelijk wat inbegrepen is, wat na betaling gebeurt en wanneer contact of demo verstandiger is.' : 'The page explains what is included, what happens after payment and when contact or demo is the better route.'}</p></div><div class="completion-faq">${faqs.map(q => `<article><h3>${q}</h3><p>${nl ? 'Deze vraag wordt beantwoord met praktische context zonder onbewezen claims.' : 'This is answered with practical context and without unsupported claims.'}</p></article>`).join('')}</div></div></section>`);
+    : ['Can I start with a trial?', 'Do I need a credit card?', 'Can we add more users later?', 'What happens after payment?', 'Is implementation ondersteuning available?', 'Can we request a demo first?', 'What if our team needs a custom setup?'];
+  return section(`pricing-${lang}`, `<section class="completion-band pricing-depth"><div class="container"><div class="section-head"><span class="kicker">${nl ? 'Prijzen met context' : 'Pricing with context'}</span><h2>${nl ? 'Kies tussen proefperiode, demo, betaling of maatwerk.' : 'Choose trial, demo, payment or custom setup with clear expectations.'}</h2><p>${nl ? 'De pagina maakt duidelijk wat inbegrepen is, wat na betaling gebeurt en wanneer contact of demo verstandiger is.' : 'The page explains what is included, what happens after payment and when contact or demo is the better route.'}</p></div><div class="completion-faq">${faqs.map(q => `<article><h3>${q}</h3><p>${nl ? 'Bekijk de praktische route zonder onbewezen normclaims of verzonnen garanties.' : 'This is answered with practical context and without unsupported claims.'}</p></article>`).join('')}</div></div></section>`);
 }
 
 function normalizeHref(file, href) {
@@ -232,9 +232,9 @@ function normalizeLinks(file, html) {
 }
 
 svgVisual({ file: 'product-standards-context.svg', title: 'Standards context', subtitle: 'Safe documentation workflow around standards', active: 'Documents', accent: '#7c3aed' });
-svgVisual({ file: 'product-pricing-onboarding.svg', title: 'Pricing and onboarding', subtitle: 'Trial, demo, checkout and implementation routes', active: 'Projects', accent: '#0ea5e9' });
+svgVisual({ file: 'product-pricing-onboarding.svg', title: 'Pricing and onboarding', subtitle: 'Proefperiode, demo, checkout and implementation routes', active: 'Projects', accent: '#0ea5e9' });
 svgVisual({ file: 'product-demo-walkthrough.svg', title: 'Demo walkthrough', subtitle: 'Project setup to dossier handover', active: 'Inspections', accent: '#16a34a' });
-svgVisual({ file: 'nl-product-standards-context.svg', title: 'Normcontext', subtitle: 'Veilige documentatieworkflow rond normen', active: 'Documenten', accent: '#7c3aed', lang: 'nl' });
+svgVisual({ file: 'nl-product-standards-context.svg', title: 'Normcontext', subtitle: 'Veilige documentatiewerkproces rond normen', active: 'Documenten', accent: '#7c3aed', lang: 'nl' });
 svgVisual({ file: 'nl-product-pricing-onboarding.svg', title: 'Prijzen en onboarding', subtitle: 'Proefperiode, demo, betaling en implementatie', active: 'Projecten', accent: '#0ea5e9', lang: 'nl' });
 svgVisual({ file: 'nl-product-demo-walkthrough.svg', title: 'Demo-doorloop', subtitle: 'Van projectinrichting tot dossieroverdracht', active: 'Inspecties', accent: '#16a34a', lang: 'nl' });
 

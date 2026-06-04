@@ -39,7 +39,7 @@ function updatePricing(file, section, heroActions, english) {
     html = html.replaceAll('<a class="btn btn-primary btn-large" href="/trial">Pay yearly via Mollie</a>', '<a class="btn btn-primary btn-large" href="/nl/checkout?cycle=yearly&amp;seats=1">Pay yearly via Mollie</a>');
   } else {
     html = html.replace(
-      'Bekijk pakketten, start een proefperiode of plan een demo voor uw lasinspectie- en documentatieworkflow.',
+      'Bekijk pakketten, start een proefperiode of plan een demo voor uw lasinspectie- en documentatiewerkproces.',
       'Kies maandelijks of jaarlijks afrekenen en ga door naar de beveiligde Mollie checkout. De checkout berekent het gekozen abonnement, aantal gebruikers, btw en eindbedrag voordat u betaalt.',
     );
     html = html.replace(/<!-- pricing-cycle-ctas -->[\s\S]*?<section class="final-cta visual-cta">/, '<section class="final-cta visual-cta">');
