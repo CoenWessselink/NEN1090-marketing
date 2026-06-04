@@ -27,6 +27,18 @@ const legalPaths = new Set([
   '/service-availability'
 ]);
 
+const excludedFromPrimarySitemaps = new Set([
+  '/abs',
+  '/api-1104',
+  '/asme-ix',
+  '/aws-d1-1',
+  '/aws-d1-2',
+  '/aws-d1-6',
+  '/lloyds',
+  '/nl/audit-ready-ce-dossier',
+  '/nl/blog/digitale-traceability-lassen',
+]);
+
 function priority(pathname) {
   if (pathname === '/' || pathname === '/nl/') return '1.0';
   if (['/platform','/inspections','/standards','/reports','/pricing','/trial','/demo','/contact','/nl/lasinspectie-software','/nl/en-1090-software','/nl/ce-dossier-software','/nl/prijzen','/nl/trial','/nl/demo','/nl/contact'].includes(pathname)) return '0.9';
@@ -53,6 +65,8 @@ for (const file of walk()) {
   const match = html.match(/<link rel="canonical" href="(https:\/\/weldinspectpro\.com[^"]+)">/);
   if (!match) continue;
   const url = match[1].replace(/\.html$/, '');
+  const pathname = new URL(url).pathname;
+  if (excludedFromPrimarySitemaps.has(pathname)) continue;
   urls.set(url, url);
 }
 

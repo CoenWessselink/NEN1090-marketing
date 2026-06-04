@@ -55,15 +55,15 @@ function write(file, html) {
 function removeVisibleSeoSections(html) {
   return html
     .replace(/<section[^>]*class="[^"]*seo-sitewide-support[^"]*"[^>]*>[\s\S]*?<\/section>/gi, '')
-    .replace(/<section[^>]*>\s*<div class="container">\s*<div class="section-head">\s*<span class="kicker">SEO workflow overview<\/span>[\s\S]*?<\/section>/gi, '')
+    .replace(/<section[^>]*>\s*<div class="container">\s*<div class="section-head">\s*<span class="kicker">Knowledge centre structure<\/span>[\s\S]*?<\/section>/gi, '')
     .replace(/<span class="kicker">SEO context<\/span>/gi, '<span class="kicker">Workflow context</span>')
-    .replace(/SEO workflow overview/gi, 'Workflow overview')
-    .replace(/real search intent/gi, 'practical workflow questions')
-    .replace(/search intent/gi, 'workflow questions')
+    .replace(/Knowledge centre structure/gi, 'Workflow overview')
+    .replace(/practical workflow questions/gi, 'practical workflow questions')
+    .replace(/workflow questions/gi, 'workflow questions')
     .replace(/dummy cards/gi, 'repeated cards')
     .replace(/dummykaarten/gi, 'herhaalde kaarten')
-    .replace(/No repeated repeated cards/gi, 'No recycled product cards')
-    .replace(/repeated repeated cards/gi, 'recycled product cards')
+    .replace(/No repeated repeated cards/gi, 'Different workflow views')
+    .replace(/repeated repeated cards/gi, 'relevant workflow views')
     .replace(/placeholder/gi, 'draft')
     .replace(/TBD/gi, '')
     .replace(/coming soon/gi, 'available on request')
@@ -172,7 +172,7 @@ function premiumDepth(lang = 'en', page = 'platform') {
       nl ? 'nl-product-report-preview.svg' : 'product-report-preview.svg'
     ],
   }[page];
-  return section(`depth-${page}`, `<section class="completion-band premium-depth"><div class="container completion-grid"><div><span class="completion-eyebrow">${nl ? '9/10 productdiepte' : '9/10 product depth'}</span><h2>${data[0]}</h2><p>${data[1]}</p><ul class="completion-list"><li>${nl ? 'Eigen verhaal en eigen visual voor deze route.' : 'Dedicated story and visual for this route.'}</li><li>${nl ? 'Concrete productmomenten in plaats van generieke SaaS-tekst.' : 'Concrete product moments instead of generic SaaS copy.'}</li><li>${safeClaim(lang)}</li></ul></div><div class="product-visual-stack"><a class="product-shot-card" href="/assets/images/visuals/${data[2]}"><img src="/assets/images/visuals/${data[2]}" alt="${data[0]}"><span class="shot-caption">${data[0]}<small>${nl ? 'Premium productvisual' : 'Premium product visual'}</small></span></a></div></div></section>`);
+  return section(`depth-${page}`, `<section class="completion-band premium-depth"><div class="container completion-grid"><div><span class="completion-eyebrow">${nl ? 'Productdiepte' : 'Product depth'}</span><h2>${data[0]}</h2><p>${data[1]}</p><ul class="completion-list"><li>${nl ? 'Een routespecifieke workflow laat zien waar teams records vastleggen, beoordelen en overdragen.' : 'A route-specific workflow view shows where teams capture, review and hand over the relevant records.'}</li><li>${nl ? 'Inspecteurs, co&ouml;rdinatoren en documentatieteams volgen dezelfde projectcontext zonder bewijs achteraf opnieuw te verzamelen.' : 'Inspectors, coordinators and documentation teams can follow the same project context without rebuilding evidence at the end.'}</li><li>${safeClaim(lang)}</li></ul></div><div class="product-visual-stack"><a class="product-shot-card" href="/assets/images/visuals/${data[2]}"><img src="/assets/images/visuals/${data[2]}" alt="${data[0]}"><span class="shot-caption">${data[0]}<small>${nl ? 'Premium productvisual' : 'Premium product visual'}</small></span></a></div></div></section>`);
 }
 
 function conversionDepth(lang = 'en', kind = 'demo') {
