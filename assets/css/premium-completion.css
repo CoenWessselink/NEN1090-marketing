@@ -133,9 +133,9 @@ a:focus-visible,.product-shot-card:focus-visible,.knowledge-card:focus-visible,.
 .customer-reference-brand,.customer-quote{margin:0;padding:30px;border:1px solid #dbe7fb;border-radius:24px;background:#fff;box-shadow:0 20px 60px rgba(15,23,42,.08)}
 .customer-reference-brand{display:flex;flex-direction:column;justify-content:center;background:linear-gradient(145deg,#fff8cf,#fff)}
 .customer-reference-label{margin-bottom:18px;color:#345170;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
-.tasche-wordmark{display:inline-grid;width:max-content;max-width:100%;padding:18px 24px;border-radius:10px;background:#ffdc34;color:#050505;line-height:1}
-.tasche-wordmark strong{font-size:32px;font-style:italic;letter-spacing:.035em}.tasche-wordmark span{font-size:15px;letter-spacing:.28em}.tasche-wordmark small{margin-top:7px;font-size:10px;letter-spacing:.14em;text-transform:uppercase}
-.tasche-wordmark.large{padding:34px 42px;align-self:center}.tasche-wordmark.large strong{font-size:48px}.tasche-wordmark.large span{font-size:20px}
+.tasche-logo-shell{display:flex;width:max-content;max-width:100%;padding:18px 24px;border-radius:10px;background:#ffdc34;box-shadow:0 16px 36px rgba(15,23,42,.12)}
+.tasche-logo{display:block;width:240px;max-width:100%;height:auto}
+.tasche-logo-shell.large{align-self:center;padding:32px 40px}.tasche-logo-shell.large .tasche-logo{width:360px}
 .customer-reference-brand p{max-width:480px;margin:18px 0 0;color:#53627a}
 .customer-quote{display:flex;flex-direction:column;justify-content:center;background:linear-gradient(145deg,#08172d,#102d55);color:#fff}
 .customer-quote blockquote{margin:0;font-size:clamp(22px,2.2vw,34px);font-weight:750;line-height:1.3;letter-spacing:-.025em}
@@ -151,8 +151,8 @@ a:focus-visible,.product-shot-card:focus-visible,.knowledge-card:focus-visible,.
 .article-depth{max-width:850px;margin:0 auto;padding:18px 0 48px}.article-depth h2{margin-top:32px;font-size:30px;letter-spacing:-.035em}.article-depth p,.article-depth li{color:#475569;line-height:1.78}.article-depth li+li{margin-top:8px}
 .article-review{max-width:850px;margin:0 auto 48px;padding:26px 30px;border-left:4px solid #2563eb;border-radius:0 18px 18px 0;background:#f3f7ff}.article-review h2{margin:0 0 14px;font-size:28px;letter-spacing:-.035em}.article-review p{color:#475569;line-height:1.78}.article-review p:last-child{margin-bottom:0}
 @media(max-width:980px){.evaluation-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.product-proof-grid{grid-template-columns:1fr}.product-proof-card{max-width:720px}}
-@media(max-width:980px){.real-product-layout,.customer-reference-grid,.real-screen-feature-grid{grid-template-columns:1fr}.real-product-video video{min-height:320px}.case-detail-grid{grid-template-columns:1fr}.tasche-wordmark.large{justify-self:start}}
-@media(max-width:620px){.evaluation-grid{grid-template-columns:1fr}.evaluation-grid article,.product-proof-card div,.choice-cta{padding:18px}.product-proof-card h3{font-size:19px}.scope-table{margin-inline:-2px}.scope-table th,.scope-table td{padding:13px 14px}.choice-cta .btn{width:100%}.real-product-card{grid-template-columns:1fr}.real-product-card img{width:100%;height:auto}.real-product-note{position:static;margin:12px;border-radius:16px}.real-product-video video{min-height:240px}.customer-reference-brand,.customer-quote{padding:22px}.tasche-wordmark{width:100%;padding:16px}.tasche-wordmark strong{font-size:28px}.tasche-wordmark.large{padding:24px}.tasche-wordmark.large strong{font-size:34px}.customer-quote blockquote{font-size:21px}}
+@media(max-width:980px){.real-product-layout,.customer-reference-grid,.real-screen-feature-grid{grid-template-columns:1fr}.real-product-video video{min-height:320px}.case-detail-grid{grid-template-columns:1fr}.tasche-logo-shell.large{justify-self:start}}
+@media(max-width:620px){.evaluation-grid{grid-template-columns:1fr}.evaluation-grid article,.product-proof-card div,.choice-cta{padding:18px}.product-proof-card h3{font-size:19px}.scope-table{margin-inline:-2px}.scope-table th,.scope-table td{padding:13px 14px}.choice-cta .btn{width:100%}.real-product-card{grid-template-columns:1fr}.real-product-card img{width:100%;height:auto}.real-product-note{position:static;margin:12px;border-radius:16px}.real-product-video video{min-height:240px}.customer-reference-brand,.customer-quote{padding:22px}.tasche-logo-shell{width:100%;padding:16px}.tasche-logo{width:220px}.tasche-logo-shell.large{padding:24px}.tasche-logo-shell.large .tasche-logo{width:280px}.customer-quote blockquote{font-size:21px}}
 
 @media(max-width:760px){
   html,body{max-width:100%;overflow-x:hidden}
