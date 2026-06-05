@@ -124,12 +124,27 @@ const pricingFaqAnswers = [
   ['What if our team needs a custom setup?', 'Use contact or demo to discuss team context, privacy/DPA review, implementation and commercial requirements.'],
 ];
 
+const pricingFaqAnswersNl = [
+  ['Kan ik starten met een proefperiode?', 'Ja. Vraag een proefperiode aan om projecten, lassen, inspecties, bewijs, dossierstatus en rapportage te beoordelen voordat u een betaald abonnement kiest.'],
+  ['Heb ik een creditcard nodig?', 'Nee. Voor een proefperiode of demo is geen creditcard nodig. De Mollie-betaalroute wordt alleen gebruikt wanneer u bewust een betaald abonnement kiest.'],
+  ['Kunnen we later gebruikers toevoegen?', 'Ja. Teamgrootte en uitrol kunnen tijdens de commerciële opvolging opnieuw worden afgestemd.'],
+  ['Wat gebeurt er na betaling?', 'De betaalpagina bevestigt bedrag, btw en betaalcyclus voordat Mollie de betaling verwerkt. Daarna volgt bevestiging over account en onboarding.'],
+  ['Is implementatieondersteuning mogelijk?', 'Ja. Vooral bij grotere teams kunnen inrichting, rollen en implementatie tijdens een demo of contactgesprek worden besproken.'],
+  ['Kunnen we eerst een demo aanvragen?', 'Ja. Tijdens een demo doorlopen we projecten, lassen, inspecties, bewijs, rapportage en dossieropbouw in samenhang.'],
+  ['Wat als ons team een afwijkende inrichting nodig heeft?', 'Gebruik demo of contact om teamcontext, privacy- en DPA-beoordeling, implementatie en commerciële eisen te bespreken.'],
+];
+
 const pricingTableEn = `<div class="scope-table"><table><thead><tr><th>Evaluation point</th><th>Trial evaluation</th><th>Monthly plan</th><th>Yearly plan</th><th>Enterprise / custom</th></tr></thead><tbody><tr><td>Product evaluation</td><td>Self-guided review</td><td>Paid use</td><td>Paid use</td><td>Guided scoping</td></tr><tr><td>Project and weld workflow</td><td>Review fit</td><td>Product route</td><td>Product route</td><td>Map rollout</td></tr><tr><td>Inspection documentation</td><td>Evaluate records</td><td>Product route</td><td>Product route</td><td>Discuss teams</td></tr><tr><td>Evidence and document context</td><td>Review flow</td><td>Product route</td><td>Product route</td><td>Map requirements</td></tr><tr><td>Reporting and handover workflow</td><td>Evaluate output</td><td>Product route</td><td>Product route</td><td>Discuss delivery</td></tr><tr><td>Team and implementation discussion</td><td>Available</td><td>Available</td><td>Available</td><td>Primary route</td></tr><tr><td>Commercial follow-up</td><td>After evaluation</td><td>Checkout follow-up</td><td>Checkout follow-up</td><td>Proposal route</td></tr><tr><td>Privacy and DPA review</td><td>Available</td><td>Available</td><td>Available</td><td>Included in scoping</td></tr></tbody></table></div>`;
 const pricingTableNl = `<div class="scope-table"><table><thead><tr><th>Evaluatiepunt</th><th>Proefperiode</th><th>Maandplan</th><th>Jaarplan</th><th>Enterprise / maatwerk</th></tr></thead><tbody><tr><td>Productevaluatie</td><td>Zelf beoordelen</td><td>Betaald gebruik</td><td>Betaald gebruik</td><td>Begeleide afstemming</td></tr><tr><td>Project- en laswerkproces</td><td>Aansluiting beoordelen</td><td>Productroute</td><td>Productroute</td><td>Uitrol bespreken</td></tr><tr><td>Inspectiedocumentatie</td><td>Records beoordelen</td><td>Productroute</td><td>Productroute</td><td>Teams bespreken</td></tr><tr><td>Bewijs- en documentcontext</td><td>Werkproces beoordelen</td><td>Productroute</td><td>Productroute</td><td>Eisen afstemmen</td></tr><tr><td>Rapportage en overdracht</td><td>Uitvoer beoordelen</td><td>Productroute</td><td>Productroute</td><td>Oplevering bespreken</td></tr><tr><td>Team- en implementatiegesprek</td><td>Beschikbaar</td><td>Beschikbaar</td><td>Beschikbaar</td><td>Primaire route</td></tr><tr><td>Commerci&euml;le opvolging</td><td>Na evaluatie</td><td>Na checkout</td><td>Na checkout</td><td>Voorstel op maat</td></tr><tr><td>Privacy- en DPA-beoordeling</td><td>Beschikbaar</td><td>Beschikbaar</td><td>Beschikbaar</td><td>Onderdeel van afstemming</td></tr></tbody></table></div>`;
 
 function replacePricingPlaceholder(html, dutch = false) {
   if (dutch) {
-    return html.replace(/<p>Dit wordt beantwoord met praktische context[^<]*<\/p>/g, '<p>Bekijk proefperiode, demo en betaalroute naast elkaar en kies de vervolgstap die past bij uw team.</p>');
+    let index = 0;
+    return html.replace(/<p>(?:Dit wordt beantwoord met praktische context[^<]*|Bekijk de praktische route zonder onbewezen normclaims of verzonnen garanties\.)<\/p>/g, () => {
+      const answer = pricingFaqAnswersNl[index]?.[1] || 'Neem contact op voor een duidelijk antwoord op basis van uw team en gewenste evaluatieroute.';
+      index += 1;
+      return `<p>${answer}</p>`;
+    });
   }
   let index = 0;
   return html.replace(/<p>This is answered with practical context and without unsupported claims\.<\/p>/g, () => {
