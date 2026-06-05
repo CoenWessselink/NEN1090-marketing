@@ -257,25 +257,6 @@ function bindMobileMenu() {
   });
 }
 
-function ensureMobileMenuFallback() {
-  const sourceButton = document.querySelector('.menu-button');
-  const menu = document.querySelector('#mobileMenu');
-  if (!sourceButton || !menu || document.querySelector('.mobile-fixed-menu-button')) return;
-
-  const fallback = document.createElement('button');
-  fallback.type = 'button';
-  fallback.className = 'mobile-fixed-menu-button';
-  fallback.setAttribute('aria-label', sourceButton.getAttribute('aria-label') || 'Open menu');
-  fallback.innerHTML = '<span></span><span></span><span></span>';
-  fallback.addEventListener('click', (event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    const nextState = sourceButton.getAttribute('aria-expanded') !== 'true';
-    setMobileMenuState(sourceButton, menu, nextState);
-  });
-  document.body.appendChild(fallback);
-}
-
 window.addEventListener('DOMContentLoaded', () => {
   ensureVisualPremiumStyles();
   normalizeBranding();
@@ -283,7 +264,6 @@ window.addEventListener('DOMContentLoaded', () => {
   ensureLoginActions();
   setGlobalPricingSubscriptionLinks();
   bindMobileMenu();
-  ensureMobileMenuFallback();
   bindLeadForms();
 });
 
