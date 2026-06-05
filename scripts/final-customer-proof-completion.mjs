@@ -47,6 +47,37 @@ function insertBeforeTrustOrCta(html, content) {
   return insertBefore(html, marker, content);
 }
 
+function addCustomerStoryFooterLink(html, dutch) {
+  const heading = dutch ? 'Conversie' : 'Company';
+  const label = dutch ? 'Klantverhaal' : 'Customer story';
+  const pattern = new RegExp(`(<div><h4>${heading}</h4>[\\s\\S]*?)(</div>)`);
+  return html.replace(pattern, (column, content, closing) => {
+    if (column.includes('href="/case-studies/tasche-staalbouw"')) return column;
+    return `${content}<a href="/case-studies/tasche-staalbouw">${label}</a>${closing}`;
+  });
+}
+
+function polishCustomerStoriesHub(html) {
+  const schema = `<script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Customer Stories | WeldInspect Pro","description":"Verified customer experience with WeldInspect Pro for weld inspection, project documentation, dossier preparation and reporting.","url":"https://weldinspectpro.com/case-studies","mainEntity":{"@type":"ItemList","itemListElement":[{"@type":"ListItem","position":1,"url":"https://weldinspectpro.com/case-studies/tasche-staalbouw","name":"Tasche Staalbouw Customer Reference"}]}}</script>`;
+  return html
+    .replace(/<title>[\s\S]*?<\/title>/, '<title>Customer Stories for Steel Construction Teams | WeldInspect Pro</title>')
+    .replace(/<meta name="description" content="[^"]*">/, '<meta name="description" content="Explore verified customer experience with WeldInspect Pro for weld inspection, project documentation, dossier preparation and reporting.">')
+    .replace(/<meta property="og:title" content="[^"]*">/, '<meta property="og:title" content="Customer Stories for Steel Construction Teams | WeldInspect Pro">')
+    .replace(/<meta property="og:description" content="[^"]*">/, '<meta property="og:description" content="See how steel construction teams use WeldInspect Pro to keep inspection records, project documentation and dossier work connected.">')
+    .replace(/<script type="application\/ld\+json">\[[\s\S]*?<\/script>/, schema)
+    .replace('<p class="kicker">Workflow scenarios</p>', '<p class="kicker">Customer stories</p>')
+    .replace('<h1>Weld inspection workflow scenarios without fictional customer claims.</h1>', '<h1>Customer stories from steel construction workflows.</h1>')
+    .replace('<p class="lead">Explore practical project situations around inspection evidence, dossier preparation and handover without fake customer logos, fake testimonials or unsupported claims.</p>', '<p class="lead">See how steel construction teams use WeldInspect Pro to keep weld inspections, project documentation, dossier preparation and reporting connected.</p>')
+    .replace('alt="Weld inspection workflow scenario"', 'alt="Weld inspection and documentation workflow in steel construction"')
+    .replace('<h2>Use scenarios to understand where the platform helps</h2>', '<h2>See the platform in a real steel construction context.</h2>')
+    .replace('<p>Each scenario shows how records connect across project setup, weld inspection, WPS/WPQ context, traceability and reporting.</p>', '<p>The customer reference shows how project records, weld inspection, dossier preparation and reporting can remain connected throughout delivery.</p>')
+    .replace('<li>No fake testimonials or logos are used.</li><li>Examples stay focused on realistic workflows.</li><li>Related routes guide visitors to product pages.</li><li>Safe standards wording is maintained.</li>', '<li>Verified customer experience is kept separate from product claims.</li><li>Product screens show the workflow at a readable scale.</li><li>Related routes connect the story to relevant platform pages.</li><li>Official standards and formal conformity decisions remain leading.</li>')
+    .replace('Discuss a project scenario.', 'Discuss your project workflow.')
+    .replace('<h2>Use-case scenario questions</h2>', '<h2>Customer reference questions</h2>')
+    .replace('<h3>Who are these use-case scenarios for?</h3><p>They are for visitors who want concrete examples of weld inspection, evidence and documentation work without fake customer stories.</p>', '<h3>What does the customer reference cover?</h3><p>It covers practical experience with weld inspection overview, project documentation, dossier preparation and professional reporting.</p>')
+    .replace('<h3>How do these scenarios connect to product workflows?</h3><p>The scenarios connect evidence capture, open actions, traceability, standards context and reporting in practical project situations.</p>', '<h3>How does the reference connect to the product?</h3><p>The reference is supported by real product screens for project status, inspection follow-up, reporting and dossier preparation.</p>');
+}
+
 const tascheLogo = `<div class="tasche-logo-shell"><img class="tasche-logo" src="/assets/images/logos/tasche-staalbouw-logo.svg" alt="Tasche Staalbouw logo" width="186" height="55" loading="lazy" decoding="async"></div>`;
 const tascheLogoLarge = `<div class="tasche-logo-shell large"><img class="tasche-logo" src="/assets/images/logos/tasche-staalbouw-logo.svg" alt="Tasche Staalbouw logo" width="186" height="55" decoding="async"></div>`;
 const legacyTascheLogo = /<div class="tasche-wordmark" role="img" aria-label="Tasche Staalbouw logo"><strong>TASCHE<\/strong><span>STAALBOUW<\/span><small>Albergen - Fleringen<\/small><\/div>/g;
@@ -151,10 +182,17 @@ for (const file of walk()) {
   const dutch = relativePath.startsWith('nl/');
   html = html
     .replace(legacyTascheLogoLarge, tascheLogoLarge)
-    .replace(legacyTascheLogo, tascheLogo);
+    .replace(legacyTascheLogo, tascheLogo)
+    .replace(/=(["'])(?:\.\/|\.\.\/)*assets\//g, '=$1/assets/');
   html = repairEncoding(html);
+  if (relativePath === 'case-studies.html' || relativePath === 'case-studies/index.html') {
+    html = polishCustomerStoriesHub(html);
+  }
   html = replaceTrust(html, dutch);
   html = replacePricingPlaceholder(html, dutch);
+  if (relativePath === 'index.html' || relativePath === 'nl/index.html') {
+    html = addCustomerStoryFooterLink(html, dutch);
+  }
   writeFileSync(file, html, 'utf8');
 }
 
@@ -257,12 +295,17 @@ for (const folder of ['resources', 'nl/blog']) {
 
 const caseSource = read('case-studies.html');
 const beforeMain = caseSource.slice(0, caseSource.indexOf('<main>'))
-  .replace(/<title>[\s\S]*?<\/title>/, '<title>Tasche Staalbouw customer reference | WeldInspect Pro</title>')
+  .replace(/<title>[\s\S]*?<\/title>/, '<title>Tasche Staalbouw Customer Reference | WeldInspect Pro</title>')
   .replace(/<meta name="description" content="[^"]*">/, '<meta name="description" content="How Tasche Staalbouw uses WeldInspect Pro for weld inspection overview, project documentation, dossier preparation and professional reporting.">')
-  .replace(/<link rel="canonical" href="[^"]+">/, '<link rel="canonical" href="https://weldinspectpro.com/case-studies/tasche-staalbouw">');
+  .replace(/<link rel="canonical" href="[^"]+">/, '<link rel="canonical" href="https://weldinspectpro.com/case-studies/tasche-staalbouw">')
+  .replace(/<meta property="og:type" content="[^"]+">/, '<meta property="og:type" content="article">')
+  .replace(/<meta property="og:title" content="[^"]+">/, '<meta property="og:title" content="Tasche Staalbouw Customer Reference | WeldInspect Pro">')
+  .replace(/<meta property="og:description" content="[^"]+">/, '<meta property="og:description" content="How Tasche Staalbouw uses WeldInspect Pro for clearer weld inspections, project documentation, dossier preparation and professional reporting.">')
+  .replace(/<meta property="og:url" content="[^"]+">/, '<meta property="og:url" content="https://weldinspectpro.com/case-studies/tasche-staalbouw">')
+  .replace(/<script type="application\/ld\+json">\[[\s\S]*?<\/script>\s*/, '');
 const afterMain = caseSource.slice(caseSource.indexOf('</main>') + 7);
 const caseMain = `<main><section class="route-hero customer-case-hero"><div class="container route-hero-grid"><div><p class="kicker">Customer reference</p><h1>Tasche Staalbouw keeps weld inspection and dossier work connected.</h1><p class="lead">A practical steel construction reference focused on overview, project documentation, dossier preparation and professional reporting.</p><div class="hero-actions"><a class="btn btn-primary btn-large" href="/demo">Book a demo</a><a class="btn btn-outline btn-large" href="/trial">Start trial evaluation</a></div></div>${tascheLogoLarge}</div></section>${trustEn}<section class="section"><div class="container case-detail-grid"><article><span class="kicker">Context</span><h2>Steel construction needs project information to stay findable.</h2><p>Tasche Staalbouw works with WeldInspect Pro to organise weld inspections, project documentation and dossier preparation. The reference is intentionally based on confirmed experience rather than invented project details or performance figures.</p></article><article><span class="kicker">Experience</span><h2>More overview across inspection and documentation work.</h2><p>The platform fits the practical steel construction context and helps keep project information, inspection records, evidence and reporting closer together.</p></article><article><span class="kicker">Reporting</span><h2>Professional and well-presented output.</h2><p>Tasche Staalbouw is very satisfied with the operation of WeldInspect Pro and describes the reporting as professional and well presented.</p></article></div></section><section class="section real-screen-feature"><div class="container real-screen-feature-grid"><div><span class="kicker">Product context</span><h2>From project overview to reporting.</h2><p>The product environment supports the connected route from project records and inspection follow-up to report preparation.</p><a class="btn btn-outline" href="/demo">See the workflow in a demo</a></div><a class="real-screen-frame" href="/assets/images/screenshots/real-app-reports-clean.webp"><img src="/assets/images/screenshots/real-app-reports-clean.webp" alt="WeldInspect Pro report preparation screen" loading="lazy" decoding="async"></a></div></section><section class="claim-safe-strip"><div class="container">WeldInspect Pro supports documentation workflows around relevant standards. Official standard texts, certification, qualified review and formal conformity decisions remain leading.</div></section></main>`;
-const caseSchema = `<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Tasche Staalbouw customer reference","description":"How Tasche Staalbouw uses WeldInspect Pro for weld inspection overview, project documentation, dossier preparation and professional reporting.","author":{"@type":"Organization","name":"WeldInspect Pro"},"publisher":{"@type":"Organization","name":"WeldInspect Pro"},"mainEntityOfPage":"https://weldinspectpro.com/case-studies/tasche-staalbouw"}</script>`;
+const caseSchema = `<script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Tasche Staalbouw Customer Reference","description":"How Tasche Staalbouw uses WeldInspect Pro for weld inspection overview, project documentation, dossier preparation and professional reporting.","image":"https://weldinspectpro.com/assets/images/marketing/optimized/photo-weld-closeup.jpg","about":{"@type":"Organization","name":"Tasche Staalbouw","url":"https://www.taschestaalbouw.nl/"},"author":{"@type":"Organization","name":"WeldInspect Pro"},"publisher":{"@type":"Organization","name":"WeldInspect Pro"},"mainEntityOfPage":"https://weldinspectpro.com/case-studies/tasche-staalbouw"}</script>`;
 write('case-studies/tasche-staalbouw.html', `${beforeMain.replace('</head>', `${caseSchema}</head>`)}${caseMain}${afterMain}`);
 write('case-studies/tasche-staalbouw/index.html', `${beforeMain.replace('</head>', `${caseSchema}</head>`)}${caseMain}${afterMain}`);
 
