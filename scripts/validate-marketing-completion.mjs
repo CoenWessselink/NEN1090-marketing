@@ -114,6 +114,12 @@ const forbiddenVisible = [
   'CE-dossieropbouwen',
   'complianceclaims',
   'audit-ready output',
+  'without fake proof',
+  'zonder verzonnen bewijs',
+  'This is answered with practical context',
+  'SEO workflow overview',
+  'real search intent',
+  'No recycled product cards',
 ];
 for (const file of walk(root)) {
   const html = read(file);
@@ -122,6 +128,66 @@ for (const file of walk(root)) {
   }
   for (const brand of ['MAMMOET', 'HEEREMA', 'BOSKALIS', 'VAN OORD', 'TATA STEEL', 'TECHNIPFMC']) {
     if (html.includes(brand)) fail.push(`${file}: unsupported customer/trust claim "${brand}"`);
+  }
+}
+
+for (const file of ['index.html', 'pricing.html', 'demo.html', 'trial.html', 'case-studies.html']) {
+  const html = read(file);
+  if (!html.includes('Tasche Staalbouw')) fail.push(`${file}: missing Tasche Staalbouw customer reference`);
+}
+
+for (const file of ['index.html', 'nl/index.html']) {
+  const html = read(file);
+  for (const schemaType of ['Organization', 'WebSite', 'SoftwareApplication']) {
+    if (!html.includes(`"@type":"${schemaType}"`)) fail.push(`${file}: missing ${schemaType} structured data`);
+  }
+}
+
+for (const file of ['trial.html', 'demo.html', 'nl/trial.html', 'nl/demo.html']) {
+  if (!read(file).includes('"@type":"FAQPage"')) fail.push(`${file}: missing FAQPage structured data`);
+}
+
+for (const file of walk(join(root, 'nl'))) {
+  const html = read(file);
+  for (const broken of ['\u00e2\u20ac\u2122', '\u00c3\u00ab', '\u00c3\u00a9', '\u00c3\u00af', '\u00c3\u00b3', '\u00c2\u00b7', 'foto?s']) {
+    if (html.includes(broken)) fail.push(`${file}: broken Dutch encoding sequence "${broken}"`);
+  }
+}
+
+const canonicalPages = new Map();
+for (const file of walk(root)) {
+  const html = read(file);
+  const canonical = html.match(/<link rel="canonical" href="(https:\/\/weldinspectpro\.com[^"]+)">/)?.[1];
+  if (canonical && !canonicalPages.has(canonical)) canonicalPages.set(canonical, { file, html });
+}
+const titles = new Map();
+const descriptions = new Map();
+for (const [canonical, { file, html }] of canonicalPages) {
+  const title = html.match(/<title>([\s\S]*?)<\/title>/i)?.[1]?.trim();
+  const description = html.match(/<meta name="description" content="([^"]*)">/i)?.[1]?.trim();
+  if (!title) fail.push(`${file}: missing title`);
+  else if (titles.has(title)) fail.push(`${file}: duplicate title with ${titles.get(title)} (${title})`);
+  else titles.set(title, canonical);
+  if (!description) fail.push(`${file}: missing meta description`);
+  else if (descriptions.has(description)) fail.push(`${file}: duplicate meta description with ${descriptions.get(description)}`);
+  else descriptions.set(description, canonical);
+}
+
+for (const directory of ['resources', 'nl/blog']) {
+  for (const entry of readdirSync(join(root, directory))) {
+    if (!entry.endsWith('.html') || entry === 'index.html') continue;
+    const file = `${directory}/${entry}`;
+    const html = read(file);
+    const visible = html
+      .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+      .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/&[a-z#0-9]+;/gi, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    const words = visible.split(' ').filter(Boolean).length;
+    if (words < 600) fail.push(`${file}: article contains ${words} words, expected at least 600`);
+    if (!html.includes('"@type":"Article"')) fail.push(`${file}: missing Article structured data`);
   }
 }
 

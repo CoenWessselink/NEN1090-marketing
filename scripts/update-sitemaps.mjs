@@ -2,7 +2,7 @@ import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const root = process.cwd();
-const today = '2026-06-03';
+const today = '2026-06-05';
 const host = 'https://weldinspectpro.com';
 
 function walk(dir = root) {
