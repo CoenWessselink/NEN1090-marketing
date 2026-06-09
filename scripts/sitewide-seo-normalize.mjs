@@ -41,9 +41,9 @@ function routeFromFile(file) {
 }
 
 function describe({ file, title, h1, lang }) {
-  const topic = h1 || title || titleFromFile(file);
+  const topic = (h1 || title || titleFromFile(file)).replace(/[.!?]+$/, '');
   if (lang === 'nl') {
-    return `${topic} voor lasinspectie, EN 1090 documentatie, WPS/WPQ context, materiaaltraceerbaarheid, QA/QC workflows en CE dossieropbouw met WeldInspect Pro.`;
+    return `${topic}: informatie over lasinspectie, EN 1090-documentatie, WPS/WPQ-context, materiaaltraceerbaarheid, QA/QC en CE-dossieropbouw.`;
   }
   return `${topic} for weld inspection software, EN 1090 documentation, WPS/WPQ context, material traceability, QA/QC workflows, reporting and CE dossier preparation with WeldInspect Pro.`;
 }

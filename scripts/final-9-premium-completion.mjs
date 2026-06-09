@@ -159,20 +159,23 @@ function premiumDepth(lang = 'en', page = 'platform') {
     platform: [
       nl ? 'Van project tot dossier in een verbonden record.' : 'From project to dossier in one connected record.',
       nl ? 'Projectscope, lasregister, inspectiestatus, WPS/WPQ, materiaalcontext, bewijs en documenten blijven samen zichtbaar.' : 'Project scope, weld register, inspection status, WPS/WPQ, material context, evidence and documents stay visible together.',
-      nl ? 'nl-product-standards-context.svg' : 'product-standards-context.svg'
+      nl ? 'nl-product-standards-context.svg' : 'product-standards-context.svg',
+      nl ? 'Projectgegevens, lassen, inspecties en bewijs blijven vanaf inrichting tot overdracht in dezelfde context zichtbaar.' : 'Project data, welds, inspections and evidence remain in the same context from setup through handover.'
     ],
     inspections: [
       nl ? 'Inspectiewerk dat past bij de werkvloer.' : 'Inspection workflows built for the field.',
       nl ? 'Leg bevindingen, foto&rsquo;s, open acties en reviewstatus vast bij de juiste las, zonder formele beoordeling te vervangen.' : 'Capture findings, photos, open actions and review status against the right weld without replacing formal review.',
-      nl ? 'nl-product-inspection-record.svg' : 'product-inspection-record.svg'
+      nl ? 'nl-product-inspection-record.svg' : 'product-inspection-record.svg',
+      nl ? 'Inspecteurs leggen bevindingen, foto&rsquo;s, open acties en reviewstatus direct vast bij de juiste las en het juiste project.' : 'Inspectors capture findings, photos, open actions and review status directly against the correct weld and project record.'
     ],
     reports: [
       nl ? 'Overdracht voorbereiden terwijl het project loopt.' : 'Prepare handover while the project is still moving.',
       nl ? 'Rapportage, bewijs, documentcontrole en CE-dossierstatus krijgen een eigen, duidelijke workflow.' : 'Reporting, evidence, document completeness and CE dossier readiness get a clear workflow of their own.',
-      nl ? 'nl-product-report-preview.svg' : 'product-report-preview.svg'
+      nl ? 'nl-product-report-preview.svg' : 'product-report-preview.svg',
+      nl ? 'Documentatieteams beoordelen dossierstatus, ontbrekend bewijs en overdrachtsoutput terwijl het project nog actief is.' : 'Documentation teams review dossier status, missing evidence and handover output while the project is still active.'
     ],
   }[page];
-  return section(`depth-${page}`, `<section class="completion-band premium-depth"><div class="container completion-grid"><div><span class="completion-eyebrow">${nl ? 'Productdiepte' : 'Product depth'}</span><h2>${data[0]}</h2><p>${data[1]}</p><ul class="completion-list"><li>${nl ? 'Een routespecifieke workflow laat zien waar teams records vastleggen, beoordelen en overdragen.' : 'A route-specific workflow view shows where teams capture, review and hand over the relevant records.'}</li><li>${nl ? 'Inspecteurs, co&ouml;rdinatoren en documentatieteams volgen dezelfde projectcontext zonder bewijs achteraf opnieuw te verzamelen.' : 'Inspectors, coordinators and documentation teams can follow the same project context without rebuilding evidence at the end.'}</li><li>${safeClaim(lang)}</li></ul></div><div class="product-visual-stack"><a class="product-shot-card" href="/assets/images/visuals/${data[2]}"><img src="/assets/images/visuals/${data[2]}" alt="${data[0]}"><span class="shot-caption">${data[0]}<small>${nl ? 'Premium productvisual' : 'Premium product visual'}</small></span></a></div></div></section>`);
+  return section(`depth-${page}`, `<section class="completion-band premium-depth"><div class="container completion-grid"><div><span class="completion-eyebrow">${nl ? 'Product in praktijk' : 'Product in practice'}</span><h2>${data[0]}</h2><p>${data[1]}</p><ul class="completion-list"><li>${data[3]}</li><li>${nl ? 'Inspecteurs, co&ouml;rdinatoren en documentatieteams volgen dezelfde projectcontext zonder bewijs achteraf opnieuw te verzamelen.' : 'Inspectors, coordinators and documentation teams can follow the same project context without rebuilding evidence at the end.'}</li><li>${safeClaim(lang)}</li></ul></div><div class="product-visual-stack"><a class="product-shot-card" href="/assets/images/visuals/${data[2]}"><img src="/assets/images/visuals/${data[2]}" alt="${data[0]}"><span class="shot-caption">${data[0]}<small>${nl ? 'Verbonden productweergave' : 'Connected product view'}</small></span></a></div></div></section>`);
 }
 
 function conversionDepth(lang = 'en', kind = 'demo') {
@@ -194,9 +197,23 @@ function conversionDepth(lang = 'en', kind = 'demo') {
 function resourcesHub(lang = 'en') {
   const nl = lang === 'nl';
   const cards = nl
-    ? [['Lasinspectie', 'Lasinspecties digitaal vastleggen', '/nl/lasinspectie-software'], ['EN 1090', 'EN 1090-documentatie beter organiseren', '/nl/en-1090-software'], ['CE-dossier', 'CE-dossier opbouwen tijdens uitvoering', '/nl/ce-dossier-software'], ['WPS/WPQ', 'WPS/WPQ-documentatie overzichtelijk koppelen', '/nl/wps-wpq-beheer'], ['Materiaaltraceerbaarheid', 'Materiaaltraceerbaarheid in staalbouwprojecten', '/nl/ce-dossier-software'], ['Rapportage en overdracht', 'Van inspectiefoto naar bruikbaar bewijs', '/nl/blog/']]
-    : [['Weld inspection', 'Digital weld inspection records explained', '/inspections'], ['EN 1090', 'How to prepare a weld dossier during execution', '/standards'], ['CE dossier', 'CE dossier preparation without last-minute document chasing', '/reports'], ['WPS/WPQ', 'WPS/WPQ documentation in project workflows', '/platform'], ['Material traceability', 'Material traceability for steel construction teams', '/en-10204'], ['Reporting and handover', 'From inspection photos to structured evidence', '/reports']];
-  return section(`hub-${lang}`, `<section class="completion-band premium-knowledge"><div class="container"><div class="section-head"><span class="kicker">${nl ? 'Kenniscentrum' : 'Knowledge hub'}</span><h2>${nl ? 'Een echte kennisbank voor lasinspectie en dossieropbouw.' : 'A practical knowledge hub for weld inspection and documentation.'}</h2><p>${nl ? 'Categorie&euml;n en kaarten verwijzen naar bestaande, bruikbare routes.' : 'Categories and cards point to real, useful routes.'}</p></div><div class="knowledge-grid">${cards.map(([c, t, u]) => `<a class="knowledge-card" href="${u}"><span>${c}</span><h3>${t}</h3><p>${nl ? 'Lees hoe dit onderwerp terugkomt in projecten, inspecties, bewijs en overdracht.' : 'See how this topic appears in projects, inspections, evidence and handover.'}</p></a>`).join('')}</div></div></section>`);
+    ? [
+      ['Lasinspectie', 'Lasinspecties digitaal vastleggen', '/nl/lasinspectie-software', 'Lees hoe bevindingen, foto&rsquo;s en open punten direct bij de juiste las blijven.'],
+      ['EN 1090', 'EN 1090-documentatie beter organiseren', '/nl/en-1090-software', 'Bekijk hoe projectdocumentatie rondom EN 1090 overzichtelijk kan worden opgebouwd.'],
+      ['CE-dossier', 'CE-dossier opbouwen tijdens uitvoering', '/nl/ce-dossier-software', 'Leer welke dossierinformatie al tijdens uitvoering beter kan worden verzameld.'],
+      ['WPS/WPQ', 'WPS/WPQ-documentatie overzichtelijk koppelen', '/nl/wps-wpq-beheer', 'Zie hoe procedure- en kwalificatiecontext bij lasrecords vindbaar blijft.'],
+      ['Materiaaltraceerbaarheid', 'Materiaaltraceerbaarheid in staalbouwprojecten', '/nl/materiaaltraceerbaarheid', 'Koppel certificaten, heatnummers en batchinformatie aan het juiste projectbewijs.'],
+      ['Rapportage en overdracht', 'Van inspectiefoto naar bruikbaar bewijs', '/nl/blog/', 'Maak inspectieresultaten en documenten begrijpelijk voor review en overdracht.']
+    ]
+    : [
+      ['Weld inspection', 'Digital weld inspection records explained', '/inspections', 'Keep findings, photos and open actions attached to the correct weld and project record.'],
+      ['EN 1090', 'How to prepare project documentation during execution', '/standards', 'Organise standards-oriented project records while official texts and qualified review remain leading.'],
+      ['CE dossier', 'Prepare dossier evidence before handover pressure', '/reports', 'Review missing evidence and dossier status while the project is still active.'],
+      ['WPS/WPQ', 'Keep procedure context close to weld records', '/platform', 'Make procedure and qualification references easier to find during inspection and review.'],
+      ['Material traceability', 'Connect certificates, heats and project evidence', '/en-10204', 'Follow material context from certificate and batch information into project documentation.'],
+      ['Reporting and handover', 'Turn inspection records into structured output', '/reports', 'Prepare reports and handover from connected project, weld, inspection and evidence records.']
+    ];
+  return section(`hub-${lang}`, `<section class="completion-band premium-knowledge"><div class="container"><div class="section-head"><span class="kicker">${nl ? 'Kenniscentrum' : 'Knowledge hub'}</span><h2>${nl ? 'Praktische kennis voor lasinspectie en dossieropbouw.' : 'Practical guidance for weld inspection and documentation teams.'}</h2><p>${nl ? 'Elke route behandelt een concreet onderdeel van inspectie, bewijs, documentatie of overdracht.' : 'Each route covers a concrete part of inspection, evidence, documentation or handover.'}</p></div><div class="knowledge-grid">${cards.map(([c, t, u, d]) => `<a class="knowledge-card" href="${u}"><span>${c}</span><h3>${t}</h3><p>${d}</p></a>`).join('')}</div></div></section>`);
 }
 
 function pricingDepth(lang = 'en') {

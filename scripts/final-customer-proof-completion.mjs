@@ -174,6 +174,9 @@ const mojibake = new Map([
 function repairEncoding(html) {
   for (const [bad, good] of mojibake) html = html.split(bad).join(good);
   return html
+    .replaceAll('\u00e2\u20ac\u00a2', '&bull;')
+    .replaceAll('\u00e2\u0153\u201c', '&#10003;')
+    .replaceAll('\u00c3\u201a\u00c2\u00b7', '&middot;')
     .replaceAll('commerciÃ«le', 'commerci&euml;le')
     .replaceAll('vÃ³Ã³r', 'v&oacute;&oacute;r')
     .replaceAll('OfficiÃ«le', 'Offici&euml;le')
@@ -364,9 +367,10 @@ for (const [canonical, files] of [...canonicalGroups.entries()].sort(([a], [b]) 
   }
   if (description && descriptionCounts.get(description) > 1) {
     const routeLabel = pathname.split('/').filter(Boolean).at(-1)?.replaceAll('-', ' ') || 'WeldInspect Pro';
+    const subject = `${routeLabel.charAt(0).toUpperCase()}${routeLabel.slice(1)}`;
     description = dutch
-      ? `${h1 || routeLabel}. Praktische uitleg over ${routeLabel}, lasinspectie, projectdocumentatie, bewijs, dossieropbouw en overdracht met WeldInspect Pro.`
-      : `${h1 || routeLabel}. Practical guidance for ${routeLabel}, weld inspection, project documentation, evidence, dossier preparation and handover with WeldInspect Pro.`;
+      ? `${subject}: praktische uitleg over lasinspectie, bewijs, projectdocumentatie en overdracht met WeldInspect Pro.`
+      : `${subject}: practical guidance for weld inspection, evidence, project documentation and handover with WeldInspect Pro.`;
   }
 
   if (title) usedTitles.set(title, canonical);
