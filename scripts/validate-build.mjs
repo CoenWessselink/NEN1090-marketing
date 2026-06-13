@@ -59,10 +59,10 @@ const forbidden = [
 ];
 
 const requiredLegalLinks = [
-  'legal.html',
-  'terms.html',
-  'privacy.html',
-  'dpa.html',
+  '/legal',
+  '/terms',
+  '/privacy',
+  '/dpa',
 ];
 
 const requiredCleanRouteIndexes = [
@@ -82,6 +82,18 @@ const requiredCleanRouteIndexes = [
   'nl/lasinspectie-software/index.html',
   'nl/en-1090-software/index.html',
   'nl/ce-dossier-software/index.html',
+  'en-1090-software/index.html',
+  'weld-inspection-software/index.html',
+  'weld-inspection-app/index.html',
+  'weld-inspection-tools/index.html',
+  'welding-inspection-checklist/index.html',
+  'ce-dossier-software/index.html',
+  'wps-wpqr-software/index.html',
+  'nl/lascontrole-software/index.html',
+  'nl/las-controle-app/index.html',
+  'nl/digitale-lasinspectie/index.html',
+  'nl/wps-wpqr-software/index.html',
+  'nl/lasinspectie-checklist/index.html',
   'nl/prijzen/index.html',
   'nl/demo/index.html',
   'nl/contact/index.html',
@@ -145,7 +157,7 @@ if (existsSync(join(root, 'robots.txt'))) {
 if (existsSync(join(root, 'legal-sitemap.xml'))) {
   const legalSitemap = readFileSync(join(root, 'legal-sitemap.xml'), 'utf8');
   for (const link of requiredLegalLinks) {
-    if (!legalSitemap.includes(`https://weldinspectpro.com/${link}`)) violations.push(`legal-sitemap.xml: missing ${link}`);
+    if (!legalSitemap.includes(`https://weldinspectpro.com${link}`)) violations.push(`legal-sitemap.xml: missing ${link}`);
   }
 }
 
