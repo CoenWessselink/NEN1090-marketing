@@ -36,6 +36,59 @@ for (const route of [
   }
 }
 
+const searchLandingRoutes = [
+  'en-1090-software',
+  'weld-inspection-software',
+  'weld-inspection-app',
+  'weld-inspection-tools',
+  'welding-inspection-checklist',
+  'ce-dossier-software',
+  'wps-wpqr-software',
+  'nl/en-1090-software',
+  'nl/lasinspectie-software',
+  'nl/lascontrole-software',
+  'nl/las-controle-app',
+  'nl/digitale-lasinspectie',
+  'nl/ce-dossier-software',
+  'nl/wps-wpqr-software',
+  'nl/lasinspectie-checklist',
+];
+for (const route of searchLandingRoutes) {
+  const file = `${route}.html`;
+  const index = `${route}/index.html`;
+  if (!existsSync(join(root, file)) || !existsSync(join(root, index))) {
+    fail.push(`${route}: missing route file or clean-route index`);
+    continue;
+  }
+  const html = read(file);
+  const canonical = `https://weldinspectpro.com/${route}`;
+  if (!html.includes(`<link rel="canonical" href="${canonical}">`)) fail.push(`${file}: missing clean canonical`);
+  if (!html.includes('hreflang=') || !html.includes('hreflang="x-default"')) fail.push(`${file}: missing hreflang declarations`);
+  for (const schemaType of ['WebPage', 'BreadcrumbList', 'FAQPage']) {
+    if (!html.includes(`"@type":"${schemaType}"`)) fail.push(`${file}: missing ${schemaType} structured data`);
+  }
+  const visible = html
+    .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&[a-z#0-9]+;/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const words = visible.split(' ').filter(Boolean).length;
+  if (words < 900 || words > 1400) fail.push(`${file}: ${words} visible words, expected 900-1400`);
+}
+
+const requiredDiscoveryLinks = {
+  'index.html': ['/en-1090-software', '/weld-inspection-software', '/ce-dossier-software', '/weld-inspection-app', '/nl/en-1090-software', '/nl/lasinspectie-software'],
+  'inspections.html': ['/weld-inspection-software', '/weld-inspection-app', '/welding-inspection-checklist', '/nl/lasinspectie-software', '/nl/lascontrole-software'],
+  'standards.html': ['/en-1090-software', '/wps-wpqr-software', '/ce-dossier-software', '/nl/en-1090-software'],
+  'reports.html': ['/ce-dossier-software', '/nl/ce-dossier-software'],
+};
+for (const [file, links] of Object.entries(requiredDiscoveryLinks)) {
+  const html = read(file);
+  for (const link of links) if (!html.includes(`href="${link}"`)) fail.push(`${file}: missing discovery link ${link}`);
+}
+
 const checkout = read('assets/js/checkout-flow.js');
 if (!checkout.includes('new URLSearchParams(location.search)')) fail.push('checkout-flow.js: query parameters are not parsed');
 if (!checkout.includes("params.get('cycle')")) fail.push('checkout-flow.js: cycle query parameter is not read');
@@ -50,7 +103,7 @@ const contact = read('nl/contact.html');
 if (!contact.includes('data-enterprise-form')) fail.push('nl/contact.html: missing working lead form hook');
 if (!contact.includes('data-enterprise-status')) fail.push('nl/contact.html: missing visible submit status');
 if (!contact.includes('enterprise-flow.js')) fail.push('nl/contact.html: missing form submission script');
-if (!contact.includes('privacy.html') || !contact.includes('terms.html')) fail.push('nl/contact.html: missing legal links');
+if (!contact.includes('/privacy') || !contact.includes('/terms')) fail.push('nl/contact.html: missing legal links');
 
 const demo = read('nl/demo.html');
 if (!demo.includes('mailto:info@weldinspectpro.com')) fail.push('nl/demo.html: missing direct demo mailto route');
